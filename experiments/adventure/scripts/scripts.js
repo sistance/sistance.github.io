@@ -157,7 +157,7 @@ var game = {
 				//item_str += game.item_data.list[items[lp]].name;
 				game.print(game.item_data.list[items[lp]].desc);
 			}
-			this.print(item_str);
+			//this.print(item_str);
 			this.print('');
 		}
 		
