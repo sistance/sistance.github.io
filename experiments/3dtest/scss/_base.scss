@@ -1,0 +1,19 @@
+body {
+	display: block;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+}
+.clear {
+	clear: both;
+}
+.alignright {
+	float: right;
+}
+.alignleft {
+	float: left;
+}
