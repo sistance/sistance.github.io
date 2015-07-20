@@ -381,7 +381,7 @@ game.room_data = { 'idx':2, 'list':[
 
 game.item_data = { 'idx':1, 'list':[
 	//{idx:0,name:'Voidgun',desc:'',long_desc:'',flags:0},
-	{idx:0,name:'Voidgun',desc:'It is a shiny gun made of nothing.',long_desc:'This shiny gun made of strands of the Void actually shoots Nothing!',flags:0},
+	{idx:0,name:'Voidgun',desc:'A shiny gun made of nothing.',long_desc:'This shiny gun made of strands of the Void actually shoots Nothing!',flags:0},
 ]};
 
 
