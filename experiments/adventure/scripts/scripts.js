@@ -151,9 +151,11 @@ var game = {
 		
 		var items = room.items;
 		if (items.length > 0) {
-			var item_str = "Items: ";
+			//var item_str = "You see: ";
+			this.print("You see: ");
 			for(var lp=0;lp<items.length;lp++) {
-				item_str += game.item_data.list[items[lp]].name;
+				//item_str += game.item_data.list[items[lp]].name;
+				game.print(game.item_data.list[items[lp]].desc);
 			}
 			this.print(item_str);
 			this.print('');
