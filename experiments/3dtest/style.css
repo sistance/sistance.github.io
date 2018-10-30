@@ -24,3 +24,56 @@ body {
   height: 100%;
   margin: 0;
   padding: 0; }
+
+.control-button {
+  display: block;
+  position: absolute;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #c0c0c0;
+  border-radius: 6px;
+  background-color: transparent;
+  font-size: 24px;
+  line-height: 40px;
+  text-decoration: none;
+  color: #c0c0c0;
+  text-align: center; }
+  .control-button.active {
+    color: #ffe000;
+    border: 1px solid #ffe000; }
+
+#keyboard-control-button {
+  right: 10px; }
+
+#controller-control-button {
+  right: 60px; }
+
+#ai-controls {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 10px; }
+
+#daytime-controls {
+  position: absolute;
+  right: 10px;
+  bottom: 70px;
+  text-align: right; }
+  #daytime-controls a {
+    padding: 5px;
+    border-radius: 6px;
+    text-decoration: none; }
+  #daytime-controls #day-time-button {
+    border: 1px solid #fc0;
+    color: #fc0; }
+  #daytime-controls #night-time-button {
+    border: 1px solid #66c;
+    color: #66c; }
+
+#light_0_mon {
+  position: absolute;
+  right: 10px;
+  top: 10px; }
+
+/*# sourceMappingURL=style.css.map */

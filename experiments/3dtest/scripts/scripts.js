@@ -1,28 +1,40 @@
 // globals
-var camera, camera2, scene, renderer, renderer2;
+var camera, camera2, scene, renderer, renderer2, raycaster, mouse;
 var geometry, material, mesh, mesh2, mesh3, mesh4, mesh5, mesh6, mesh7, mesh8, mesh9, mesh10;
 var skyMat, groundMat, waterMat, treeMat, wandererMat, snowMat;
+var cubeBase, waterBase, treeBase, grassBase, wandererBase;
 var light = [];
 var ground = [];
 var swatch_ground = [];
 var grass = [];
 var forest = [];
 var wanderers = [];
+var tile_names = ["water","sand","ground","gravel","grass","snow"];
 
+var GUID = 101;
 var startTime;
 var currentTime;
 var lastTickTime;
 var PI = 3.1415926536;
-var lightWaverCycle = PI / 2; // starts halfway between midnight and noon
+var lightWaverCycle = PI / 2; // starts at dawn
+var LENGTH_OF_DAY = 60000; // in MS
 
 // globals?
 var TILE_SIZE = 100;
 var WORLD_SIZE = 60;
+var CAMERA_RANDOMIZE_TIME = 10000;
 
 // console.logs some stuff
 var VAR_TEST = false;
 var DEBUG_MODE = false;
 
+// for controllers
+var gamepads = {};
+var has_gamepad = false;
+var live_controller = {
+	id: 0,
+	mode: 0, // 0 = keyboard, 1 = controller
+};
 
 // main!
 $(window).load(function(){
@@ -31,23 +43,88 @@ $(window).load(function(){
 	//$("#main").width(width);
 	$("#main").height(height-3);
 	
+	// set up controllers
+	function gamepadConnectHandler(e, connecting) {
+		var gamepad = e.originalEvent.gamepad;
+		// Note:
+		// gamepad === navigator.getGamepads()[gamepad.index]
+
+		if (connecting) {
+			gamepads[gamepad.index] = gamepad;
+			has_gamepad = true;
+		} else {
+			delete gamepads[gamepad.index];
+			has_gamepad = false;
+		}
+		
+		jQuery("#controller-control-button").toggle(has_gamepad);
+	}
+	$(window).on("gamepadconnected", function(e) { 
+		var gp = navigator.getGamepads()[e.originalEvent.gamepad.index];
+		console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+			gp.index, gp.id,
+			gp.buttons.length, gp.axes.length
+		);
+	
+		gamepadConnectHandler(e, true); 
+	});
+	$(window).on("gamepaddisconnected", function(e) {
+		e.preventDefault();
+		gamepadConnectHandler(e, false); 
+	});	
+	
+	$("#keyboard-control-button").on("click",function(e){
+		live_controller.mode = 0;
+		$('.control-button').removeClass('active');
+		$(this).addClass('active');
+	});
+	$("#controller-control-button").on("click",function(e){
+		live_controller.mode = 1;
+		$('.control-button').removeClass('active');
+		$(this).addClass('active');
+	});
+	
+	$("#mode-set").on("click",function(e){
+		e.preventDefault();
+		var action_value = $("#action-mode-select").val();
+		var idle_value = $("#idle-mode-select").val();
+		camera.follow.ai.action.mode = 0;
+		camera.follow.ai.intention.idle_mode = parseInt(idle_value);
+		camera.follow.ai.intention.mode = parseInt(action_value);
+		camera.follow.ai.action.endtime = currentTime - 1;
+	});
+	$("#day-time-button").on("click",function(e){
+		lightWaverCycle = PI / 2;
+	});
+	$("#night-time-button").on("click",function(e){
+		lightWaverCycle = 3 * PI / 2;
+	});
+	$(document).on("mousemove",function(e){
+		mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+		mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+	});
+	
 	init();
 	animate();
+	
+	
 });
 
 // initialize
 function init() {
 	$window = $("#main");
 
-	camera = new THREE.PerspectiveCamera( 75, $window.innerWidth() / $window.innerHeight(), 1, 11000 );
+	camera = new THREE.PerspectiveCamera( 75, ($window.innerWidth()-0) / ($window.innerHeight()-1), 1, 11000 );
 	camera.position.z = 600;
 	camera.position.y = 800;
 	camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
 	renderer = new THREE.WebGLRenderer();
-	renderer.setSize( $window.width(), $window.height() );
+	renderer.setSize( $window.innerWidth()-0, $window.innerHeight()-1 );
 	renderer.setClearColor( 0x000000, 1 ); 
 	$window.append( renderer.domElement );
 
+	raycaster = new THREE.Raycaster();
+	mouse = new THREE.Vector2();
 	// controls
 	//	up = 38
 	//	left = 37
@@ -95,11 +172,20 @@ function init() {
 				break;
 			// arrow keys
 			case 37:
-			case 38:
-			case 39:
-			case 40:
+				cameraFollowANewWanderer(-1);
 				break;
-			}
+			case 38:
+				cameraResetFollow();
+				break;
+			case 39:
+				cameraFollowANewWanderer(1);
+				break;
+			case 40:
+				cameraFollowANewWanderer(0);
+				break;
+			case 99:
+				break;
+		}
 				
 	}).on("keyup",function(e){
 		e.preventDefault();
@@ -126,6 +212,11 @@ function init() {
 				
 		}
 	});
+	
+	$(renderer.domElement).on("click",function(e){
+		console.log(camera.targeting);
+		
+	});
 	//camera2 = new THREE.PerspectiveCamera( 75, $window.width() / $window.height(), 1, 10000 );
 	//camera2.position.y = 1000;
 	//camera2.lookAt( new THREE.Vector3( 0, 0, 0 ) );
@@ -134,50 +225,32 @@ function init() {
 	//renderer2.setClearColor( 0x000000, 1 );
 	//$subwindow.append( renderer2.domElement );
 
-
-
-	// new stuff!
-
-	//var geometry = new THREE.BoxGeometry( 200, 200, 200 );
-	//var texture = THREE.ImageUtils.loadTexture( 'textures/crate.gif' );
-	//texture.anisotropy = renderer.getMaxAnisotropy();
-	//var material = new THREE.MeshBasicMaterial( { map: texture } );
 	
-	// skybox setup
-	var urlPrefix = "testcube/";
-	var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg", urlPrefix + "posy.jpg", urlPrefix + "negy.jpg", urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
-	textureCube = THREE.ImageUtils.loadTextureCube( urls );
-	var shader = THREE.ShaderLib["cube"];
-	var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
-	uniforms['tCube'].value = textureCube;   // textureCube has been init before
-
 	// textures
-	var groundTexture = THREE.ImageUtils.loadTexture('images/textures/flat-floor7_2.jpg');
-	groundTexture.anisotropy = renderer.getMaxAnisotropy();
-	var waterTexture = THREE.ImageUtils.loadTexture('images/textures/flat-fwater2.png');
-	waterTexture.anisotropy = renderer.getMaxAnisotropy();
-	var gravelTexture = THREE.ImageUtils.loadTexture('images/textures/flat-rrock17_2.jpg');
-	gravelTexture.anisotropy = renderer.getMaxAnisotropy();
-	var grassTexture = THREE.ImageUtils.loadTexture('images/textures/flat-grass1_2.jpg');
-	grassTexture.anisotropy = renderer.getMaxAnisotropy();
-	var sandTexture = THREE.ImageUtils.loadTexture('images/textures/flat-flat5_5.png');
-	sandTexture.anisotropy = renderer.getMaxAnisotropy();
-	var snowTexture = THREE.ImageUtils.loadTexture('images/textures/flat-snow.png');
-	snowTexture.anisotropy = renderer.getMaxAnisotropy();
+	var groundTexture = new THREE.TextureLoader().load('images/textures/flat-floor7_2.jpg');
+	//groundTexture.anisotropy = renderer.getMaxAnisotropy();
+	var waterTexture = new THREE.TextureLoader().load('images/textures/flat-fwater2.png');
+	waterTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+	var gravelTexture = new THREE.TextureLoader().load('images/textures/flat-rrock17_2.jpg');
+	//gravelTexture.anisotropy = renderer.getMaxAnisotropy();
+	var grassTexture = new THREE.TextureLoader().load('images/textures/flat-grass1_2.jpg');
+	//grassTexture.anisotropy = renderer.getMaxAnisotropy();
+	var sandTexture = new THREE.TextureLoader().load('images/textures/flat-flat5_5.png');
+	//sandTexture.anisotropy = renderer.getMaxAnisotropy();
+	var snowTexture = new THREE.TextureLoader().load('images/textures/flat-snow.png');
+	//snowTexture.anisotropy = renderer.getMaxAnisotropy();
 	
 	// materials
-	skyMat = new THREE.ShaderMaterial({ fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, side: THREE.BackSide	});
-	groundMat = new THREE.MeshPhongMaterial( { map: groundTexture, side: THREE.FrontSide } );
-	waterMat = new THREE.MeshPhongMaterial( { map: waterTexture, side: THREE.FrontSide } );
-	gravelMat = new THREE.MeshPhongMaterial( { map: gravelTexture, side: THREE.FrontSide } );
-	grassMat = new THREE.MeshPhongMaterial( { map: grassTexture, side: THREE.FrontSide } );
-	sandMat = new THREE.MeshPhongMaterial( { map: sandTexture, side: THREE.FrontSide } );
-	snowMat = new THREE.MeshPhongMaterial( { map: snowTexture, side: THREE.FrontSide } );
-	treeMat = new THREE.MeshLambertMaterial( { color: 0x30c000 } );
-	wandererMat = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+	groundMat = new 	THREE.MeshLambertMaterial	( { map: groundTexture, side: THREE.FrontSide } ); //Lambert
+	waterMat = new  	THREE.MeshPhongMaterial		( { map: waterTexture, side: THREE.FrontSide } );
+	gravelMat = new 	THREE.MeshLambertMaterial	( { map: gravelTexture, side: THREE.FrontSide } ); //Lambert
+	grassMat = new  	THREE.MeshLambertMaterial	( { map: grassTexture, side: THREE.FrontSide } ); //Lambert
+	sandMat = new   	THREE.MeshLambertMaterial	( { map: sandTexture, side: THREE.FrontSide } ); //Lambert
+	snowMat = new   	THREE.MeshLambertMaterial	( { map: snowTexture, side: THREE.FrontSide } ); //Lambert
+	treeMat = new 		THREE.MeshLambertMaterial	( { color: 0x30c000 } );
+	wandererMat = new 	THREE.MeshLambertMaterial	( { color: 0xffffff } );
 	
 	
-	skyBase = new THREE.CubeGeometry( 10000, 10000, 10000, 1, 1, 1, null, true );
 	cubeBase = new THREE.CubeGeometry( TILE_SIZE, TILE_SIZE, TILE_SIZE );
 	waterBase = new THREE.CubeGeometry( TILE_SIZE, TILE_SIZE*.8, TILE_SIZE );
 	treeBase = new THREE.CylinderGeometry( 0, 30, 150, 7, 1 );
@@ -191,14 +264,28 @@ function init() {
 	light[0].position.y = 1000;
 	light[0].position.z = 0;
 	scene.add( light[0] );
-	light[1] = new THREE.PointLight( 0xc0a040, 1, 400 );
+	light[1] = new THREE.PointLight( 0xffc080, 1, 400 );
 	light[1].position.x = 0;
 	light[1].position.y = 200;
 	light[1].position.z = 0;
+	light[1].intensity = .5;
 	scene.add( light[1] );
-	//light[2] = new THREE.HemisphereLight( 0xcccc00, 0x484000, 1	);
 	light[2] = new THREE.HemisphereLight( 0xeeeeee, 0x484848, 1	);
 	scene.add( light[2] );
+	
+	// add random lights
+	for(var lp=3;lp<10;lp++) {
+		light[lp] = new THREE.PointLight( 0x80ff80, 1, 1000);
+		var wsz = WORLD_SIZE * TILE_SIZE;
+		var x = Math.floor(Math.random() * wsz) - (wsz/2);
+		var z = Math.floor(Math.random() * wsz) - (wsz/2);
+
+		light[lp].position.x = x;
+		light[lp].position.y = (TILE_SIZE*.7);
+		light[lp].position.z = z;
+		light[lp].intensity = 1;
+		scene.add(light[lp]);
+	}
 
 	lastTickTime = (new Date()).getTime();
 	startTime = lastTickTime;
@@ -208,7 +295,10 @@ function init() {
 	createGrass();
 	createForest();
 	createWanderers();
-	camera.follow = wanderers[0];
+	camera.follow_id = 0;
+	camera.follow = wanderers[camera.follow_id];
+	camera.follow_randomize = 0;
+	camera.follow_tick = 0;
 	camera.type = 2; // 1 = chase, 2 = follow, 3 = first-person
 	//camera.follow = wanderers[Math.floor(Math.random()*wanderers.length)];
 }
@@ -220,20 +310,21 @@ function animate() {
 	currentTime = (new Date()).getTime();
 	// note: three.js includes requestAnimationFrame shim
 
-	//mesh.rotation.x += 0.01;
-	//mesh.rotation.y += 0.02;
-	
 	// daylight cycle
-	lightWaverCycle += (currentTime - lastTickTime) / 40000;
-	light[0].intensity = Math.sin(lightWaverCycle) * (3/2);
-	light[2].intensity = Math.sin(lightWaverCycle) * (3/2);
-	if (VAR_TEST) {console.log(lightWaverCycle + " " + Math.sin(lightWaverCycle));}
+	lightWaverCycle += (currentTime - lastTickTime) / LENGTH_OF_DAY;
+	light[0].intensity = Math.cos(lightWaverCycle - PI) * (3/2);
+	light[2].intensity = Math.cos(lightWaverCycle - PI) * (3/2);
+	$("#light_0_mon").html(round3(light[0].intensity));
+	if (VAR_TEST) {console.log(lightWaverCycle + " " + Math.cos(lightWaverCycle));}
 	
 	// will o wisp
-	light[1].intensity = Math.sin(lightWaverCycle) * -(5/2) + (5/2);
+	light[1].intensity = (Math.cos(lightWaverCycle - PI) * -(5/2) + (5/2)) * camera_following_light_intensity();
+	light[1].color = camera_following_light_color();
 	light[1].position.x = camera.follow.position.x;
 	light[1].position.y = camera.follow.position.y + 30;
 	light[1].position.z = camera.follow.position.z;
+	
+	
 	// random movements
 	// light[1].position.x += ((Math.random() * 12) - 6) * 10;
 	// light[1].position.z += ((Math.random() * 12) - 6) * 10;
@@ -246,8 +337,20 @@ function animate() {
 	animateWanderers();
 	
 	// randomly target a wanderer with the camera
-	//cameraFollowANewWanderer();
+	if(camera.follow_randomize == 1) {
+		camera.follow_tick += (currentTime - lastTickTime);
+		
+		if(camera.follow_tick > CAMERA_RANDOMIZE_TIME) {
+			cameraFollowANewWanderer(0);
+		}
+	}
 	camera_track();
+
+	
+	// update mouse location
+	check_mouse_targeting();
+	jQuery("#mouse_mon").html("("+round3(mouse.x)+","+round3(mouse.y)+")");
+	
 	
 	// render
 	renderer.render( scene, camera );
@@ -330,7 +433,7 @@ function createGround() {
 		var scale = Math.floor(Math.random() * 3)+2;
 		var it = Math.floor(Math.random() * 5) + 9 * scale;
 		
-		console.log(scale);
+		//console.log(scale);
 		// mountain
 		spread_alt(cx,cy,it,scale);
 	}
@@ -408,6 +511,7 @@ function createGround() {
 			}
 			obj = new THREE.Mesh( base, mater );
 			obj.mat = mat;
+			obj.GUID = getGUID();
 			obj.position.x = (x-(WORLD_SIZE/2)) * TILE_SIZE + (TILE_SIZE/2);
 			obj.position.z = (y-(WORLD_SIZE/2)) * TILE_SIZE + (TILE_SIZE/2);
 			obj.water = false;
@@ -481,6 +585,7 @@ function createSky() {
 function createGrass() {
 	for (i=0;i<1000;i++) {
 		obj = new THREE.Mesh( grassBase, treeMat );
+		obj.GUID = getGUID();
 		var wsz = WORLD_SIZE * TILE_SIZE;
 		var x = Math.floor(Math.random() * wsz) - (wsz/2);
 		var z = Math.floor(Math.random() * wsz) - (wsz/2);
@@ -525,10 +630,16 @@ function createForest() {
 		
 		var alt = swatch_ground[tx][tz].alt;
 		obj = new THREE.Mesh( treeBase, treeMat );
+		obj.GUID = getGUID();
 		obj.position.x = x;
 		obj.position.y = (alt*(TILE_SIZE*.2)) + (Math.floor(Math.random() * 10) * 4) + (TILE_SIZE*.8);
 		obj.position.z = z;
 		obj.rotation.y = Math.random();
+		obj.contains = [{
+			type : 1, // 0 = null, material, x, x,
+			material : 1, // 0 = null, wood, stone
+			amount : Math.floor(Math.random() * 20) + 10,
+		}];
 		forest[i] = obj;
 		scene.add(forest[i]);
 	}
@@ -537,21 +648,30 @@ function createForest() {
 
 // create wandering mobiles
 function createWanderers() {
-	for (i=0;i<50;i++) {
+	for (i=0;i<4;i++) {
 		var wsz = WORLD_SIZE * TILE_SIZE;
 		// new object
-		obj = new THREE.Mesh( wandererBase, wandererMat );
+		obj = new THREE.Mesh( wandererBase, wandererMat ); // treeBase, treeMat
+		obj.GUID = getGUID();		
 		obj.position.x = Math.floor(Math.random() * wsz) - (wsz/2);
-		obj.position.y = (TILE_SIZE*.7);
 		obj.position.z = Math.floor(Math.random() * wsz) - (wsz/2);
-		obj.rotation.y = Math.random();
+		var tx = (WORLD_SIZE/2) + Math.floor(obj.position.x/TILE_SIZE);
+		var	tz = (WORLD_SIZE/2) + Math.floor(obj.position.z/TILE_SIZE);
+		var alt = swatch_ground[tx][tz].alt;
+		obj.position.y = (alt*(TILE_SIZE*.2))+(TILE_SIZE*.6);
+		obj.rotation.y = round3(Math.random() * 2*PI);
+		obj.rotation.x = 0;
+		obj.rotation.z = 0;
+		
 		obj.stats = {
+			sex : (Math.floor(Math.random() * 2) + 1), // {N=0,M,F}
+			
 			base : {
-				str : 13,
-				dex : 13,
-				con : 13,
-				itl : 13,
-				wis : 13,
+				str : 13, 
+				dex : 13, 
+				con : 13, 
+				itl : 13, 
+				wis : 13, 
 				cha : 13
 			},
 			mods : {
@@ -561,11 +681,26 @@ function createWanderers() {
 				itl : 0,
 				wis : 0,
 				cha : 0
-			}
+			},
+			sight_range : (300 + 13 * 20), // 300 pixels + 20 pixels per point of int; each 100 pixels is two squares
+			health : {
+				hunger : 0,
+				thirst : 0,
+				mentality : 50, // 50% = balance, 0% = passed out, 100% = hallucinating
+				drunkenness : 0, // 0% = none, 100% = toxic shutdown
+				comfort : 50, // 50% = normal, 0% = fleeing, 100% = falling asleep
+				love : 50, // 50% = content, 0% = spiteful to, 100% = desperate for
+				anger : 50, // 50% = content, 0% = jaded, 100% = raging
+				
+				diseases : [{
+					name : "",
+					type : "",
+				}],
+			},
 		}
 		obj.ai = { // artificial intelligence
 			action : {
-				mode: 0, // 0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather
+				mode: 0, // 0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather; deliver
 				dest : {
 					x : 0.0,
 					y : (TILE_SIZE*.7),
@@ -575,15 +710,44 @@ function createWanderers() {
 				endtime : lastTickTime,
 				delta_time : 0
 			},
-			intention : {
-				mode: 1, // 0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather
-				idle_mode : 2, // 0 = wait; sleep; scan
-				targeting : "",
-				following : "",
-				fleeing : "",
-				guarding : "",
-				beseiging : ""
-			}
+			intention : { // 4/0 gives randomly wandering guy that stops to look around; 1/2 gives a guy relentlessly following
+				mode: ((Math.random()>0.5)?1:4), //1, // 0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather; deliver
+				idle_mode : ((Math.random()>0.5)?0:2), //2, // 0 = continue; wait; scan; sleep
+			},
+			knowledge : { // and more
+				// passive things
+				has_seen : [{
+					object : "",
+					concept : "",
+					direction_to : "",
+				}],
+				targeting : [{
+					object : "",
+					concept : "", // home, shelter, water, food, fuel, fire, stone, ore, defense
+					direction_to : "",
+				}],
+				afraid_of : [{
+					object : "",
+					concept : "",
+					direction_to : "",
+				}],
+				// active things
+				following : [{
+					object : (i>0)?wanderers[i-1]:"",
+					concept : "",
+					direction_to : "",
+				}],
+				collecting : [{
+					object : "",
+					concept : "",
+					direction_to : "",
+				}],
+				delivering : [{
+					object : "",
+					concept : "",
+					direction_to : "",
+				}],
+			},
 		}
 		obj.velocity = {
 			x : 0.0,
@@ -597,12 +761,37 @@ function createWanderers() {
 			z : 0.0,
 			ry : 0.0,
 		}
+		obj.inventory = [
+			{
+				guid : 0x01,
+				name : 'Lamp',
+				type : 'light',
+				weight : 1,
+				attrs : {
+					intensity : 1,
+					color : (i==0)?0xffc040:(Math.random()>0.5)?0xff8040:0x8080ff,
+				},
+				located: 0x02, // guid of container
+			},
+			{
+				guid : 0x02,
+				name : 'Backpack',
+				type : 'container',
+				weight : 1,
+				attrs : {
+					capacity : 35,
+				},
+				located: -1, // located in inventory root
+			}
+		]
 		if (i==0) {
 			// temp stuff for facing testing --------
 			obj.position.x = 0;
 			obj.position.z = 0;
 			//obj.rotation.y = 0;
 			obj.lookAt(new THREE.Vector3(0,(TILE_SIZE*.7),1));
+			obj.rotation.x = 0;
+			obj.rotation.z = 0;
 			// --------------------------------------
 			obj.control_type = 1;
 			obj.controller = {
@@ -631,8 +820,9 @@ function createWanderers() {
 			}
 		} else {
 			obj.control_type = 0;
+			obj.lookAt(new THREE.Vector3(0,(TILE_SIZE*.7),1));
 		}
-		obj.animate = animate_this_wanderer; // animate method
+		obj.animate_this = animate_this_wanderer; // animate method
 		
 		if (VAR_TEST) { console.log(obj); } // TEST SHOW OBJECT
 		wanderers[i] = obj;
@@ -665,7 +855,7 @@ function camera_track() {
 			}
 			camera.lookAt(camera.follow.position);
 			break;
-		case 2: // third-person
+		case 2: // chase
 			var ty = camera.follow.rotation.y;
 			var c_ty = Math.cos(ty + PI/2);
 			var m_c = Math.round(c_ty*10000.0);
@@ -673,9 +863,9 @@ function camera_track() {
 			var s_ty = Math.sin(ty + PI/2);
 			var m_s = Math.round(s_ty*10000.0);
 			var f_s = m_s / 10000.0;
-			$("#facing_mon").html(ty*180/PI);
-			$("#facing_trig_mon").html("("+camera.follow.position.x+","+camera.follow.position.z+") "+f_c+", "+f_s);
-			$("#camera_mon").html(camera.rotation.y);
+			$("#facing_mon").html(round3(ty*180/PI));
+			$("#facing_trig_mon").html("("+round3(camera.follow.position.x)+","+round3(camera.follow.position.z)+") "+f_c+", "+f_s);
+			$("#camera_mon").html(round3(camera.rotation.y));
 			
 			camera.position.x = x1 + (f_c * 300);
 			camera.position.z = z1 - (f_s * 300);
@@ -703,14 +893,48 @@ function camera_track() {
 
 
 // camera randomly picks a wanderer to follow
-function cameraFollowANewWanderer() {
-	dt = currentTime - startTime;
-	
-	if ((dt % 5000) < 3) {
-		camera.follow = wanderers[Math.floor(Math.random()*wanderers.length)];
-	}
-}
+function cameraFollowANewWanderer(delta) {
+	//dt = currentTime - startTime;
 
+	var id = camera.follow_id + delta;
+	var max_id = wanderers.length;
+	
+	if (delta == -1 || delta == 1) {
+		if(id < 0) {
+			id = wanderers.length - 1;
+		}
+		if(id == wanderers.length) {
+			id = 0;
+		}
+		camera.follow_randomize = 0;
+	} else if(delta == 0) {
+		id = Math.floor(Math.random()*wanderers.length);
+		camera.follow_randomize = 1;
+		camera.follow_tick = 0;
+	}
+	camera.follow_id = id;
+	camera.follow = wanderers[id];
+	
+	if(id !== 0) {
+		$("#ai-controls").css('display','block');
+		$("#ai_id_mon").html(id);
+		$("#action-mode-select").val(wanderers[id].ai.intention.mode);
+		$("#idle-mode-select").val(wanderers[id].ai.intention.idle_mode);
+	} else {
+		$("#ai-controls").css('display','none');		
+	}
+	
+	
+	//if ((dt % 5000) < 3) {
+	//	camera.follow = wanderers[Math.floor(Math.random()*wanderers.length)];
+	//}
+}
+function cameraResetFollow() {
+	camera.follow_id = 0;
+	camera.follow = wanderers[0];
+	camera.follow_randomize = 0;
+	camera.follow_tick = currentTime;
+}
 
 // animate wandering mobiles 
 function animateWanderers() {
@@ -721,21 +945,35 @@ function animateWanderers() {
 	}
 	
 	for (i=0;i<max;i++) {
-		wanderers[i].animate();
+		wanderers[i].animate_this();
 	}
 }
 
 // animate this object
 function animate_this_wanderer() {
-	// wanderers[i]		ai			action		mode
-	//											(stationary, wander, patrol)  
-	//											dest
+	// wanderers[i]		ai			action		
+	//											mode: (0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather; deliver)  
+	//											dest : {
+	//												x : 0.0,
+	//												y : (TILE_SIZE*.7),
+	//												z : 0.0
+	//											}
+	//											created_time
 	//											endtime
 	//											delta_time
-	//								intention	following :obj
+	//
+	//								intention	
+	//											mode: {0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather; deliver}
+	//											idle_mode: {0 = wait; sleep; scan}
+	//											targeting :obj
+	//											following :obj
 	//											fleeing :obj
 	//											guarding :obj
 	//											beseiging :obj
+	//											
+
+
+
 	var pTime = (currentTime - lastTickTime);
 	
 	w = this;
@@ -743,6 +981,9 @@ function animate_this_wanderer() {
 	
 	if (w.control_type == 0) { // computer-controlled
 		w.ai.action.delta_time = currentTime - w.ai.action.created_time;
+		//camera.follow.ai.action.mode = 0;
+		//camera.follow.ai.intention.mode = action_value;
+		//camera.follow.ai.intention.idle_mode = idle_value;
 		
 		// change after time
 		if (currentTime > w.ai.action.endtime) {
@@ -754,21 +995,39 @@ function animate_this_wanderer() {
 				w.ai.action.mode = 0;
 				w.velocity.x = 0;
 				w.velocity.z = 0;
-				w.ai.action.endtime = currentTime + ((Math.random() * 8) * 1000);
+				
+				// end time
+				switch(w.ai.intention.idle_mode) {
+					case 0: // continue
+						w.ai.action.endtime = currentTime + 1;
+						break;
+					//case 1: // wait
+					//case 2: // scan
+					//case 3: // sleep
+					default:
+						w.ai.action.endtime = currentTime + ((Math.random() * 8) * 1000);
+						break;
+				}
+				//if(w.ai.intention.mode == 4) {
+				//	w.ai.action.endtime = currentTime + 1;
+				//} else {
+				//	w.ai.action.endtime = currentTime + ((Math.random() * 8) * 1000);
+				//}
 			}
 		
 			switch (w.ai.action.mode) {
+				// 0 = stationary; wander; patrol; search; follow; flee; guard; beseige; hunt; gather; deliver
 				case 1: // wander
 					var wsz = WORLD_SIZE * TILE_SIZE;
-					var np = {
-						x : (Math.floor(Math.random() * (wsz/2))-(wsz/4)),
-						y : (TILE_SIZE*.7),
-						z : (Math.floor(Math.random() * (wsz/2))-(wsz/4))
-					}
+					var np = new THREE.Vector3(
+						(Math.floor(Math.random() * (wsz/2))-(wsz/4)),
+						(TILE_SIZE*.7),
+						(Math.floor(Math.random() * (wsz/2))-(wsz/4))
+					);
 					w.ai.action.dest = np;
 					var dx = (np.x - w.position.x);
 					var dz = (np.z - w.position.z);
-					var speed = 50/1000; // pixels per second / ms per second
+					var speed = 200/1000; // pixels per second / ms per second - 50 slow walk
 					var dist = Math.sqrt((dx * dx) + (dz * dz));
 					
 					var t_elapse = dist / speed; //(Math.floor(Math.random() * 5)*1000)+1000;
@@ -780,16 +1039,69 @@ function animate_this_wanderer() {
 					break;
 				case 2: // patrol
 					break;
+				case 3: // search
+					break;
+				case 4: // follow
+					var following = w.ai.knowledge.following[0].object;
+					var np = new THREE.Vector3(
+						following.position.x,
+						w.position.y, //following.position.y,
+						following.position.z
+					);
+					var speed = 225/1000; // pixels per second / ms per second
+					var dx = (np.x - w.position.x);
+					var dz = (np.z - w.position.z);
+					var dist = Math.sqrt((dx * dx) + (dz * dz));
+					
+					if (dist > 100) {					
+						var t_elapse = dist / speed; //(Math.floor(Math.random() * 5)*1000)+1000;
+						w.velocity.x = dx / t_elapse;
+						w.velocity.z = dz / t_elapse;
+					}
+					w.lookAt(np);
+					w.ai.action.endtime = currentTime + 250;
+					break;
+				case 5: // flee
+					var fleeing = w.ai.knowledge.fleeing[0].object;
+					var np = new THREE.Vector3(
+						fleeing.position.x-w.position.x,
+						w.position.y,
+						fleeing.position.z-w.position.z
+					);
+					var speed = 280/1000; // pixels per second / ms per second
+					var dx = (np.x - w.position.x);
+					var dz = (np.z - w.position.z);
+					var dist = Math.sqrt((dx * dx) + (dz * dz));
+					
+					if (dist > 100) {					
+						var t_elapse = dist / speed; //(Math.floor(Math.random() * 5)*1000)+1000;
+						w.velocity.x = dx / t_elapse;
+						w.velocity.z = dz / t_elapse;
+					}
+					w.lookAt(np);
+					w.ai.action.endtime = currentTime + 250;
+					break;
+				
 				default: // stationary - idle mode
 					switch(w.ai.intention.idle_mode) {
-						case 1:
+						case 1: // wait
+							if(w.ai.knowledge.following.length > 0) {
+								var following = w.ai.knowledge.following[0].object;
+								var np = new THREE.Vector3(
+									following.position.x, 
+									w.position.y, //following.position.y, 
+									following.position.z
+								);
+								w.lookAt(np);
+							}
+							w.ai.action.endtime = currentTime + ((Math.random() * 8) * 1000);
 							break;
 						case 2: // scan
 							w.rotation.y = Math.random();
 							w.ai.action.endtime = currentTime + ((Math.random() * 8) * 1000);
 							if (VAR_TEST)  {console.log("rot:"+w.rotation.y);} // TEST
 							break;
-						default:
+						default: // continue
 							break;
 					}
 					break;
@@ -801,7 +1113,69 @@ function animate_this_wanderer() {
 		w.position.z += (w.velocity.z * pTime);
 
 	} else { // human-controlled
-		//console.log("pc: ("+w.position.x+", "+w.position.z+")");
+		
+		if(live_controller.mode == 1) { // if it's in controller mode
+			// poll game pads
+			var pgamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+			
+			// detect which controller is live
+			for (var i = 0; i < pgamepads.length; i++) {
+				if (pgamepads[i]) {
+					if (pgamepads[i].index in gamepads) {
+						for (var j = 0; j < pgamepads[i].buttons.length; j++) {
+							if(pgamepads[i].buttons[j].pressed) {
+								live_controller.id = pgamepads[i].index;
+							}
+						}
+						for(var j = 0; j < pgamepads[i].axes.length; j++) {
+							if(pgamepads[i].axes[j] > 0.1) {
+								live_controller.id = pgamepads[i].index;
+							}
+						}
+					}
+					gamepads[pgamepads[i].index] = pgamepads[i];
+				}
+			}		
+			
+			// handle live controller
+			var button_buf = "";
+			var axis_buf = "/";
+			i = live_controller.id;
+			if(i in gamepads) {
+				for (var j = 0; j < gamepads[i].buttons.length; j++) {
+					button_buf += (gamepads[i].buttons[j].pressed)?'T':'F';
+				}
+				for (var j = 0; j < gamepads[i].axes.length; j++) {
+					if(Math.abs(gamepads[i].axes[j]) > 0.25) {
+						axis_buf += j+":"+gamepads[i].axes[j].toFixed(4)+"/";
+					} else {
+						axis_buf += j+":0.0000/";
+					}
+				}
+				//console.log("#"+gamepads[i].index+" "+button_buf+" "+axis_buf);
+				
+				// use 
+				if (Math.abs(gamepads[i].axes[0]) > 0.25) {
+					w.controller.now.x = -gamepads[i].axes[0];
+				} else {
+					w.controller.now.x = 0;
+				}
+				if (Math.abs(gamepads[i].axes[1]) > 0.25) {
+					w.controller.now.y = -gamepads[i].axes[1];
+				} else {
+					w.controller.now.y = 0;
+				}
+				if (Math.abs(gamepads[i].axes[2]) > 0.25) {
+					w.controller.now.ry = -gamepads[i].axes[2];
+				} else {
+					w.controller.now.ry = 0;
+				}
+			}
+		}
+		
+		
+		
+		// handle final controls
 		if (w.controller.old.x != w.controller.now.x) {
 			w.velocity.x = w.controller.now.x;
 			w.controller.old.x = w.controller.now.x;
@@ -827,6 +1201,7 @@ function animate_this_wanderer() {
 			}
 			w.controller.old.cam = w.controller.now.cam;
 		}
+
 		
 		w.rotation.y += (w.velocity.ry * pTime);
 		while (w.rotation.y > 2*PI) {
@@ -857,7 +1232,7 @@ function animate_this_wanderer() {
 	// find altitude for object based on ground height
 	if ((tx>=0)&&(tx<WORLD_SIZE)&&(ty>=0)&&(ty<WORLD_SIZE)) {
 		w.position.y = (swatch_ground[tx][ty].alt * (TILE_SIZE*.2)) + (TILE_SIZE*.7);
-		if (swatch_ground[tx][ty].tile == 0)  w.position.y -= 35;
+		if (swatch_ground[tx][ty].tile == 0)  w.position.y -= (TILE_SIZE*.35);
 	} else {
 		w.position.y = (TILE_SIZE*.7);
 	}
@@ -865,10 +1240,119 @@ function animate_this_wanderer() {
 
 
 // utility
+// general
 function clamp(a,b,c) {
 	return((b<a)?a:(b>c)?c:b);
 }
+function round3(a) {
+	return (Math.round(a*1000)/1000);
+}
+function getGUID() {
+	thisGUID = GUID;
+	GUID++;
+
+	return thisGUID;
+}
 
 
+// wanderers
+function find_wanderer_by_id(id) {
+	var wid = -1;
+	
+	for(var lp=0;lp<wanderers.length;lp++) {
+		if(wanderers[lp].id == id) {
+			return lp;
+		}
+	}
+	
+	return wid;
+}
 
+
+// mouse
+function check_mouse_targeting() {
+	raycaster.setFromCamera( mouse, camera );
+	
+	var intersects;
+	var intersects_buf = "";
+	
+	/*
+	// check type of tile
+	var first = true;
+	
+	for(var lp=0;lp<ground.length;lp++) {
+		for(var lp2=0;lp2<ground[lp].length;lp2++) {
+			intersects = raycaster.intersectObject(ground[lp][lp2]);
+			
+			if(intersects.length > 0 && first) {
+				intersects_buf = tile_names[ground[lp][lp2].mat]+", ";
+				first = false;
+			}
+		}
+	}
+	
+	// check forest
+	for(var lp=0;lp<forest.length;lp++) {
+		intersects = raycaster.intersectObject(forest[lp]);
+		
+		if(intersects.length > 0) {
+			intersects_buf += "t"+lp+", ";
+		}
+	}
+	
+	// check grass
+	for(var lp=0;lp<grass.length;lp++) {
+		intersects = raycaster.intersectObject(grass[lp]);
+		
+		if(intersects.length > 0) {
+			intersects_buf += "g"+lp+", ";
+		}
+	}
+	intersects_buf = intersects_buf.substr(0,intersects_buf.length-2);
+	$("#mouse_target_mon").html(intersects_buf);
+	*/
+	
+	intersects = raycaster.intersectObjects(scene.children);
+	if(intersects.length > 0) {
+		$("#mouse_target_mon").html(intersects[0].object.GUID);
+		camera.targeting = intersects[0].object.GUID;
+	} else {
+		$("#mouse_target_mon").html("none");
+	}
+}
+
+// camera
+function camera_following_light_intensity() {
+	var intensity = 0;
+	var wid = find_wanderer_by_id(camera.follow.id);
+	var iii = find_item_in_inventory_by_type(wid,"light");
+	
+	if(iii > -1) {
+		intensity = wanderers[wid].inventory[iii].attrs.intensity;
+	}
+	return intensity;
+}
+function camera_following_light_color() {
+	var color = new THREE.Color(0x008080);
+	var wid = find_wanderer_by_id(camera.follow.id);
+	var iii = find_item_in_inventory_by_type(wid,"light");
+	
+	if(iii > -1) {
+		color = new THREE.Color(wanderers[wid].inventory[iii].attrs.color);
+	}
+	return color;
+}
+
+
+// inventory
+function find_item_in_inventory_by_type(wid,itype) {
+	var iid = -1;
+	
+	for(var lp=0;lp<wanderers[wid].inventory.length;lp++) {
+		if (wanderers[wid].inventory[lp].type == itype) {
+			return lp;
+		}
+	}
+	return iid;
+}
 

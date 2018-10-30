@@ -1,34 +1,66 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title></title>
-<link rel="stylesheet" href="style.css" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="scripts/three.min.js"></script>
-<script src="scripts/scripts.js"></script>
-</head>
+	<head>
+		<title></title>
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="fontawesome-free-5.2.0-web/css/all.css">
+	</head>
 
-<body>
-	<div id="headerContainer">
-		<header>
-		
-		</header>
-	</div>
-	<div id="mainContainer">
-		<div id="main">
-		
+	<body>
+		<div id="headerContainer">
+			<header>
+			
+			</header>
 		</div>
-	</div>
-	<div id="footerContainer">
-		<footer>
+		<div id="mainContainer">
+			<div id="main">
+			
+			</div>
+		</div>
+		<div id="footerContainer">
+			<footer>
+			
+			</footer>
+		</div>
+		<div id="infoContainer" style="background:#000;border:1px solid #f00;display:block;position:absolute;top:0;right:0;width:400px;height:120px;z-index:1;padding:5px;">
+			<div class="data_mon" id="facing_mon" style="color:#fff;"></div>
+			<div class="data_mon" id="facing_trig_mon" style="color:#fff;"></div>
+			<div class="data_mon" id="camera_mon" style="color:#fff;"></div>
+			<div class="data_mon" id="camera_style_mon" style="color:#fff;"></div>
+			<div class="data_mon" id="light_0_mon" style="color:#fff;"></div>
+			<div class="data_mon" id="mouse_mon" style="color:#fff;"></div>
+			<div class="data_mon" id="mouse_target_mon" style="color:#fff;"></div>
+			<div id="daytime-controls">
+				<a href="#" id="day-time-button"><i class="fas fa-sun"></i></a>
+				<a href="#" id="night-time-button"><i class="fas fa-moon"></i></a>
+			</div>
+			<div id="ai-controls">
+				<div class="data_mon" id="ai_id_mon" style="color:#fff;"></div>
+				<select class="control-select" id="action-mode-select" name="action-mode-select">
+					<!--option value="0">Stationary</option-->
+					<option value="1">Wander</option>
+					<!--option value="2">Patrol</option-->
+					<!--option value="3">Search</option-->
+					<option value="4">Follow</option>
+					<!--option value="5">Flee</option-->
+					<!--option value="6">Guard</option-->
+					<!--option value="7">Beseige</option-->
+					<!--option value="8">Hunt</option-->
+					<!--option value="9">Gather</option-->
+					<!--option value="10">Deliver</option-->
+				</select><select class="control-select" id="idle-mode-select" name="idle-mode-select">
+					<option value="0">Continue</option>
+					<!--option value="1">Wait</option-->
+					<option value="2">Scan</option>
+					<!--option value="3">Sleep</option-->
+				</select><a href="#" class="mode-set" id="mode-set">Set</a>
+			</div>
+			<a href="#" class="control-button active" id="keyboard-control-button"><i class="fas fa-keyboard"></i></a>
+			<a href="#" class="control-button" id="controller-control-button"><i class="fas fa-gamepad"></i></a>
+		</div>
 		
-		</footer>
-	</div>
-	<div id="infoContainer" style="background:#000;border:1px solid #f00;display:block;position:absolute;top:0;right:0;width:400px;height:120px;z-index:1;padding:5px;">
-		<div class="data_mon" id="facing_mon" style="color:#fff;"></div>
-		<div class="data_mon" id="facing_trig_mon" style="color:#fff;"></div>
-		<div class="data_mon" id="camera_mon" style="color:#fff;"></div>
-		<div class="data_mon" id="camera_style_mon" style="color:#fff;"></div>
-	</div>
-</body>
+		<script src="scripts/jquery.min.js"></script>
+		<script src="scripts/three.v96.min.js"></script>
+		<script src="scripts/scripts.js"></script>
+	</body>
 </html>
