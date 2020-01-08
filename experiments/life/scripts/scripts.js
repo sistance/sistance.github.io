@@ -6,6 +6,7 @@ var game = {
 	LIFESPAN: null, // generations
 	BLUR_MODE: null,
 	FADE_MODE: null,
+	COLOR_MODE: null,
 	game_board: null,
 	generation: null,
 	game_on: true,
@@ -15,13 +16,14 @@ var game = {
 	context: null,
 	
 	init: function(){
-		this.SCALE = 4;
-		this.WIDTH = 300;
-		this.HEIGHT = 200;
+		this.SCALE = 10;
+		this.WIDTH = 128;
+		this.HEIGHT = 76;
 		this.ANIMATE_SPEED = 500;
 		this.LIFESPAN = 720;
 		this.BLUR_MODE = false;
 		this.FADE_MODE = true;
+		this.COLOR_MODE = 1;
 		this.generation = 0;
 		this.canvas = $('#game-canvas');
 		this.canvas.attr("width",(this.WIDTH*this.SCALE)).attr("height",(this.HEIGHT*this.SCALE));
@@ -147,6 +149,20 @@ var game = {
 			game.FADE_MODE = !game.FADE_MODE;
 			game.render();
 		});
+		$(".control-color-mode").on("click",function(e){
+			e.preventDefault();
+			game.COLOR_MODE += 1;
+			if(game.COLOR_MODE > 3) {
+				game.COLOR_MODE = 1;
+			}
+			game.render();
+		});
+		$(".control-reset-clock").on("click",function(e){
+			e.preventDefault();
+			game.generation = 0;
+			game.stop();
+			game.render();
+		});
 	},
 	clear_board: function(){
 		this.game_board = [];
@@ -259,7 +275,8 @@ var game = {
 		$("#mon-lifespan").html(this.LIFESPAN);
 		$("#mon-blur-mode").html(this.BLUR_MODE?'On':'Off');
 		$("#mon-fade-mode").html(this.FADE_MODE?'On':'Off');
-		//this.to_string();
+		$("#mon-color-mode").html(this.COLOR_MODE);
+
 		if(this.BLUR_MODE == false) {
 			this.context.clearRect(0,0,this.WIDTH*this.SCALE,this.HEIGHT*this.SCALE);
 		}
@@ -270,31 +287,70 @@ var game = {
 				var ty = y*this.SCALE;
 				
 				if(this.game_board[x][y].alive == true) {					
-					var angle = (this.game_board[x][y].generation * 3) % 360;
-					var saturation = Math.floor(this.game_board[x][y].generation / 360) * 5 + 15;
-					var gen_gap = this.LIFESPAN - (this.generation - this.game_board[x][y].generation);
-					
-					if(saturation > 100) {
-						saturation = 100;
-					}
-					if(gen_gap < 0) {
-						gen_gap = 0;
-					}
-					gen_gap /= this.LIFESPAN;
+					var style_buf = "";
 
-					var style_buf = "hsla("+angle+","+saturation+"%,50%,"+gen_gap+")";
+					switch(this.COLOR_MODE) {
+						case 1: // HSL rainbow
+							var angle = (this.game_board[x][y].generation * 3) % 360;
+							var saturation = Math.floor(this.game_board[x][y].generation / 360) * 5 + 15;
+							var gen_gap = this.LIFESPAN - (this.generation - this.game_board[x][y].generation);
+							
+							if(saturation > 100) {
+								saturation = 100;
+							}
+							if(gen_gap < 0) {
+								gen_gap = 0;
+							}
+							gen_gap /= this.LIFESPAN;
+							style_buf = "hsla("+angle+","+saturation+"%,50%,"+gen_gap+")";
+							break;
+						case 2: // green-red ripples based on parity
+							var step = ((this.game_board[x][y].generation + 10) % 20);
+							var r = 0;
+							var g = 0;
+							
+							if(step < 10) {
+								r = 255 * (step / 10);
+								g = 255 * ((10 - step) / 10);								
+							};
+							if(step > 9) {
+								r = 255 * ((10 - (step - 10)) / 10);
+								g = 255 * ((step - 10) / 10);
+							};
+							style_buf = "rgb("+r+","+g+",0)";
+							break;
+						case 3:
+							var step = ((this.game_board[x][y].generation + 10) % 20);
+							var b = 0;
+							
+							if(step < 10) {
+								b = 63 + 192 * (step / 10);
+							}
+							if(step > 9) {
+								b = 63 + 192 * ((10 - (step - 10)) / 10);
+							}
+							style_buf = "rgb(0,0,"+b+")";
+							break;
+							
+					}
 					//console.log(style_buf);
 					this.context.fillStyle = style_buf;
 					this.context.fillRect(tx,ty,this.SCALE,this.SCALE);
 				} else {
-					if(this.BLUR_MODE == true) {
-						this.context.fillStyle = "rgba(0,0,0,0.05)";
-					} else {
-						// no clearing this time!
-						this.context.fillStyle = "#000000";
-					}
-					if(this.FADE_MODE == true) {
-						this.context.fillRect(tx,ty,this.SCALE,this.SCALE);
+					switch(this.COLOR_MODE) {
+						case 1:
+						case 2:
+						case 3:
+							if(this.BLUR_MODE == true) {
+								this.context.fillStyle = "rgba(0,0,0,0.05)";
+							} else {
+								// no clearing this time!
+								this.context.fillStyle = "#000000";
+							}
+							if(this.FADE_MODE == true) {
+								this.context.fillRect(tx,ty,this.SCALE,this.SCALE);
+							}
+							break;
 					}
 				}
 			}
