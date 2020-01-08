@@ -1,6 +1,7 @@
 // 3D TRIANGLES MAP
 // globals
 var camera, camera2, scene, renderer, renderer2, raycaster, heightcaster, mouse;
+var ground_geometry;
 var geometry, material, mesh, mesh2, mesh3, mesh4, mesh5, mesh6, mesh7, mesh8, mesh9, mesh10;
 var skyMat, groundMat, waterMat, treeMat, wandererMat, snowMat;
 var cubeBase, waterBase, treeBase, grassBase, wandererBase;
@@ -114,8 +115,6 @@ $(window).load(function(){
 	});
 	
 	init();
-	animate();
-	
 	
 });
 
@@ -302,16 +301,19 @@ function init() {
 	startTime = lastTickTime;
 	
 	//createSky();
-	createGround();
-	//createGrass();
-	createForest();
-	createWanderers();
-	camera.follow_id = 0;
-	camera.follow = wanderers[camera.follow_id];
-	camera.follow_randomize = 0;
-	camera.follow_tick = 0;
-	camera.type = 2; // 1 = chase, 2 = follow, 3 = first-person
-	//camera.follow = wanderers[Math.floor(Math.random()*wanderers.length)];
+	createGround(function(){
+		//createGrass();
+		createForest();
+		createWanderers();
+		camera.follow_id = 0;
+		camera.follow = wanderers[camera.follow_id];
+		camera.follow_randomize = 0;
+		camera.follow_tick = 0;
+		camera.type = 2; // 1 = chase, 2 = follow, 3 = first-person
+		//camera.follow = wanderers[Math.floor(Math.random()*wanderers.length)];
+
+		animate();		
+	});
 }
 
 
@@ -379,109 +381,116 @@ function animate() {
 
 
 // NEW creates the ground
-function createGround() {
-	var mat, mater, base;
-	
-	var ground_geometry = new THREE.Geometry();
-	
-	// create level ground, hexagon lattice
-	for (var x=0;x<WORLD_SIZE;x++) {
-		swatch_point[x] = [];
-		for(var y=0;y<WORLD_SIZE;y++) {
-			swatch_point[x][y] = {
-				x:0.0,
-				y: 0.0, //Math.floor(Math.random()*2)*EQUIL_HEIGHT
-				z:EQUIL_HEIGHT*y,
-			};
+function createGround(the_callback) {
+	if(false) {
+		// LOAD
+		// should be preloaded?
+		jQuery.ajax({
+			url:"images/maps/map1.map",
+			dataType:"json",
+		}).done(function(data){
+			swatch_point = data;
+			build_ground_geometry(function(){
+				// build object and add to world!
+				ground = new THREE.Mesh( ground_geometry, all_ground_materials );
+				ground.GUID = getGUID();
+				ground.position.x = 0; //-((WORLD_SIZE * TILE_SIZE)/2);
+				ground.position.z = 0; //-((WORLD_SIZE * TILE_SIZE)/2);
+				ground.position.y = 0;
+				scene.add(ground);	
+				the_callback();
+			});
 			
-			if(y%2==0) {
-				swatch_point[x][y].x = x*TILE_SIZE;
-			} else {
-				swatch_point[x][y].x = x*TILE_SIZE+(TILE_SIZE/2);
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			console.log(jqXHR);
+		});
+	} else {
+		// CREATE
+
+		// create level ground, hexagon lattice
+		for (var x=0;x<WORLD_SIZE;x++) {
+			swatch_point[x] = [];
+			for(var y=0;y<WORLD_SIZE;y++) {
+				// height!
+				if(y%2==0) {
+					var x_coord = x*TILE_SIZE;
+				} else {
+					var x_coord = x*TILE_SIZE+(TILE_SIZE/2);
+				}
+				var z_coord = EQUIL_HEIGHT*y;
+				
+				// use (x,z) for ground plane grid coordinates
+				
+				//var point_y_height = (Math.cos(x/WORLD_SIZE*2*PI)*4*EQUIL_HEIGHT)+(Math.sin(y/WORLD_SIZE*2*PI)*4*EQUIL_HEIGHT)/2; // nice curves!
+				var point_y_height = 0.0;
+				
+				// build point
+				swatch_point[x][y] = {
+					x: x_coord,
+					y: point_y_height, //Math.floor(Math.random()*2)*EQUIL_HEIGHT
+					z: z_coord,
+				};
 			}
 		}
+
+		// mountain heights!
+		for(var lp=0;lp<100;lp++) {
+			// position
+			var x = Math.floor(Math.random()*WORLD_SIZE);
+			var y = Math.floor(Math.random()*WORLD_SIZE);
+			
+			//console.log("("+x+","+y+")");
+			
+			// height
+			var h = Math.floor(Math.random()*2.5)*EQUIL_HEIGHT;
+			
+			// levels
+			var lev = Math.floor(Math.random()*10);
+			spread_alt(x,y,h,lev); // x,y,height per level, number of levels
+		}
+		
+		// platform heights!
+		/*
+		for(var lp=0;lp<200;lp++) {
+			// position
+			var x = Math.floor(Math.random()*(WORLD_SIZE-1));
+			var y = Math.floor(Math.random()*(WORLD_SIZE-1));
+			
+			if(y%2 == 0) {
+				swatch_point[x][y].y = 		EQUIL_HEIGHT * 2;
+				swatch_point[x+1][y].y = 	EQUIL_HEIGHT * 2;
+				swatch_point[x][y+1].y = 	EQUIL_HEIGHT * 2;
+			} else {
+				swatch_point[x][y].y = 		EQUIL_HEIGHT * 2;
+				swatch_point[x+1][y+1].y = 	EQUIL_HEIGHT * 2;
+				swatch_point[x][y+1].y = 	EQUIL_HEIGHT * 2;
+			}
+		}
+		*/
+		build_ground_geometry(function(){
+			// build object and add to world!
+			ground = new THREE.Mesh( ground_geometry, all_ground_materials );
+			ground.GUID = getGUID();
+			ground.position.x = 0; //-((WORLD_SIZE * TILE_SIZE)/2);
+			ground.position.z = 0; //-((WORLD_SIZE * TILE_SIZE)/2);
+			ground.position.y = 0;
+			scene.add(ground);
+			the_callback();
+		});
 	}
 
-	// mountain heights!
-	for(var lp=0;lp<100;lp++) {
-		// position
-		var x = Math.floor(Math.random()*WORLD_SIZE);
-		var y = Math.floor(Math.random()*WORLD_SIZE);
-		
-		//console.log("("+x+","+y+")");
-		
-		// height
-		var h = (Math.floor(Math.random()*5)+5)*EQUIL_HEIGHT;
-		
-		// height in point grid
-		swatch_point[x][y].y = h;
-		if(x-1 >= 0) {
-			swatch_point[x-1][y].y = h / 2;
-		}
-		if(x+1 < WORLD_SIZE) {
-			swatch_point[x+1][y].y = h / 2;
-		}
-		
-		// above and below
-		if(y%2 == 0) { // even
-			// top
-			if(y-1 >= 0) {
-				// left
-				if(x-1 >= 0) {
-					swatch_point[x-1][y-1].y = h / 2;
-				}
-				// right
-				swatch_point[x][y-1].y = h / 2;
-			}
-			// bottom
-			if(y+1 < WORLD_SIZE) {
-				// left
-				if(x-1 >= 0) {
-					swatch_point[x-1][y+1].y = h / 2;
-				}
-				// right
-				swatch_point[x][y+1].y = h / 2;
-			}
-		} else { // odd
-			// top
-			if(y-1 >= 0) {
-				// left
-				swatch_point[x][y-1].y = h / 2;
-				// right
-				if(x+1 < WORLD_SIZE) {
-					swatch_point[x+1][y-1].y = h / 2;
-				}
-			}
-			// bottom
-			if(y+1 < WORLD_SIZE) {
-				// left
-				swatch_point[x][y+1].y = h / 2;
-				// right
-				if(x+1 < WORLD_SIZE) {
-					swatch_point[x+1][y+1].y = h / 2;
-				}
-			}
-		}
-		
-	}
+
+}
+
+
+
+
+
+// build ground geometry
+function build_ground_geometry(the_callback) {
+	ground_geometry = new THREE.Geometry();
+	console.log(swatch_point);
 	
-	// platform heights!
-	for(var lp=0;lp<200;lp++) {
-		// position
-		var x = Math.floor(Math.random()*(WORLD_SIZE-1));
-		var y = Math.floor(Math.random()*(WORLD_SIZE-1));
-		
-		if(y%2 == 0) {
-			swatch_point[x][y].y = 		EQUIL_HEIGHT * 2;
-			swatch_point[x+1][y].y = 	EQUIL_HEIGHT * 2;
-			swatch_point[x][y+1].y = 	EQUIL_HEIGHT * 2;
-		} else {
-			swatch_point[x][y].y = 		EQUIL_HEIGHT * 2;
-			swatch_point[x+1][y+1].y = 	EQUIL_HEIGHT * 2;
-			swatch_point[x][y+1].y = 	EQUIL_HEIGHT * 2;
-		}
-	}
-		
 	// build geometry with points
 	for (var x=0;x<WORLD_SIZE;x++) {
 		for(var y=0;y<WORLD_SIZE;y++) {
@@ -494,7 +503,14 @@ function createGround() {
 	// texture polygons!
 	for (var x=0;x<WORLD_SIZE-1;x++) {
 		for (var y=0;y<WORLD_SIZE-1;y++) {
-			var face_mat = 0; //Math.floor(Math.random() * all_ground_materials.length);
+			var face_mat = 3; //Math.floor(Math.random() * all_ground_materials.length);
+			
+			// check altitude for face material
+			//if(swatch_point[x][y].y > 0) {
+			//	face_mat = 2;
+			//}
+			
+			
 			swatch_polys.push({
 				mat: face_mat
 			},{
@@ -551,16 +567,49 @@ function createGround() {
 			}
 		}
 	}
+	
 	ground_geometry.computeBoundingBox();
 	ground_geometry.computeFaceNormals();
 
-	// build object and add to world!
-	ground = new THREE.Mesh( ground_geometry, all_ground_materials );
-	ground.GUID = getGUID();
-	ground.position.x = 0; //-((WORLD_SIZE * TILE_SIZE)/2);
-	ground.position.z = 0; //-((WORLD_SIZE * TILE_SIZE)/2);
-	ground.position.y = 0;
-	scene.add(ground);	
+	for (var x=0;x<WORLD_SIZE;x++) {
+		for (var y=0;y<WORLD_SIZE;y++) {
+			if(swatch_point[x][y].y > 0) { // mountain of rock or hill of dirt
+				var faces = find_faces_around_point(x,y);
+				
+				for(var lp in faces) {
+					var the_face = faces[lp];
+					
+					if(swatch_point[x][y].y > EQUIL_HEIGHT * 6) {
+						ground_geometry.faces[the_face].materialIndex = 2;
+					} else {
+						if(swatch_point[x][y].y > EQUIL_HEIGHT * 3) {
+							ground_geometry.faces[the_face].materialIndex = 0;
+						} else {
+							ground_geometry.faces[the_face].materialIndex = 3;
+						}
+					}
+				}
+			}
+		}
+	}
+	for (var x=0;x<WORLD_SIZE;x++) {
+		for (var y=0;y<WORLD_SIZE;y++) {
+			if(swatch_point[x][y].y > 0) { // snow caps?
+				var faces = find_faces_around_point(x,y);
+				
+				for(var lp in faces) {
+					var the_face = faces[lp];
+					
+					if(swatch_point[x][y].y > EQUIL_HEIGHT * 12) {
+						ground_geometry.faces[the_face].materialIndex = 5;
+					}
+				}
+				
+			}			
+		}
+	}
+	ground_geometry.elementsNeedUpdate = true;
+	the_callback();
 }
 
 
@@ -757,8 +806,120 @@ function spread_tile(sx,sy,iter,tile,border,replaces) {
 }
 
 
-function spread_alt(sx,sy,iter) {
+function spread_alt(x,y,h,iter) {
+	// raise this point
+	if((x > -1 && x < WORLD_SIZE) && (y > -1 && y < WORLD_SIZE)) {
+		if(swatch_point[x][y].y < h * (iter + 1)) {
+			swatch_point[x][y].y = h * (iter + 1);
+		}
+	}
 	
+	if(iter > 0) {
+		// spread left and right
+		if(x-1 >= 0) {
+			spread_alt(x-1,y,h,iter-1);
+		}
+		if(x+1 < WORLD_SIZE) {
+			spread_alt(x+1,y,h,iter-1);
+		}
+		
+		// spread up and down
+		if(y%2 == 0) { // even
+			// top
+			if(y-1 >= 0) {
+				// left
+				if(x-1 >= 0) {
+					spread_alt(x-1,y-1,h,iter-1);
+				}
+				// right
+				spread_alt(x,y-1,h,iter-1);
+			}
+			// bottom
+			if(y+1 < WORLD_SIZE) {
+				// left
+				if(x-1 >= 0) {
+					spread_alt(x-1,y+1,h,iter-1);
+				}
+				// right
+				spread_alt(x+1,y+1,h,iter-1);
+			}
+		} else { // odd
+			// top
+			if(y-1 >= 0) {
+				// left
+				spread_alt(x,y-1,h,iter-1);
+				
+				// right
+				if(x+1 < WORLD_SIZE) {
+					spread_alt(x+1,y-1,h,iter-1);
+				}
+				
+			}
+			// bottom
+			if(y+1 < WORLD_SIZE) {
+				// left
+				spread_alt(x,y+1,h,iter-1);
+				
+				// right
+				if(x+1 < WORLD_SIZE) {
+					spread_alt(x+1,y+1,h,iter-1);
+				}
+			}
+		}
+	}  
+	/* ---------------------- REMOVE TEMPORARILY? -------------------------------
+	else if(iter == 0) {
+		// height in point grid
+		swatch_point[x][y].y += h;
+		if(x-1 >= 0) {
+			swatch_point[x-1][y].y += h / 2;
+		}
+		if(x+1 < WORLD_SIZE) {
+			swatch_point[x+1][y].y += h / 2;
+		}
+		
+		// above and below
+		if(y%2 == 0) { // even
+			// top
+			if(y-1 >= 0) {
+				// left
+				if(x-1 >= 0) {
+					swatch_point[x-1][y-1].y += h / 2;
+				}
+				// right
+				swatch_point[x][y-1].y += h / 2;
+			}
+			// bottom
+			if(y+1 < WORLD_SIZE) {
+				// left
+				if(x-1 >= 0) {
+					swatch_point[x-1][y+1].y += h / 2;
+				}
+				// right
+				swatch_point[x][y+1].y += h / 2;
+			}
+		} else { // odd
+			// top
+			if(y-1 >= 0) {
+				// left
+				swatch_point[x][y-1].y += h / 2;
+				// right
+				if(x+1 < WORLD_SIZE) {
+					swatch_point[x+1][y-1].y += h / 2;
+				}
+			}
+			// bottom
+			if(y+1 < WORLD_SIZE) {
+				// left
+				swatch_point[x][y+1].y += h / 2;
+				// right
+				if(x+1 < WORLD_SIZE) {
+					swatch_point[x+1][y+1].y += h / 2;
+				}
+			}
+		}
+	}
+	---------------------- REMOVE TEMPORARILY? ------------------------------- */
 }
 
 // spread altitude, always works on the first iteration
@@ -1554,3 +1715,18 @@ function find_item_in_inventory_by_type(wid,itype) {
 	return iid;
 }
 
+
+function find_faces_around_point(py,px) {
+	var this_point = py * WORLD_SIZE + px;
+	var faces_array = [];
+	
+	for(var lp in ground_geometry.faces) {
+		var ggf = ground_geometry.faces[lp];
+		
+		if(ggf.a == this_point || ggf.b == this_point || ggf.c == this_point) {
+			faces_array.push(lp);
+		}
+	}
+	
+	return faces_array;
+}
