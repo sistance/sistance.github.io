@@ -26,7 +26,7 @@ var lightWaverCycle = PI / 2; // starts at dawn
 var LENGTH_OF_DAY = 60000; // in MS
 
 // always light, for testing
-var ALWAYS_LIGHT = true;
+var ALWAYS_LIGHT = false;
 
 // globals?
 var TILE_SIZE = 40;
