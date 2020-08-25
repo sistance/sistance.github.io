@@ -82,24 +82,24 @@ var GAME = {
 			{ // player shots
 				w: 1,
 				h: 1,
-				ax: 0,
-				ay: -0.1,
+				sx: 0,
+				sy: -0.66,
 				r: 255,
 				g: 0,
 				b: 0,
-				delta_r: -1,
+				delta_r: -2,
 				delta_g: 0,
 				delta_b: 0
 			},
 			{ // player bombs
 				w: 1,
 				h: 1,
-				ax: 0,
-				ay: -0.02,
+				sx: 0,
+				sy: -0.2,
 				r: 0,
 				g: 255,
 				b: 0,
-				delta_r: 1,
+				delta_r: 2,
 				delta_g: -2,
 				delta_b: 2
 			}
@@ -113,6 +113,8 @@ var GAME = {
 		this.PLAYER = {
 			x: 0.0,
 			y: 13.0,
+			sx: 0.0,
+			sy: 0.0,
 			ax: 0.0,
 			ay: 0.0,
 			fire1: 0, // projectile ID
@@ -123,7 +125,7 @@ var GAME = {
 			accel: 0.07, // pixels/tick
 			lives: 3,
 			f1_cooldown: 200,
-			f2_cooldown: 1000
+			f2_cooldown: 750
 		};
 		
 		this.MOBILES = [];
@@ -209,8 +211,8 @@ var GAME = {
 			owner: who,
 			x: Math.floor(who.x+0.5),
 			y: who.y - 0.5,
-			ax: this.PROJECTILE_MODELS[0].ax,
-			ay: this.PROJECTILE_MODELS[0].ay,
+			sx: this.PROJECTILE_MODELS[0].sx,
+			sy: this.PROJECTILE_MODELS[0].sy,
 			time: 0
 		};
 		
@@ -321,20 +323,27 @@ var GAME = {
 	move_player: function() {
 		// add acceleration - x axis
 		if(GAME.CONTROL_HANDLER[0] != 0) {
-			GAME.PLAYER.ax += GAME.CONTROL_HANDLER[0]*GAME.PLAYER.accel;
+			GAME.PLAYER.ax = GAME.CONTROL_HANDLER[0]*GAME.PLAYER.accel;
 		} else {
-			GAME.PLAYER.ax /= 2;
+			GAME.PLAYER.ax = 0;
+		}
+		
+		// add acceleration
+		if(GAME.PLAYER.ax != 0) {
+			GAME.PLAYER.sx += GAME.PLAYER.ax;
+		} else {
+			GAME.PLAYER.sx /= 2;
 		}
 		
 		// move
-		GAME.PLAYER.x += GAME.PLAYER.ax;
+		GAME.PLAYER.x += GAME.PLAYER.sx;
 		if(GAME.PLAYER.x < 0) {
 			GAME.PLAYER.x = 0;
-			GAME.PLAYER.ax = 0;
+			GAME.PLAYER.sx = 0;
 		}
 		if(GAME.PLAYER.x > 7) {
 			GAME.PLAYER.x = 7;
-			GAME.PLAYER.ax = 0;
+			GAME.PLAYER.sx = 0;
 		}
 	},
 	move_mobiles: function() {},
@@ -345,11 +354,11 @@ var GAME = {
 		}
 	},
 	move_projectile: function(proj) {
-		proj.ax += GAME.PROJECTILE_MODELS[proj.type].ax;
-		proj.ay += GAME.PROJECTILE_MODELS[proj.type].ay;
+		proj.sx = GAME.PROJECTILE_MODELS[proj.type].sx;
+		proj.sy = GAME.PROJECTILE_MODELS[proj.type].sy;
 		
-		proj.x += proj.ax;
-		proj.y += proj.ay;
+		proj.x += proj.sx;
+		proj.y += proj.sy;
 		
 		proj.time += GAME.ELAPSED;
 	},
