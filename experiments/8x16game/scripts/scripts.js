@@ -99,9 +99,9 @@ var GAME = {
 				r: 0,
 				g: 255,
 				b: 0,
-				delta_r: 0,
-				delta_g: -1,
-				delta_b: 1
+				delta_r: 1,
+				delta_g: -2,
+				delta_b: 2
 			}
 		];
 
@@ -265,7 +265,7 @@ var GAME = {
 				var base_b = GAME.PROJECTILE_MODELS[proj.type].b;
 				
 				// animate color
-				var step = GAME.CLOCK % 255;
+				var step = proj.time % 128;
 				base_r += step * GAME.PROJECTILE_MODELS[proj.type].delta_r;
 				if(base_r > 255) {base_r = 255;}
 				if(base_r < 0) {base_r = 0;}
