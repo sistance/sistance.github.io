@@ -125,7 +125,7 @@ var GAME = {
 			accel: 0.07, // pixels/tick
 			lives: 3,
 			f1_cooldown: 200,
-			f2_cooldown: 750
+			f2_cooldown: 1500
 		};
 		
 		this.MOBILES = [];
@@ -245,8 +245,8 @@ var GAME = {
 		GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*2);	
 	},
 	render_projectiles: function() {
-		for(var lp=0;lp<GAME.PROJECTILES.length;lp++) {
-			GAME.render_projectile(GAME.PROJECTILES[lp]);
+		for(proj of GAME.PROJECTILES) {
+			GAME.render_projectile(proj);
 		}
 	},
 	render_projectile: function(proj) {
@@ -349,8 +349,10 @@ var GAME = {
 	move_mobiles: function() {},
 	move_mobile: function() {},
 	move_projectiles: function() {
-		for(var lp=0;lp<GAME.PROJECTILES.length;lp++) {
-			GAME.move_projectile(GAME.PROJECTILES[lp]);			
+		if(GAME.PROJECTILES.length > 0) {
+			for(proj of GAME.PROJECTILES) {
+				GAME.move_projectile(proj);
+			}
 		}
 	},
 	move_projectile: function(proj) {
@@ -364,13 +366,12 @@ var GAME = {
 	},
 	
 	dispose_projectiles: function() {
-		for(var lp=0;lp<GAME.PROJECTILES.length;lp++) {
-			GAME.dispose_projectile(lp);			
-		}
-	},
-	dispose_projectile: function(proj) {
-		if(proj.y < 0 || proj.y > 15 || proj.x < 0 || proj.x > 7) {
-			delete GAME.PROJECTILES[proj];
+		if(GAME.PROJECTILES.length > 0) {
+			for(var lp=(GAME.PROJECTILES.length-1);lp>=0;lp--) {
+				if(GAME.PROJECTILES[lp].y < 0 || GAME.PROJECTILES[lp].y > 15 || GAME.PROJECTILES[lp].x < 0 || GAME.PROJECTILES[lp].x > 7) {
+					GAME.PROJECTILES.splice(lp,1);
+				}
+			}
 		}
 	},
 	
