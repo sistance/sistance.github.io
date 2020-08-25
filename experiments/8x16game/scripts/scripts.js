@@ -1,6 +1,8 @@
 var GAME = {
 	CLOCK: null,
+	ELAPSED: null,
 	LAST_TICK: null,
+
 	CANVAS: null,
 	CONTEXT: null,
 	GAME_ON: true,
@@ -85,7 +87,7 @@ var GAME = {
 				r: 255,
 				g: 0,
 				b: 0,
-				delta_r: 1,
+				delta_r: -1,
 				delta_g: 0,
 				delta_b: 0
 			},
@@ -93,13 +95,13 @@ var GAME = {
 				w: 1,
 				h: 1,
 				ax: 0,
-				ay: -0.05,
+				ay: -0.02,
 				r: 0,
 				g: 255,
 				b: 0,
 				delta_r: 0,
-				delta_g: 1,
-				delta_b: 0
+				delta_g: -1,
+				delta_b: 1
 			}
 		];
 
@@ -208,7 +210,8 @@ var GAME = {
 			x: Math.floor(who.x+0.5),
 			y: who.y - 0.5,
 			ax: this.PROJECTILE_MODELS[0].ax,
-			ay: this.PROJECTILE_MODELS[0].ay
+			ay: this.PROJECTILE_MODELS[0].ay,
+			time: 0
 		};
 		
 		this.PROJECTILES.push(proj);
@@ -248,7 +251,7 @@ var GAME = {
 		//console.log(proj);
 		
 		switch(proj.type) {
-			case 0: // player file
+			case 0: // player shot
 			case 1: // player bomb
 				// player fire - ratcheting position!
 				var x = Math.floor(proj.x);
@@ -256,14 +259,33 @@ var GAME = {
 				var ox = (proj.x%1);
 				var oy = (proj.y%1);
 				
+				// grab base color
+				var base_r = GAME.PROJECTILE_MODELS[proj.type].r;
+				var base_g = GAME.PROJECTILE_MODELS[proj.type].g;
+				var base_b = GAME.PROJECTILE_MODELS[proj.type].b;
+				
+				// animate color
+				var step = GAME.CLOCK % 255;
+				base_r += step * GAME.PROJECTILE_MODELS[proj.type].delta_r;
+				if(base_r > 255) {base_r = 255;}
+				if(base_r < 0) {base_r = 0;}
+				base_g += step * GAME.PROJECTILE_MODELS[proj.type].delta_g;
+				if(base_g > 255) {base_g = 255;}
+				if(base_g < 0) {base_g = 0;}
+				base_b += step * GAME.PROJECTILE_MODELS[proj.type].delta_b;
+				if(base_b > 255) {base_b = 255;}
+				if(base_b < 0) {base_b = 0;}
+				var color0 = "#"+GAME.color_code(base_r)+GAME.color_code(base_g)+GAME.color_code(base_b);
+				
+				
 				// player fire color - fading between pixels
-				var r1 = (1-oy)*GAME.PROJECTILE_MODELS[proj.type].r;
-				var g1 = (1-oy)*GAME.PROJECTILE_MODELS[proj.type].g;
-				var b1 = (1-oy)*GAME.PROJECTILE_MODELS[proj.type].b;
+				var r1 = (1-oy)*base_r;
+				var g1 = (1-oy)*base_g;
+				var b1 = (1-oy)*base_b;
 				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
-				var r2 = oy*GAME.PROJECTILE_MODELS[proj.type].r;
-				var g2 = oy*GAME.PROJECTILE_MODELS[proj.type].g;
-				var b2 = oy*GAME.PROJECTILE_MODELS[proj.type].b;
+				var r2 = oy*base_r;
+				var g2 = oy*base_g;
+				var b2 = oy*base_b;
 				var color2 = "#"+GAME.color_code(r2)+GAME.color_code(g2)+GAME.color_code(b2);
 				
 				// render all of it
@@ -328,6 +350,8 @@ var GAME = {
 		
 		proj.x += proj.ax;
 		proj.y += proj.ay;
+		
+		proj.time += GAME.ELAPSED;
 	},
 	
 	dispose_projectiles: function() {
@@ -343,7 +367,7 @@ var GAME = {
 	
 	// animate needs to refer to GAME instead of this!
 	animate: function(time) {
-		var ELAPSED = time - GAME.CLOCK;
+		GAME.ELAPSED = time - GAME.CLOCK;
 		GAME.CLOCK = time;
 		
 		// handle other controls - fire bomb select start
