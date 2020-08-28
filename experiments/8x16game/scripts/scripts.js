@@ -46,7 +46,7 @@ var GAME = {
 	
 	// boss models
 	BOSS_MODELS: null,
-	BOSS_ARMOR_MODELS: null,
+	ARMOR_MODELS: null,
 	BOSS_CORE_MODELS: null,
 	
 	// projectile models
@@ -134,7 +134,8 @@ var GAME = {
 				b: 85,
 				delta_r: 0,
 				delta_g: 0,
-				delta_b: 0
+				delta_b: 0,
+				armor_id: -1
 			},
 			{
 				name: 'SIMPLE_SHIP_2',
@@ -149,7 +150,8 @@ var GAME = {
 				b: 49,
 				delta_r: 0,
 				delta_g: 0,
-				delta_b: 0
+				delta_b: 0,
+				armor_id: 0
 			},
 			{
 				name: 'BOSS_SHIP_1',
@@ -164,7 +166,8 @@ var GAME = {
 				b: 99,
 				delta_r: 0,
 				delta_g: 0,
-				delta_b: 0
+				delta_b: 0,
+				armor_id: 1
 			},
 			{
 				name: 'BOSS_SHIP_2',
@@ -179,7 +182,8 @@ var GAME = {
 				b: 99,
 				delta_r: 0,
 				delta_g: 0,
-				delta_b: 0
+				delta_b: 0,
+				armor_id: 2
 			},
 			{
 				name: 'BOSS_SHIP_3',
@@ -194,13 +198,23 @@ var GAME = {
 				b: 99,
 				delta_r: 0,
 				delta_g: 0,
-				delta_b: 0
+				delta_b: 0,
+				armor_id: 3
 			}
 		];
 		
 		
 		// ARMOR MODELS
-		this.BOSS_ARMOR_MODELS = [
+		this.ARMOR_MODELS = [
+			{
+				name: 'SIMPLE_SHIP_2_ARMOR',
+				segments: 1,
+				durability: 2,
+				locations: [{x:0,y:0}],
+				r: 156,
+				g: 132,
+				b: 75
+			},
 			{
 				name: 'BOSS_SHIP_ARMOR_1',
 				segments: 3,
@@ -222,18 +236,20 @@ var GAME = {
 			{
 				name: 'BOSS_SHIP_ARMOR_3',
 				segments: 5,
-				durability: 6,
+				durability: 4,
 				locations: [{x:0,y:1},{x:0,y:2},{x:1,y:2},{x:2,y:1},{x:2,y:2}],
 				r: 156,
 				g: 132,
 				b: 75
 			}
 		];
-		// CORE MODELS
+
+		// BOSS CORE MODELS
 		this.BOSS_CORE_MODELS = [
 			{
 				name: 'BOSS_SHIP_CORE_1',
 				segments: 2,
+				durability: 5,
 				locations: [{x:1,y:0},{x:1,y:1}],
 				r: 214,
 				g: 222,
@@ -242,6 +258,7 @@ var GAME = {
 			{
 				name: 'BOSS_SHIP_CORE_2',
 				segments: 2,		
+				durability: 5,
 				locations: [{x:0,y:0},{x:2,y:0}],
 				r: 214,
 				g: 222,
@@ -250,12 +267,35 @@ var GAME = {
 			{
 				name: 'BOSS_SHIP_CORE_3',
 				segments: 2,
+				durability: 5,
 				locations: [{x:1,y:0},{x:1,y:1}],
 				r: 214,
 				g: 222,
 				b: 54
 			}
 		];
+		// BOSS SECTION MODELS
+		this.BOSS_SECTION_MODELS = [
+			{
+				name: 'BOSS_SHIP_SECTIONS_1',
+				segments: 5,
+				durability: 2,
+				locations: [{x:1,y:0},{x:0,y:1},{x:1,y:1},{x:2,y:1},{x:1,y:2}]
+			},
+			{
+				name: 'BOSS_SHIP_SECTIONS_2',
+				segments: 6,
+				durability: 2,
+				locations: [{x:0,y:0},{x:0,y:1},{x:0,y:2},{x:2,y:0},{x:2,y:1},{x:2,y:2}]
+			},
+			{
+				name: 'BOSS_SHIP_SECTIONS_3',
+				segments: 9,
+				durability: 2,
+				locations: [{x:0,y:0},{x:0,y:1},{x:0,y:2},{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:2,y:0},{x:2,y:1},{x:2,y:2}]
+			}
+		];
+		
 		
 		
 		// ANIMATED THINGS
@@ -287,9 +327,12 @@ var GAME = {
 				sy: 0,
 				ax: 0,
 				ay: 0,
-				time: 0
+				time: 0,
+				hull_life: [1],
+				armor_life: [0],
+				core_life: [0]
 			},
-			{ // test enemy ship
+			{ // test enemy ship #2
 				type: 1,
 				x: 7,
 				y: 0,
@@ -297,9 +340,13 @@ var GAME = {
 				sy: 0,
 				ax: 0,
 				ay: 0,
-				time: 0
+				time: 0,
+				hull_life: [1],
+				armor_life: [1],
+				core_life: [0]
+
 			},
-			{ // test enemy ship
+			{ // test boss #1
 				type: 2,
 				x: 0,
 				y: 2,
@@ -307,9 +354,13 @@ var GAME = {
 				sy: 0,
 				ax: 0,
 				ay: 0,
-				time: 0
+				time: 0,
+				hull_life: [2,2,2,2,2],
+				armor_life: [3,3,3],
+				core_life: [5,5]
+
 			},
-			{ // test enemy ship
+			{ // test boss #2
 				type: 3,
 				x: 5,
 				y: 2,
@@ -317,9 +368,13 @@ var GAME = {
 				sy: 0,
 				ax: 0,
 				ay: 0,
-				time: 0
+				time: 0,
+				hull_life: [2,2,2,2,2,2],
+				armor_life: [4,4],
+				core_life: [5,5]
+
 			},
-			{ // test enemy ship
+			{ // test boss #3
 				type: 4,
 				x: 2,
 				y: 6,
@@ -327,7 +382,11 @@ var GAME = {
 				sy: 0,
 				ax: 0,
 				ay: 0,
-				time: 0
+				time: 0,
+				hull_life: [2,2,2,2,2,2,2,2,2],
+				armor_life: [4,4,4,4,4],
+				core_life: [5,5]
+
 			},
 		];
 		
@@ -348,7 +407,7 @@ var GAME = {
 	},
 	init_controls: function() {
 		document.addEventListener('keydown',function(e){
-			console.log(e.keyCode);
+			//console.log(e.keyCode);
 			switch(e.keyCode) {
 				case 37: // left
 					GAME.CONTROL_HANDLER[0] = -1;
@@ -472,6 +531,9 @@ var GAME = {
 				// render all of it
 				GAME.CONTEXT.fillStyle = color1;
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE*h);	
+
+				// render armor!
+				this.render_armor(mob);
 				break;
 			case 2: // boss ship #1
 				// ship - ratcheting position!
@@ -491,7 +553,11 @@ var GAME = {
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,(y+1)*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE);	
 				GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);
 				
-				// render boss armor!
+				// render boss sections!
+				this.render_boss_sections(mob);
+				// render boss cores!
+				this.render_boss_cores(mob);
+				// render armor!
 				this.render_armor(mob);
 				break;
 			case 3: // boss ship #2
@@ -512,7 +578,11 @@ var GAME = {
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);	
 				GAME.CONTEXT.fillRect((x+2)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);
 				
-				// render boss armor!
+				// render boss sections!
+				this.render_boss_sections(mob);
+				// render boss cores!
+				this.render_boss_cores(mob);
+				// render armor!
 				this.render_armor(mob);
 				break;
 			case 4: // boss ship #3
@@ -532,12 +602,22 @@ var GAME = {
 				GAME.CONTEXT.fillStyle = color1;
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE*h);	
 				
-				// render boss armor!
+				// render boss sections!
+				this.render_boss_sections(mob);
+				// render boss cores!
+				this.render_boss_cores(mob);
+				// render armor!
 				this.render_armor(mob);
 				break;
 		}
 	},
 	render_armor: function(mob) {
+		
+	},
+	render_boss_sections: function(mob) {
+		
+	},
+	render_boss_cores: function(mob) {
 		
 	},
 	render_projectiles: function() {
