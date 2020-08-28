@@ -46,6 +46,8 @@ var GAME = {
 	
 	// boss models
 	BOSS_MODELS: null,
+	BOSS_ARMOR_MODELS: null,
+	BOSS_CORE_MODELS: null,
 	
 	// projectile models
 	PROJECTILE_MODELS: null,
@@ -84,12 +86,12 @@ var GAME = {
 				h: 1,
 				sx: 0,
 				sy: -0.66,
-				r: 255,
-				g: 0,
-				b: 0,
-				delta_r: -2,
-				delta_g: 0,
-				delta_b: 0
+				r: 228,
+				g: 75,
+				b: 164,
+				delta_r: -3,
+				delta_g: -1,
+				delta_b: -2
 			},
 			{ // player bombs
 				w: 1,
@@ -102,10 +104,158 @@ var GAME = {
 				delta_r: 2,
 				delta_g: -2,
 				delta_b: 2
+			},
+			{ // boss shots
+				w: 1,
+				h: 1,
+				sx: 0,
+				sy: 0.2,
+				r: 242,
+				g: 135,
+				b: 64,
+				delta_r: 4,
+				delta_g: 2,
+				delta_b: 1
 			}
 		];
-
-
+		
+		// MOBILE MODELS
+		this.MOBILE_MODELS = [
+			{
+				name: 'SIMPLE_SHIP_1',
+				w: 1,
+				h: 1,
+				ax: 0,
+				ay: 0,
+				sx: 0,
+				sy: 0,
+				r: 33,
+				g: 163,
+				b: 85,
+				delta_r: 0,
+				delta_g: 0,
+				delta_b: 0
+			},
+			{
+				name: 'SIMPLE_SHIP_2',
+				w: 1,
+				h: 1,
+				ax: 0,
+				ay: 0,
+				sx: 0,
+				sy: 0,
+				r: 223,
+				g: 167,
+				b: 49,
+				delta_r: 0,
+				delta_g: 0,
+				delta_b: 0
+			},
+			{
+				name: 'BOSS_SHIP_1',
+				w: 3,
+				h: 3,
+				ax: 0,
+				ay: 0,
+				sx: 0,
+				sy: 0,
+				r: 227,
+				g: 55,
+				b: 99,
+				delta_r: 0,
+				delta_g: 0,
+				delta_b: 0
+			},
+			{
+				name: 'BOSS_SHIP_2',
+				w: 3,
+				h: 3,
+				ax: 0,
+				ay: 0,
+				sx: 0,
+				sy: 0,
+				r: 227,
+				g: 55,
+				b: 99,
+				delta_r: 0,
+				delta_g: 0,
+				delta_b: 0
+			},
+			{
+				name: 'BOSS_SHIP_3',
+				w: 3,
+				h: 3,
+				ax: 0,
+				ay: 0,
+				sx: 0,
+				sy: 0,
+				r: 227,
+				g: 55,
+				b: 99,
+				delta_r: 0,
+				delta_g: 0,
+				delta_b: 0
+			}
+		];
+		
+		
+		// ARMOR MODELS
+		this.BOSS_ARMOR_MODELS = [
+			{
+				name: 'BOSS_SHIP_ARMOR_1',
+				segments: 3,
+				durability: 3,
+				locations: [{x:0,y:1},{x:1,y:2},{x:2,y:1}],
+				r: 156,
+				g: 132,
+				b: 75
+			},
+			{
+				name: 'BOSS_SHIP_ARMOR_2',
+				segments: 2,
+				durability: 4,
+				locations: [{x:0,y:2},{x:2,y:2}],
+				r: 156,
+				g: 132,
+				b: 75
+			},
+			{
+				name: 'BOSS_SHIP_ARMOR_3',
+				segments: 5,
+				durability: 6,
+				locations: [{x:0,y:1},{x:0,y:2},{x:1,y:2},{x:2,y:1},{x:2,y:2}],
+				r: 156,
+				g: 132,
+				b: 75
+			}
+		];
+		// CORE MODELS
+		this.BOSS_CORE_MODELS = [
+			{
+				name: 'BOSS_SHIP_CORE_1',
+				segments: 2,
+				locations: [{x:1,y:0},{x:1,y:1}],
+				r: 214,
+				g: 222,
+				b: 54
+			},
+			{
+				name: 'BOSS_SHIP_CORE_2',
+				segments: 2,		
+				locations: [{x:0,y:0},{x:2,y:0}],
+				r: 214,
+				g: 222,
+				b: 54
+			},
+			{
+				name: 'BOSS_SHIP_CORE_3',
+				segments: 2,
+				locations: [{x:1,y:0},{x:1,y:1}],
+				r: 214,
+				g: 222,
+				b: 54
+			}
+		];
 		
 		
 		// ANIMATED THINGS
@@ -121,14 +271,67 @@ var GAME = {
 			fire2: 1, // projectile ID
 			f1_timer: 0,
 			f2_timer: 0,
-			color: {r:160,g:32,b:128},
+			color: {r:96,g:44,b:126},
 			accel: 0.07, // pixels/tick
 			lives: 3,
 			f1_cooldown: 200,
 			f2_cooldown: 1500
 		};
 		
-		this.MOBILES = [];
+		this.MOBILES = [
+			{ // test enemy ship
+				type: 0,
+				x: 0,
+				y: 0,
+				sx: 0,
+				sy: 0,
+				ax: 0,
+				ay: 0,
+				time: 0
+			},
+			{ // test enemy ship
+				type: 1,
+				x: 7,
+				y: 0,
+				sx: 0,
+				sy: 0,
+				ax: 0,
+				ay: 0,
+				time: 0
+			},
+			{ // test enemy ship
+				type: 2,
+				x: 0,
+				y: 2,
+				sx: 0,
+				sy: 0,
+				ax: 0,
+				ay: 0,
+				time: 0
+			},
+			{ // test enemy ship
+				type: 3,
+				x: 5,
+				y: 2,
+				sx: 0,
+				sy: 0,
+				ax: 0,
+				ay: 0,
+				time: 0
+			},
+			{ // test enemy ship
+				type: 4,
+				x: 2,
+				y: 6,
+				sx: 0,
+				sy: 0,
+				ax: 0,
+				ay: 0,
+				time: 0
+			},
+		];
+		
+		
 		this.PROJECTILES = [];
 		
 		
@@ -244,6 +447,99 @@ var GAME = {
 		GAME.CONTEXT.fillStyle = color2;
 		GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*2);	
 	},
+	render_mobiles: function() {
+		for(mob of GAME.MOBILES) {
+			GAME.render_mobile(mob);
+		}
+	},
+	render_mobile: function(mob) {
+		// 
+		switch(mob.type) {
+			case 0: // simple ship #1
+			case 1: // simple ship #2
+				// ship - ratcheting position!
+				var x = Math.floor(mob.x);
+				var y = Math.floor(mob.y);
+				var w = GAME.MOBILE_MODELS[mob.type].w;
+				var h = GAME.MOBILE_MODELS[mob.type].h;
+				
+				// mob color - fading between pixels
+				var r1 = GAME.MOBILE_MODELS[mob.type].r;
+				var g1 = GAME.MOBILE_MODELS[mob.type].g;
+				var b1 = GAME.MOBILE_MODELS[mob.type].b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE*h);	
+				break;
+			case 2: // boss ship #1
+				// ship - ratcheting position!
+				var x = Math.floor(mob.x);
+				var y = Math.floor(mob.y);
+				var w = GAME.MOBILE_MODELS[mob.type].w;
+				var h = GAME.MOBILE_MODELS[mob.type].h;
+				
+				// mob color - fading between pixels
+				var r1 = GAME.MOBILE_MODELS[mob.type].r;
+				var g1 = GAME.MOBILE_MODELS[mob.type].g;
+				var b1 = GAME.MOBILE_MODELS[mob.type].b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,(y+1)*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE);	
+				GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);
+				
+				// render boss armor!
+				this.render_armor(mob);
+				break;
+			case 3: // boss ship #2
+				// ship - ratcheting position!
+				var x = Math.floor(mob.x);
+				var y = Math.floor(mob.y);
+				var w = GAME.MOBILE_MODELS[mob.type].w;
+				var h = GAME.MOBILE_MODELS[mob.type].h;
+				
+				// mob color - fading between pixels
+				var r1 = GAME.MOBILE_MODELS[mob.type].r;
+				var g1 = GAME.MOBILE_MODELS[mob.type].g;
+				var b1 = GAME.MOBILE_MODELS[mob.type].b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);	
+				GAME.CONTEXT.fillRect((x+2)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);
+				
+				// render boss armor!
+				this.render_armor(mob);
+				break;
+			case 4: // boss ship #3
+				// ship - ratcheting position!
+				var x = Math.floor(mob.x);
+				var y = Math.floor(mob.y);
+				var w = GAME.MOBILE_MODELS[mob.type].w;
+				var h = GAME.MOBILE_MODELS[mob.type].h;
+				
+				// mob color - fading between pixels
+				var r1 = GAME.MOBILE_MODELS[mob.type].r;
+				var g1 = GAME.MOBILE_MODELS[mob.type].g;
+				var b1 = GAME.MOBILE_MODELS[mob.type].b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE*h);	
+				
+				// render boss armor!
+				this.render_armor(mob);
+				break;
+		}
+	},
+	render_armor: function(mob) {
+		
+	},
 	render_projectiles: function() {
 		for(proj of GAME.PROJECTILES) {
 			GAME.render_projectile(proj);
@@ -309,6 +605,7 @@ var GAME = {
 			case 1: //	demo
 				GAME.render_player();
 				GAME.render_projectiles();
+				GAME.render_mobiles();
 				break;
 			case 2: //
 			case 3: //
@@ -346,8 +643,22 @@ var GAME = {
 			GAME.PLAYER.sx = 0;
 		}
 	},
-	move_mobiles: function() {},
-	move_mobile: function() {},
+	move_mobiles: function() {
+		if(GAME.MOBILES.length > 0) {
+			for(mob of GAME.MOBILES) {
+				GAME.move_mobile(mob);
+			}
+		}
+	},
+	move_mobile: function(mob) {
+		mob.sx = GAME.MOBILE_MODELS[mob.type].sx;
+		mob.sy = GAME.MOBILE_MODELS[mob.type].sy;
+		
+		mob.x += mob.sx;
+		mob.y += mob.sy;
+		
+		mob.time += GAME.ELAPSED;
+	},
 	move_projectiles: function() {
 		if(GAME.PROJECTILES.length > 0) {
 			for(proj of GAME.PROJECTILES) {
