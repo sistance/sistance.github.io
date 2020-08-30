@@ -33,6 +33,10 @@ var GAME = {
 	// projectiles
 	PROJECTILES: null,
 	
+	// particles
+	// x,y,sx,sy,r,g,b,d_r,d_g,d_b,life
+	PARTICLES: null,
+	
 	
 	//-------- MODELS ------------//
 	// title model
@@ -51,6 +55,7 @@ var GAME = {
 	
 	// projectile models
 	PROJECTILE_MODELS: null,
+	EXPLOSION_MODELS: null,
 	
 	
 	
@@ -85,27 +90,27 @@ var GAME = {
 				w: 1,
 				h: 1,
 				sx: 0,
-				sy: -0.66,
+				sy: -50, // 50px/s
 				r: 228,
 				g: 75,
 				b: 164,
-				delta_r: -3,
-				delta_g: -1,
-				delta_b: -2,
+				delta_r: 228,
+				delta_g: 0,
+				delta_b: 0,
 				damage: 1
 			},
 			{ // player bombs
 				w: 1,
 				h: 1,
 				sx: 0,
-				sy: -0.2,
+				sy: -15, // 15px/s
 				r: 0,
 				g: 255,
 				b: 0,
-				delta_r: 2,
-				delta_g: -2,
-				delta_b: 2,
-				damage: 3
+				delta_r: 255,
+				delta_g: 0,
+				delta_b: 0,
+				damage: 4
 			},
 			{ // boss shots
 				w: 1,
@@ -115,10 +120,179 @@ var GAME = {
 				r: 242,
 				g: 135,
 				b: 64,
-				delta_r: 4,
-				delta_g: 2,
-				delta_b: 1,
+				delta_r: 200,
+				delta_g: 200,
+				delta_b: 64,
 				damage: 1
+			}
+		];
+		
+		this.EXPLOSION_MODELS = [
+			{
+				name: 'SMALL_EXPLOSION',
+				particles: [
+					{
+						ex: -1,
+						ey: 0,
+						sx: -20, // px/s
+						sy: 0,
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 30,
+					},
+					{
+						ex: 1,
+						ey: 0,
+						sx: 20, // px/s
+						sy: 0,
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 30,
+					},
+					{
+						ex: 0,
+						ey: -1,
+						sx: 0,
+						sy: -20, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 30,
+					},
+					{
+						ex: 0,
+						ey: 1,
+						sx: 0,
+						sy: 20, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 30,
+					}
+				]
+			},
+			{
+				name: 'BIG_EXPLOSION',
+				particles: [
+					{ // left
+						ex: -1,
+						ey: 0,
+						sx: -20, // px/s
+						sy: 0,
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // right
+						ex: 1,
+						ey: 0,
+						sx: 20, // px/s
+						sy: 0,
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // up
+						ex: 0,
+						ey: -1,
+						sx: 0,
+						sy: -20, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // down
+						ex: 0,
+						ey: 1,
+						sx: 0,
+						sy: 20, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // ul
+						ex: -1,
+						ey: -1,
+						sx: -10, // px/s
+						sy: -10, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // ur
+						ex: 1,
+						ey: -1,
+						sx: 10, // px/s
+						sy: -10, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // dl
+						ex: -1,
+						ey: 1,
+						sx: -10, // px/s
+						sy: 10, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					},
+					{ // dr
+						ex: 1,
+						ey: 1,
+						sx: 10, // px/s
+						sy: 10, // px/s
+						r: 140,
+						g: 140,
+						b: 255,
+						delta_r: -2,
+						delta_g: -2,
+						delta_b: -1,
+						life: 200,
+					}
+				]
 			}
 		];
 		
@@ -324,7 +498,7 @@ var GAME = {
 			f1_timer: 0,
 			f2_timer: 0,
 			color: {r:96,g:44,b:126},
-			accel: 0.07, // pixels/tick
+			accel: 0.001, // pixels/tick
 			lives: 3,
 			f1_cooldown: 200,
 			f2_cooldown: 1500
@@ -405,6 +579,7 @@ var GAME = {
 		
 		
 		this.PROJECTILES = [];
+		this.PARTICLES = [];
 		
 		
 		
@@ -495,7 +670,29 @@ var GAME = {
 		this.PROJECTILES.push(proj);
 		//console.log(proj);
 	},
-	
+	create_explosion: function(ex,ey,explosion_model_id) {
+		var EXP_MODEL = this.EXPLOSION_MODELS[explosion_model_id];
+		for(var lp=0;lp<EXP_MODEL.particles.length;lp++) {
+			// create a particle
+			var part = {
+				x: ex + EXP_MODEL.particles[lp].ex,
+				y: ey + EXP_MODEL.particles[lp].ey,
+				sx: EXP_MODEL.particles[lp].sx,
+				sy: EXP_MODEL.particles[lp].sy,
+				r: EXP_MODEL.particles[lp].r,
+				g: EXP_MODEL.particles[lp].g,
+				b: EXP_MODEL.particles[lp].b,
+				delta_r: EXP_MODEL.particles[lp].delta_r,
+				delta_g: EXP_MODEL.particles[lp].delta_g,
+				delta_b: EXP_MODEL.particles[lp].delta_b,
+				life: EXP_MODEL.particles[lp].life,
+				time: 0
+			};
+			
+			this.PARTICLES.push(part);
+			console.log(part);
+		}
+	},
 	
 	render_player: function() {
 		// player - ratcheting position!
@@ -661,14 +858,14 @@ var GAME = {
 				var base_b = GAME.PROJECTILE_MODELS[proj.type].b;
 				
 				// animate color
-				var step = proj.time % 128;
-				base_r += step * GAME.PROJECTILE_MODELS[proj.type].delta_r;
+				var step = Math.cos((proj.time % 360)/180*Math.PI + Math.PI/2);
+				base_r += step * (GAME.PROJECTILE_MODELS[proj.type].delta_r - base_r);
 				if(base_r > 255) {base_r = 255;}
 				if(base_r < 0) {base_r = 0;}
-				base_g += step * GAME.PROJECTILE_MODELS[proj.type].delta_g;
+				base_g += step * (GAME.PROJECTILE_MODELS[proj.type].delta_g - base_g);
 				if(base_g > 255) {base_g = 255;}
 				if(base_g < 0) {base_g = 0;}
-				base_b += step * GAME.PROJECTILE_MODELS[proj.type].delta_b;
+				base_b += step * (GAME.PROJECTILE_MODELS[proj.type].delta_b - base_b);
 				if(base_b > 255) {base_b = 255;}
 				if(base_b < 0) {base_b = 0;}
 				var color0 = "#"+GAME.color_code(base_r)+GAME.color_code(base_g)+GAME.color_code(base_b);
@@ -692,6 +889,43 @@ var GAME = {
 				break;
 		}
 	},
+	render_particles: function() {
+		for(part of GAME.PARTICLES) {
+			GAME.render_particle(part);
+		}
+	},
+	render_particle: function(part) {
+		// player fire - ratcheting position!
+		var x = Math.floor(part.x);
+		var y = Math.floor(part.y);
+		//var ox = (part.x%1);
+		//var oy = (part.y%1);
+		
+		// grab base color
+		var base_r = part.r;
+		var base_g = part.g;
+		var base_b = part.b;
+		
+		// animate color
+		var step = part.time / part.life * 255;
+		base_r += step * part.delta_r;
+		if(base_r > 255) {base_r = 255;}
+		if(base_r < 0) {base_r = 0;}
+		base_g += step * part.delta_g;
+		if(base_g > 255) {base_g = 255;}
+		if(base_g < 0) {base_g = 0;}
+		base_b += step * part.delta_b;
+		if(base_b > 255) {base_b = 255;}
+		if(base_b < 0) {base_b = 0;}
+		var color0 = "#"+GAME.color_code(base_r)+GAME.color_code(base_g)+GAME.color_code(base_b);
+		
+		
+		// render all of it
+		GAME.CONTEXT.fillStyle = color0;
+		GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);	
+	},
+	
+	
 	
 	
 	render: function() {
@@ -704,6 +938,7 @@ var GAME = {
 				GAME.render_player();
 				GAME.render_projectiles();
 				GAME.render_mobiles();
+				GAME.render_particles();
 				break;
 			case 2: //
 			case 3: //
@@ -731,7 +966,7 @@ var GAME = {
 		}
 		
 		// move
-		GAME.PLAYER.x += GAME.PLAYER.sx;
+		GAME.PLAYER.x += GAME.PLAYER.sx * GAME.ELAPSED;
 		if(GAME.PLAYER.x < 0) {
 			GAME.PLAYER.x = 0;
 			GAME.PLAYER.sx = 0;
@@ -752,8 +987,8 @@ var GAME = {
 		mob.sx = GAME.MOBILE_MODELS[mob.type].sx;
 		mob.sy = GAME.MOBILE_MODELS[mob.type].sy;
 		
-		mob.x += mob.sx;
-		mob.y += mob.sy;
+		mob.x += mob.sx * GAME.ELAPSED;
+		mob.y += mob.sy * GAME.ELAPSED;
 		
 		mob.time += GAME.ELAPSED;
 	},
@@ -779,12 +1014,11 @@ var GAME = {
 		proj.sx = GAME.PROJECTILE_MODELS[proj.type].sx;
 		proj.sy = GAME.PROJECTILE_MODELS[proj.type].sy;
 		
-		proj.x += proj.sx;
-		proj.y += proj.sy;
+		proj.x += proj.sx * GAME.ELAPSED / 1000;
+		proj.y += proj.sy * GAME.ELAPSED / 1000;
 		
 		proj.time += GAME.ELAPSED;
 	},
-	
 	dispose_projectiles: function() {
 		if(GAME.PROJECTILES.length > 0) {
 			for(var lp=(GAME.PROJECTILES.length-1);lp>=0;lp--) {
@@ -794,6 +1028,37 @@ var GAME = {
 			}
 		}
 	},
+	
+	
+	move_particles: function() {
+		if(GAME.PARTICLES.length > 0) {
+			for(part of GAME.PARTICLES) {
+				GAME.move_particle(part);
+			}
+		}
+	},
+	move_particle: function(part) {
+		part.x += part.sx * GAME.ELAPSED / 1000;
+		part.y += part.sy * GAME.ELAPSED / 1000;
+		
+		part.time += GAME.ELAPSED;
+		
+		if(part.time > part.life) {
+			part.dead = 1; // kill it if it outlives its intent
+		}
+	},
+	dispose_particles: function() {
+		if(GAME.PARTICLES.length > 0) {
+			for(var lp=(GAME.PARTICLES.length-1);lp>=0;lp--) {
+				if(GAME.PARTICLES[lp].y < 0 || GAME.PARTICLES[lp].y > 15 || GAME.PARTICLES[lp].x < 0 || GAME.PARTICLES[lp].x > 7 || GAME.PARTICLES[lp].dead == 1) {
+					GAME.PARTICLES.splice(lp,1);
+				}
+			}
+		}
+	},
+	
+	
+	
 	
 	
 	// COLLISION
@@ -933,6 +1198,7 @@ var GAME = {
 						if(rem_life < 1) { // BOSS IS DEAD
 							this.MOBILES[mob_id].dead = 1;
 							console.log('boss '+MOB_MODEL.name+' dead.');
+							this.create_explosion(TPROJ.x1,TPROJ.y1,1); // big explosion
 						}
 					}
 				}
@@ -1012,6 +1278,7 @@ var GAME = {
 				if(this.MOBILES[mob_id].hull_life[0] < 1) {
 					this.MOBILES[mob_id].dead = 1;
 					console.log('enemy '+MOB_MODEL.name+' dead.');
+					this.create_explosion(TPROJ.x1,TPROJ.y1,0);
 				}
 				collided = true;
 			}
@@ -1054,6 +1321,7 @@ var GAME = {
 		GAME.move_player();
 		GAME.move_mobiles();
 		GAME.move_projectiles();
+		GAME.move_particles();
 		
 		
 		// collisions
@@ -1063,6 +1331,7 @@ var GAME = {
 		// dispose of things
 		GAME.dispose_projectiles();
 		GAME.dispose_mobiles();
+		GAME.dispose_particles();
 		
 		// render things
 		GAME.clear();
