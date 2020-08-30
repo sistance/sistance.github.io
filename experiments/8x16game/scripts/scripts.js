@@ -91,7 +91,8 @@ var GAME = {
 				b: 164,
 				delta_r: -3,
 				delta_g: -1,
-				delta_b: -2
+				delta_b: -2,
+				damage: 1
 			},
 			{ // player bombs
 				w: 1,
@@ -103,7 +104,8 @@ var GAME = {
 				b: 0,
 				delta_r: 2,
 				delta_g: -2,
-				delta_b: 2
+				delta_b: 2,
+				damage: 3
 			},
 			{ // boss shots
 				w: 1,
@@ -115,7 +117,8 @@ var GAME = {
 				b: 64,
 				delta_r: 4,
 				delta_g: 2,
-				delta_b: 1
+				delta_b: 1,
+				damage: 1
 			}
 		];
 		
@@ -135,7 +138,9 @@ var GAME = {
 				delta_r: 0,
 				delta_g: 0,
 				delta_b: 0,
-				armor_id: -1
+				armor_id: -1,
+				boss_model_id: -1
+
 			},
 			{
 				name: 'SIMPLE_SHIP_2',
@@ -151,7 +156,9 @@ var GAME = {
 				delta_r: 0,
 				delta_g: 0,
 				delta_b: 0,
-				armor_id: 0
+				armor_id: 0,
+				boss_model_id: -1
+
 			},
 			{
 				name: 'BOSS_SHIP_1',
@@ -167,7 +174,8 @@ var GAME = {
 				delta_r: 0,
 				delta_g: 0,
 				delta_b: 0,
-				armor_id: 1
+				armor_id: 1,
+				boss_model_id: 0
 			},
 			{
 				name: 'BOSS_SHIP_2',
@@ -183,7 +191,9 @@ var GAME = {
 				delta_r: 0,
 				delta_g: 0,
 				delta_b: 0,
-				armor_id: 2
+				armor_id: 2,
+				boss_model_id: 1
+
 			},
 			{
 				name: 'BOSS_SHIP_3',
@@ -199,7 +209,9 @@ var GAME = {
 				delta_r: 0,
 				delta_g: 0,
 				delta_b: 0,
-				armor_id: 3
+				armor_id: 3,
+				boss_model_id: 2
+
 			}
 		];
 		
@@ -330,7 +342,8 @@ var GAME = {
 				time: 0,
 				hull_life: [1],
 				armor_life: [0],
-				core_life: [0]
+				core_life: [0],
+				dead: 0
 			},
 			{ // test enemy ship #2
 				type: 1,
@@ -343,8 +356,8 @@ var GAME = {
 				time: 0,
 				hull_life: [1],
 				armor_life: [1],
-				core_life: [0]
-
+				core_life: [0],
+				dead: 0
 			},
 			{ // test boss #1
 				type: 2,
@@ -357,8 +370,8 @@ var GAME = {
 				time: 0,
 				hull_life: [2,2,2,2,2],
 				armor_life: [3,3,3],
-				core_life: [5,5]
-
+				core_life: [5,5],
+				dead: 0
 			},
 			{ // test boss #2
 				type: 3,
@@ -371,8 +384,8 @@ var GAME = {
 				time: 0,
 				hull_life: [2,2,2,2,2,2],
 				armor_life: [4,4],
-				core_life: [5,5]
-
+				core_life: [5,5],
+				dead: 0
 			},
 			{ // test boss #3
 				type: 4,
@@ -385,8 +398,8 @@ var GAME = {
 				time: 0,
 				hull_life: [2,2,2,2,2,2,2,2,2],
 				armor_life: [4,4,4,4,4],
-				core_life: [5,5]
-
+				core_life: [5,5],
+				dead: 0
 			},
 		];
 		
@@ -475,11 +488,12 @@ var GAME = {
 			y: who.y - 0.5,
 			sx: this.PROJECTILE_MODELS[0].sx,
 			sy: this.PROJECTILE_MODELS[0].sy,
-			time: 0
+			time: 0,
+			dead: 0
 		};
 		
 		this.PROJECTILES.push(proj);
-		console.log(proj);
+		//console.log(proj);
 	},
 	
 	
@@ -531,77 +545,15 @@ var GAME = {
 				// render all of it
 				GAME.CONTEXT.fillStyle = color1;
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE*h);	
-
-				// render armor!
-				this.render_armor(mob);
+				
+				if(mob.type == 1) {
+					// render armor!
+					this.render_armor(mob);
+				}
 				break;
 			case 2: // boss ship #1
-				// ship - ratcheting position!
-				var x = Math.floor(mob.x);
-				var y = Math.floor(mob.y);
-				var w = GAME.MOBILE_MODELS[mob.type].w;
-				var h = GAME.MOBILE_MODELS[mob.type].h;
-				
-				// mob color - fading between pixels
-				var r1 = GAME.MOBILE_MODELS[mob.type].r;
-				var g1 = GAME.MOBILE_MODELS[mob.type].g;
-				var b1 = GAME.MOBILE_MODELS[mob.type].b;
-				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
-				
-				// render all of it
-				GAME.CONTEXT.fillStyle = color1;
-				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,(y+1)*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE);	
-				GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);
-				
-				// render boss sections!
-				this.render_boss_sections(mob);
-				// render boss cores!
-				this.render_boss_cores(mob);
-				// render armor!
-				this.render_armor(mob);
-				break;
 			case 3: // boss ship #2
-				// ship - ratcheting position!
-				var x = Math.floor(mob.x);
-				var y = Math.floor(mob.y);
-				var w = GAME.MOBILE_MODELS[mob.type].w;
-				var h = GAME.MOBILE_MODELS[mob.type].h;
-				
-				// mob color - fading between pixels
-				var r1 = GAME.MOBILE_MODELS[mob.type].r;
-				var g1 = GAME.MOBILE_MODELS[mob.type].g;
-				var b1 = GAME.MOBILE_MODELS[mob.type].b;
-				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
-				
-				// render all of it
-				GAME.CONTEXT.fillStyle = color1;
-				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);	
-				GAME.CONTEXT.fillRect((x+2)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*h);
-				
-				// render boss sections!
-				this.render_boss_sections(mob);
-				// render boss cores!
-				this.render_boss_cores(mob);
-				// render armor!
-				this.render_armor(mob);
-				break;
 			case 4: // boss ship #3
-				// ship - ratcheting position!
-				var x = Math.floor(mob.x);
-				var y = Math.floor(mob.y);
-				var w = GAME.MOBILE_MODELS[mob.type].w;
-				var h = GAME.MOBILE_MODELS[mob.type].h;
-				
-				// mob color - fading between pixels
-				var r1 = GAME.MOBILE_MODELS[mob.type].r;
-				var g1 = GAME.MOBILE_MODELS[mob.type].g;
-				var b1 = GAME.MOBILE_MODELS[mob.type].b;
-				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
-				
-				// render all of it
-				GAME.CONTEXT.fillStyle = color1;
-				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*w,GAME.PIXEL_SIZE*h);	
-				
 				// render boss sections!
 				this.render_boss_sections(mob);
 				// render boss cores!
@@ -611,14 +563,80 @@ var GAME = {
 				break;
 		}
 	},
-	render_armor: function(mob) {
-		
-	},
 	render_boss_sections: function(mob) {
+		var MOB_TYPE = mob.type;
+		var MOB_MODEL = GAME.MOBILE_MODELS[MOB_TYPE];
+		var BOSS_SECTION_MODEL = GAME.BOSS_SECTION_MODELS[MOB_MODEL.boss_model_id];
 		
+		for(var lp=0;lp<BOSS_SECTION_MODEL.locations.length;lp++) {
+			// check health of section
+			if(mob.hull_life[lp]>0) { 
+				// render this section
+				var x = Math.floor(mob.x) + BOSS_SECTION_MODEL.locations[lp].x;
+				var y = Math.floor(mob.y) + BOSS_SECTION_MODEL.locations[lp].y;
+				
+				// mob color - fading between pixels
+				var r1 = GAME.MOBILE_MODELS[mob.type].r;
+				var g1 = GAME.MOBILE_MODELS[mob.type].g;
+				var b1 = GAME.MOBILE_MODELS[mob.type].b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);	
+			}
+			
+		}
+	},
+	render_armor: function(mob) {
+		var MOB_TYPE = mob.type;
+		var MOB_MODEL = GAME.MOBILE_MODELS[MOB_TYPE];
+		var ARMOR_MODEL = GAME.ARMOR_MODELS[MOB_MODEL.armor_id];
+		
+		for(var lp=0;lp<ARMOR_MODEL.locations.length;lp++) {
+			// check health of section
+			if(mob.armor_life[lp]>0) { 
+				// render this section
+				var x = Math.floor(mob.x) + ARMOR_MODEL.locations[lp].x;
+				var y = Math.floor(mob.y) + ARMOR_MODEL.locations[lp].y;
+				
+				// mob color - fading between pixels
+				var r1 = ARMOR_MODEL.r;
+				var g1 = ARMOR_MODEL.g;
+				var b1 = ARMOR_MODEL.b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);	
+			}
+			
+		}
 	},
 	render_boss_cores: function(mob) {
+		var MOB_TYPE = mob.type;
+		var MOB_MODEL = GAME.MOBILE_MODELS[MOB_TYPE];
+		var BOSS_CORE_MODEL = GAME.BOSS_CORE_MODELS[MOB_MODEL.boss_model_id];
 		
+		for(var lp=0;lp<BOSS_CORE_MODEL.locations.length;lp++) {
+			// check health of section
+			if(mob.core_life[lp]>0) { 
+				// render this section
+				var x = Math.floor(mob.x) + BOSS_CORE_MODEL.locations[lp].x;
+				var y = Math.floor(mob.y) + BOSS_CORE_MODEL.locations[lp].y;
+				
+				// mob color - fading between pixels
+				var r1 = BOSS_CORE_MODEL.r;
+				var g1 = BOSS_CORE_MODEL.g;
+				var b1 = BOSS_CORE_MODEL.b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);	
+			}
+			
+		}
 	},
 	render_projectiles: function() {
 		for(proj of GAME.PROJECTILES) {
@@ -739,6 +757,17 @@ var GAME = {
 		
 		mob.time += GAME.ELAPSED;
 	},
+
+	dispose_mobiles: function() {
+		if(GAME.MOBILES.length > 0) {
+			for(var lp=(GAME.MOBILES.length-1);lp>=0;lp--) {
+				if(GAME.MOBILES[lp].dead == 1) {
+					GAME.MOBILES.splice(lp,1);
+				}
+			}
+		}
+	},
+	
 	move_projectiles: function() {
 		if(GAME.PROJECTILES.length > 0) {
 			for(proj of GAME.PROJECTILES) {
@@ -759,11 +788,235 @@ var GAME = {
 	dispose_projectiles: function() {
 		if(GAME.PROJECTILES.length > 0) {
 			for(var lp=(GAME.PROJECTILES.length-1);lp>=0;lp--) {
-				if(GAME.PROJECTILES[lp].y < 0 || GAME.PROJECTILES[lp].y > 15 || GAME.PROJECTILES[lp].x < 0 || GAME.PROJECTILES[lp].x > 7) {
+				if(GAME.PROJECTILES[lp].y < 0 || GAME.PROJECTILES[lp].y > 15 || GAME.PROJECTILES[lp].x < 0 || GAME.PROJECTILES[lp].x > 7 || GAME.PROJECTILES[lp].dead == 1) {
 					GAME.PROJECTILES.splice(lp,1);
 				}
 			}
 		}
+	},
+	
+	
+	// COLLISION
+	collisions: function() {
+		// projectiles
+		for(var lp=0;lp<this.PROJECTILES.length;lp++) {
+			// find owner
+			var OWNER = this.PROJECTILES[lp].owner;
+			var PROJ_MODEL = this.PROJECTILE_MODELS[this.PROJECTILES[lp].type];
+			
+			// collide against player?
+			if(OWNER != this.PLAYER) {
+				if(this.collide_proj_player(lp)) {
+					// ENEMY PROJECTILE HIT PLAYER!
+					console.log('enemy projectile '+lp+' hit player.');
+				}
+			}
+			
+			// collide against mobiles?
+			if(OWNER == this.PLAYER) {
+				for(var lm=0;lm<this.MOBILES.length;lm++) {
+					if(this.collide_proj_armor(lp,lm)) {
+						// PLAYER PROJECTILE HIT ARMOR!
+						console.log('player projectile hit armor on enemy '+lm+'.');
+						this.PROJECTILES[lp].dead = 1;
+					}
+					if(this.collide_proj_boss_core(lp,lm)) {
+						// PLAYER PROJECTILE HIT ENEMY!
+						console.log('player projectile hit a core on enemy '+lm+'.');
+						this.PROJECTILES[lp].dead = 1;
+					}
+					if(this.collide_proj_boss_section(lp,lm)) {
+						// PLAYER PROJECTILE HIT ENEMY!
+						console.log('player projectile hit a section on enemy '+lm+'.');
+						this.PROJECTILES[lp].dead = 1;
+					}
+					if(this.collide_proj_mobile(lp,lm)) {
+						// PLAYER PROJECTILE HIT ENEMY!
+						console.log('player projectile hit enemy '+lm+'.');
+						this.PROJECTILES[lp].dead = 1;
+					}
+				}
+			}
+			
+		}
+	},
+	collide_proj_player: function(proj_id) {
+		var TPROJ = this.PROJECTILES[proj_id];
+		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
+		TPROJ.x1 = Math.floor(TPROJ.x);
+		TPROJ.y1 = Math.floor(TPROJ.y);
+		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		
+		var collided = true;
+		if(this.PLAYER.x < TPROJ.x1 || this.PLAYER.x > TPROJ.x2 || this.PLAYER.y < TPROJ.y1 || this.PLAYER.y+1>TPROJ.y2) {
+			collided = false;
+		}
+		
+		return collided;
+	},
+	collide_proj_armor: function(proj_id,mob_id) {
+		var TPROJ = this.PROJECTILES[proj_id];
+		if(TPROJ.dead == 1) {
+			return false;
+		}
+		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
+		TPROJ.x1 = Math.floor(TPROJ.x);
+		TPROJ.y1 = Math.floor(TPROJ.y);
+		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		//console.log(TPROJ.x1+','+TPROJ.y1+' '+TPROJ.x2+','+TPROJ.y2);
+		
+		var TMOB = this.MOBILES[mob_id];
+		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
+		
+		var collided = false;
+		
+		if(MOB_MODEL.armor_id < 0) {
+			// no armor - do nothing
+		} else {
+			// has armor
+			var ARMOR_MODEL = this.ARMOR_MODELS[MOB_MODEL.armor_id];
+			
+			for(lp=0;lp<ARMOR_MODEL.locations.length;lp++) {
+				var arx = TMOB.x + ARMOR_MODEL.locations[lp].x;
+				var ary = TMOB.y + ARMOR_MODEL.locations[lp].y;
+
+				if(arx >= TPROJ.x1 && arx <= TPROJ.x2 && ary >= TPROJ.y1 && ary <= TPROJ.y2) {
+					if(this.MOBILES[mob_id].armor_life[lp] > 0) {
+						this.MOBILES[mob_id].armor_life[lp] -= PROJ_MODEL.damage;
+						collided = true;
+					}
+				}
+			}
+		}
+		
+		return collided;
+	},
+	collide_proj_boss_core: function(proj_id,mob_id) {
+		var TPROJ = this.PROJECTILES[proj_id];
+		if(TPROJ.dead == 1) {
+			return false;
+		}
+		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
+		TPROJ.x1 = Math.floor(TPROJ.x);
+		TPROJ.y1 = Math.floor(TPROJ.y);
+		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		
+		var TMOB = this.MOBILES[mob_id];
+		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
+		
+		var collided = false;
+		
+		if(MOB_MODEL.boss_model_id < 0) {
+			// no cores - do nothing
+		} else {
+			// check against boss pieces!
+			var BOSS_CORE_MODEL = this.BOSS_CORE_MODELS[MOB_MODEL.boss_model_id];
+			
+			for(lp=0;lp<BOSS_CORE_MODEL.locations.length;lp++) {
+				var bsx = TMOB.x + BOSS_CORE_MODEL.locations[lp].x;
+				var bsy = TMOB.y + BOSS_CORE_MODEL.locations[lp].y;
+
+				if(bsx >= TPROJ.x1 && bsx <= TPROJ.x2 && bsy >= TPROJ.y1 && bsy <= TPROJ.y2) {
+					if(this.MOBILES[mob_id].core_life[lp] > 0) {
+						this.MOBILES[mob_id].core_life[lp] -= PROJ_MODEL.damage;
+						collided = true;
+						
+						// check boss life!
+						var rem_life = 0;
+						for(var life of this.MOBILES[mob_id].core_life) {
+							rem_life += life;
+						}
+						console.log(rem_life);
+						if(rem_life < 1) { // BOSS IS DEAD
+							this.MOBILES[mob_id].dead = 1;
+							console.log('boss '+MOB_MODEL.name+' dead.');
+						}
+					}
+				}
+			}
+		}
+		
+		return collided;
+	},
+	collide_proj_boss_section: function(proj_id,mob_id) {
+		var TPROJ = this.PROJECTILES[proj_id];
+		if(TPROJ.dead == 1) {
+			return false;
+		}
+		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
+		TPROJ.x1 = Math.floor(TPROJ.x);
+		TPROJ.y1 = Math.floor(TPROJ.y);
+		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		
+		var TMOB = this.MOBILES[mob_id];
+		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
+		
+		var collided = false;
+		
+		if(MOB_MODEL.boss_model_id < 0) {
+			// no armor
+			collided = false;
+		} else {
+			// check against boss pieces!
+			var BOSS_SECTION_MODEL = this.BOSS_SECTION_MODELS[MOB_MODEL.boss_model_id];
+			
+			for(lp=0;lp<BOSS_SECTION_MODEL.locations.length;lp++) {
+				var bsx = TMOB.x + BOSS_SECTION_MODEL.locations[lp].x;
+				var bsy = TMOB.y + BOSS_SECTION_MODEL.locations[lp].y;
+
+				if(bsx >= TPROJ.x1 && bsx <= TPROJ.x2 && bsy >= TPROJ.y1 && bsy <= TPROJ.y2) {
+					if(this.MOBILES[mob_id].hull_life[lp] > 0) {
+						this.MOBILES[mob_id].hull_life[lp] -= PROJ_MODEL.damage;
+						collided = true;
+					}
+				}
+			}
+		}
+		
+		return collided;
+	},
+	collide_proj_mobile: function(proj_id,mob_id) {
+		var TPROJ = this.PROJECTILES[proj_id];
+		if(TPROJ.dead == 1) {
+			return false;
+		}
+		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
+		TPROJ.x1 = Math.floor(TPROJ.x);
+		TPROJ.y1 = Math.floor(TPROJ.y);
+		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		
+		var TMOB = this.MOBILES[mob_id];
+		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
+		
+		var collided = false;
+		
+		if(MOB_MODEL.boss_model_id > -1) {
+			// it's a boss - do nothing
+		} else {
+			// check against simple ship hull
+			TMOB.x1 = TMOB.x;
+			TMOB.y1 = TMOB.y;
+			TMOB.x2 = TMOB.x + (MOB_MODEL.w - 1);
+			TMOB.y2 = TMOB.y + (MOB_MODEL.h - 1);
+			
+			if(TMOB.x2 < TPROJ.x1 || TMOB.x1 > TPROJ.x2 || TMOB.y2 < TPROJ.y1 || TMOB.y1 > TPROJ.y2) {
+				collided = false;
+			} else {
+				this.MOBILES[mob_id].hull_life[0] -= PROJ_MODEL.damage;
+				
+				if(this.MOBILES[mob_id].hull_life[0] < 1) {
+					this.MOBILES[mob_id].dead = 1;
+					console.log('enemy '+MOB_MODEL.name+' dead.');
+				}
+				collided = true;
+			}
+		}
+		return collided;
 	},
 	
 	// animate needs to refer to GAME instead of this!
@@ -803,9 +1056,13 @@ var GAME = {
 		GAME.move_projectiles();
 		
 		
+		// collisions
+		GAME.collisions();
+		
+		
 		// dispose of things
 		GAME.dispose_projectiles();
-		
+		GAME.dispose_mobiles();
 		
 		// render things
 		GAME.clear();
