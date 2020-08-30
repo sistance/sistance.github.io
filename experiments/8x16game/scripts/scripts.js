@@ -139,9 +139,9 @@ var GAME = {
 						r: 140,
 						g: 140,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 40,
 						life: 30,
 					},
 					{
@@ -152,9 +152,9 @@ var GAME = {
 						r: 140,
 						g: 140,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 40,
 						life: 30,
 					},
 					{
@@ -165,9 +165,9 @@ var GAME = {
 						r: 140,
 						g: 140,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 40,
 						life: 30,
 					},
 					{
@@ -178,9 +178,9 @@ var GAME = {
 						r: 140,
 						g: 140,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 40,
 						life: 30,
 					}
 				]
@@ -193,12 +193,12 @@ var GAME = {
 						ey: 0,
 						sx: -20, // px/s
 						sy: 0,
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // right
@@ -206,12 +206,12 @@ var GAME = {
 						ey: 0,
 						sx: 20, // px/s
 						sy: 0,
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // up
@@ -219,12 +219,12 @@ var GAME = {
 						ey: -1,
 						sx: 0,
 						sy: -20, // px/s
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // down
@@ -232,12 +232,12 @@ var GAME = {
 						ey: 1,
 						sx: 0,
 						sy: 20, // px/s
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // ul
@@ -245,12 +245,12 @@ var GAME = {
 						ey: -1,
 						sx: -10, // px/s
 						sy: -10, // px/s
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // ur
@@ -258,12 +258,12 @@ var GAME = {
 						ey: -1,
 						sx: 10, // px/s
 						sy: -10, // px/s
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // dl
@@ -271,12 +271,12 @@ var GAME = {
 						ey: 1,
 						sx: -10, // px/s
 						sy: 10, // px/s
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					},
 					{ // dr
@@ -284,12 +284,12 @@ var GAME = {
 						ey: 1,
 						sx: 10, // px/s
 						sy: 10, // px/s
-						r: 140,
-						g: 140,
+						r: 100,
+						g: 100,
 						b: 255,
-						delta_r: -2,
-						delta_g: -2,
-						delta_b: -1,
+						delta_r: 0,
+						delta_g: 0,
+						delta_b: 60,
 						life: 200,
 					}
 				]
@@ -907,14 +907,14 @@ var GAME = {
 		var base_b = part.b;
 		
 		// animate color
-		var step = part.time / part.life * 255;
-		base_r += step * part.delta_r;
+		var step = part.time / part.life;
+		base_r += step * (part.delta_r - base_r);
 		if(base_r > 255) {base_r = 255;}
 		if(base_r < 0) {base_r = 0;}
-		base_g += step * part.delta_g;
+		base_g += step * (part.delta_g - base_g);
 		if(base_g > 255) {base_g = 255;}
 		if(base_g < 0) {base_g = 0;}
-		base_b += step * part.delta_b;
+		base_b += step * (part.delta_b - base_b);
 		if(base_b > 255) {base_b = 255;}
 		if(base_b < 0) {base_b = 0;}
 		var color0 = "#"+GAME.color_code(base_r)+GAME.color_code(base_g)+GAME.color_code(base_b);
@@ -987,8 +987,8 @@ var GAME = {
 		mob.sx = GAME.MOBILE_MODELS[mob.type].sx;
 		mob.sy = GAME.MOBILE_MODELS[mob.type].sy;
 		
-		mob.x += mob.sx * GAME.ELAPSED;
-		mob.y += mob.sy * GAME.ELAPSED;
+		mob.x += mob.sx * GAME.ELAPSED / 1000;
+		mob.y += mob.sy * GAME.ELAPSED / 1000;
 		
 		mob.time += GAME.ELAPSED;
 	},
@@ -1186,7 +1186,12 @@ var GAME = {
 
 				if(bsx >= TPROJ.x1 && bsx <= TPROJ.x2 && bsy >= TPROJ.y1 && bsy <= TPROJ.y2) {
 					if(this.MOBILES[mob_id].core_life[lp] > 0) {
+						// damage
 						this.MOBILES[mob_id].core_life[lp] -= PROJ_MODEL.damage;
+						if(this.MOBILES[mob_id].core_life[lp] < 0) {
+							this.MOBILES[mob_id].core_life[lp] = 0;
+						}
+						
 						collided = true;
 						
 						// check boss life!
@@ -1194,10 +1199,9 @@ var GAME = {
 						for(var life of this.MOBILES[mob_id].core_life) {
 							rem_life += life;
 						}
-						console.log(rem_life);
 						if(rem_life < 1) { // BOSS IS DEAD
 							this.MOBILES[mob_id].dead = 1;
-							console.log('boss '+MOB_MODEL.name+' dead.');
+							console.log('boss '+MOB_MODEL.name+' is dead.');
 							this.create_explosion(TPROJ.x1,TPROJ.y1,1); // big explosion
 						}
 					}
