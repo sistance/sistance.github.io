@@ -1,13 +1,18 @@
 var GAME = {
-	CLOCK: null,
-	ELAPSED: null,
-	LAST_TICK: null,
+	CLOCK: 0,
+	ELAPSED: 0,
+	LAST_TICK: 0,
 
 	CANVAS: null,
 	CONTEXT: null,
 	GAME_ON: true,
-	GAME_STATE: 1,// 0=title,demo,menu,level intro,level,level end,game end,game off
-	PAUSED: true,
+	GAME_STATE: 0,// 0=title,demo,game intro,stage intro,stage,waiting to respawn,game end lose,game end win,game off
+
+	STAGE_COUNTER: 0, // which stage!
+	STAGE_SECTION_COUNTER: 0, // which section of stage!
+	STAGE_TICK: 0, // next tick time
+
+	PAUSED: false,
 	CANVAS_WIDTH: null,
 	CANVAS_HEIGHT: null,
 	
@@ -48,6 +53,10 @@ var GAME = {
 	// enemy grid models
 	GRID_MODELS: null,
 	
+	// stage models
+	STAGE_MODELS: null,
+	WAVE_MODELS: null,
+	
 	// boss models
 	BOSS_MODELS: null,
 	ARMOR_MODELS: null,
@@ -73,8 +82,9 @@ var GAME = {
 		
 		
 		// CLOCK
-		this.CLOCK = new Date().getTime();
+		this.CLOCK = 0;
 		this.LAST_TICK = this.CLOCK;
+		this.ELAPSED = 0;
 		
 
 		// CONTROLS
@@ -90,7 +100,7 @@ var GAME = {
 				w: 1,
 				h: 1,
 				sx: 0,
-				sy: -50, // 50px/s
+				sy: -30, // 30px/s
 				r: 228,
 				g: 75,
 				b: 164,
@@ -103,7 +113,7 @@ var GAME = {
 				w: 1,
 				h: 1,
 				sx: 0,
-				sy: -15, // 15px/s
+				sy: -10, // 10px/s
 				r: 0,
 				g: 255,
 				b: 0,
@@ -131,167 +141,23 @@ var GAME = {
 			{
 				name: 'SMALL_EXPLOSION',
 				particles: [
-					{
-						ex: -1,
-						ey: 0,
-						sx: -20, // px/s
-						sy: 0,
-						r: 140,
-						g: 140,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 40,
-						life: 30,
-					},
-					{
-						ex: 1,
-						ey: 0,
-						sx: 20, // px/s
-						sy: 0,
-						r: 140,
-						g: 140,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 40,
-						life: 30,
-					},
-					{
-						ex: 0,
-						ey: -1,
-						sx: 0,
-						sy: -20, // px/s
-						r: 140,
-						g: 140,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 40,
-						life: 30,
-					},
-					{
-						ex: 0,
-						ey: 1,
-						sx: 0,
-						sy: 20, // px/s
-						r: 140,
-						g: 140,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 40,
-						life: 30,
-					}
+					{ ex: -1, ey: 0,  sx: -20, sy: 0,   r: 140, g: 140, b: 255, delta_r:   0, delta_g:   0, delta_b:  40, life:  30 }, // left
+					{ ex: 1,  ey: 0,  sx: 20,  sy: 0,   r: 140, g: 140, b: 255, delta_r:   0, delta_g:   0, delta_b:  40, life:  30 }, // right
+					{ ex: 0,  ey: -1, sx: 0,   sy: -20, r: 140, g: 140, b: 255, delta_r:   0, delta_g:   0, delta_b:  40, life:  30 }, // up
+					{ ex: 0,  ey: 1,  sx: 0,   sy: 20,  r: 140, g: 140, b: 255, delta_r:   0, delta_g:   0, delta_b:  40, life:  30 }  // down
 				]
 			},
 			{
 				name: 'BIG_EXPLOSION',
 				particles: [
-					{ // left
-						ex: -1,
-						ey: 0,
-						sx: -20, // px/s
-						sy: 0,
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // right
-						ex: 1,
-						ey: 0,
-						sx: 20, // px/s
-						sy: 0,
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // up
-						ex: 0,
-						ey: -1,
-						sx: 0,
-						sy: -20, // px/s
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // down
-						ex: 0,
-						ey: 1,
-						sx: 0,
-						sy: 20, // px/s
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // ul
-						ex: -1,
-						ey: -1,
-						sx: -10, // px/s
-						sy: -10, // px/s
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // ur
-						ex: 1,
-						ey: -1,
-						sx: 10, // px/s
-						sy: -10, // px/s
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // dl
-						ex: -1,
-						ey: 1,
-						sx: -10, // px/s
-						sy: 10, // px/s
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					},
-					{ // dr
-						ex: 1,
-						ey: 1,
-						sx: 10, // px/s
-						sy: 10, // px/s
-						r: 100,
-						g: 100,
-						b: 255,
-						delta_r: 0,
-						delta_g: 0,
-						delta_b: 60,
-						life: 200,
-					}
+					{ ex: -1, ey: 0,  sx: -20, sy: 0,   r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // left
+					{ ex: 1,  ey: 0,  sx: 20,  sy: 0,   r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // right
+					{ ex: 0,  ey: -1, sx: 0,   sy: -20, r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // up
+					{ ex: 0,  ey: 1,  sx: 0,   sy: 20,  r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // down
+					{ ex: -1, ey: -1, sx: -10, sy: -10, r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // ul
+					{ ex: 1,  ey: -1, sx: 10,  sy: -10, r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // ur
+					{ ex: -1, ey: 1,  sx: -10, sy: 10,  r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }, // dl
+					{ ex: 1,  ey: 1,  sx: 10,  sy: 10,  r: 100, g: 100, b: 255, delta_r:   0, delta_g:   0, delta_b:  60, life: 200 }  // dr
 				]
 			}
 		];
@@ -305,7 +171,7 @@ var GAME = {
 				ax: 0,
 				ay: 0,
 				sx: 0,
-				sy: 0,
+				sy: 5,
 				r: 33,
 				g: 163,
 				b: 85,
@@ -313,8 +179,8 @@ var GAME = {
 				delta_g: 0,
 				delta_b: 0,
 				armor_id: -1,
-				boss_model_id: -1
-
+				boss_model_id: -1,
+				hull_life: 1
 			},
 			{
 				name: 'SIMPLE_SHIP_2',
@@ -323,7 +189,7 @@ var GAME = {
 				ax: 0,
 				ay: 0,
 				sx: 0,
-				sy: 0,
+				sy: 4,
 				r: 223,
 				g: 167,
 				b: 49,
@@ -331,8 +197,8 @@ var GAME = {
 				delta_g: 0,
 				delta_b: 0,
 				armor_id: 0,
-				boss_model_id: -1
-
+				boss_model_id: -1,
+				hull_life: 2
 			},
 			{
 				name: 'BOSS_SHIP_1',
@@ -349,7 +215,8 @@ var GAME = {
 				delta_g: 0,
 				delta_b: 0,
 				armor_id: 1,
-				boss_model_id: 0
+				boss_model_id: 0,
+				hull_life: -1
 			},
 			{
 				name: 'BOSS_SHIP_2',
@@ -366,7 +233,8 @@ var GAME = {
 				delta_g: 0,
 				delta_b: 0,
 				armor_id: 2,
-				boss_model_id: 1
+				boss_model_id: 1,
+				hull_life: -1
 
 			},
 			{
@@ -384,7 +252,8 @@ var GAME = {
 				delta_g: 0,
 				delta_b: 0,
 				armor_id: 3,
-				boss_model_id: 2
+				boss_model_id: 2,
+				hull_life: -1
 
 			}
 		];
@@ -482,6 +351,68 @@ var GAME = {
 			}
 		];
 		
+		this.WAVE_MODELS = [
+			{ // 0: simple simple
+				types: [0,0,0,0],
+				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			},
+			{ // 1: simple simple
+				types: [0,0,1,0],
+				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			},
+			{ // 2: simple hard
+				types: [0,1,1,0],
+				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			},
+			{ // 3: hard simple
+				types: [1,1,0,1],
+				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			},
+			{ // 4: hard hard
+				types: [1,1,1,1],
+				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			},
+			{ // 5: boss 1
+				types: [2],
+				locations: [{x:4,y:2}]
+			},
+			{ // 6: boss 2
+				types: [3],
+				locations: [{x:4,y:2}]
+			},
+			{ // 7: boss 3
+				types: [4],
+				locations: [{x:4,y:2}]
+			},
+		];
+		this.STAGE_MODELS = [
+			{
+				name: 'STAGE 1',
+				intro_length: 2000,
+				waves: [0,0,0,0,4]
+			},
+			{
+				name: 'STAGE 2',
+				intro_length: 2000,
+				waves: [1,1,1,1,5]
+			},
+			{
+				name: 'STAGE 3',
+				intro_length: 2000,
+				waves: [2,2,2,2,6]
+			},
+			{
+				name: 'STAGE 4',
+				intro_length: 2000,
+				waves: [3,3,3,4,6]
+			},
+			{
+				name: 'STAGE 5',
+				intro_length: 2000,
+				waves: [3,2,1,5,7]
+			}
+		];
+		
 		
 		
 		// ANIMATED THINGS
@@ -498,10 +429,11 @@ var GAME = {
 			f1_timer: 0,
 			f2_timer: 0,
 			color: {r:96,g:44,b:126},
-			accel: 0.001, // pixels/tick
-			lives: 3,
+			accel: 0.1, // pixels/s/ms
+			lives: 0,
 			f1_cooldown: 200,
-			f2_cooldown: 1500
+			f2_cooldown: 1500,
+			dead: 0
 		};
 		
 		this.MOBILES = [
@@ -590,7 +522,6 @@ var GAME = {
 		
 		
 		// start it all 
-		requestAnimationFrame(this.animate);
 		this.start();
 	},
 	init_controls: function() {
@@ -598,16 +529,35 @@ var GAME = {
 			//console.log(e.keyCode);
 			switch(e.keyCode) {
 				case 37: // left
-					GAME.CONTROL_HANDLER[0] = -1;
+					if(GAME.GAME_STATE == 4) {
+						GAME.CONTROL_HANDLER[0] = -1;
+					}
 					break;
 				case 39: // right
-					GAME.CONTROL_HANDLER[0] = 1;
+					if(GAME.GAME_STATE == 4) {
+						GAME.CONTROL_HANDLER[0] = 1;
+					}
 					break;
 				case 32: // space = fire
-					GAME.CONTROL_HANDLER[2] = 1;					
+					switch(GAME.GAME_STATE) {
+						// start game on these states
+						case 0:
+						case 1:
+							GAME.start_game();
+							break;
+						// fire on these states
+						case 4:
+							GAME.CONTROL_HANDLER[2] = 1;
+							break;
+						// ignore on the rest
+						default:
+							break;
+					}
 					break;
 				case 38: // up = bomb
-					GAME.CONTROL_HANDLER[3] = 1;					
+					if(GAME.GAME_STATE == 4) {
+						GAME.CONTROL_HANDLER[3] = 1;
+					}
 					break;
 			}
 		});
@@ -629,18 +579,51 @@ var GAME = {
 	},
 	start: function() {
 		// animate!
+		GAME.GAME_STATE = 0;
+		GAME.STAGE_TICK = GAME.CLOCK + 5000;
+		
+		requestAnimationFrame(this.animate);
 	},
-	start_game: function() {},
-	start_level: function() {},
-	finish_level: function() {},
+	start_game: function() {
+		console.log('start game');
+		// clear queues
+		// do this later after testing!
+		
+		// reset default game starting values
+		this.PLAYER.lives = 3;
+		this.STAGE_COUNTER = 0;
+		
+		// start game intro movie
+		this.GAME_STATE = 2;
+		this.STAGE_TICK = this.CLOCK + 5000;
+	},
+	start_stage: function() {
+		console.log('start stage '+this.STAGE_COUNTER);
+		// reset stage section counter and first spawn timer to 3s from the start of the level!
+		this.MOBILES = [];
+		this.STAGE_SECTION_COUNTER = -1;
+		this.GAME_STATE = 3;
+		this.STAGE_TICK = this.CLOCK + this.STAGE_MODELS[this.STAGE_COUNTER].intro_length;
+	},
+	finish_stage: function() {},
 	finish: function() {},
 
 	clear: function() {
 		GAME.CONTEXT.clearRect(0,0,this.CANVAS_WIDTH,this.CANVAS_HEIGHT);
 	},
 	render_title: function() {
-		GAME.CONTEXT.fillStyle = 'white';
-		
+		GAME.CONTEXT.fillStyle = '#808000';
+		GAME.CONTEXT.fillRect(0,0,this.CANVAS_WIDTH,this.CANVAS_HEIGHT);
+	},
+	render_intro: function() {
+		GAME.CONTEXT.fillStyle = '#00ff00';
+		GAME.CONTEXT.fillRect(0,0,this.CANVAS_WIDTH,this.CANVAS_HEIGHT);
+	},
+	render_game_over: function() {
+		// later
+	},
+	render_game_win: function() {
+		// later
 	},
 	render_background: function() {
 		// background
@@ -692,6 +675,54 @@ var GAME = {
 			this.PARTICLES.push(part);
 			console.log(part);
 		}
+	},
+	create_mobile: function(mx,my,mobile_model_id) {
+		var MOBILE_MODEL = this.MOBILE_MODELS[mobile_model_id];
+		
+		if(MOBILE_MODEL.armor_id > -1) {
+			var ARMOR_MODEL = this.ARMOR_MODELS[MOBILE_MODEL.armor_id];
+			var armor_life = [];
+			for(var lp=0;lp<ARMOR_MODEL.locations.length;lp++) {
+				armor_life[armor_life.length] = ARMOR_MODEL.durability;
+			}
+		} else {
+			var armor_life = [0];
+		}
+		
+		if(MOBILE_MODEL.boss_model_id > -1) {
+			var BOSS_SECTION_MODEL = this.BOSS_SECTION_MODELS[MOBILE_MODEL.boss_model_id];
+			var BOSS_CORE_MODEL = this.BOSS_CORE_MODELS[MOBILE_MODEL.boss_model_id];
+			var hull_life = [];
+			var core_life = [];
+			for(var lp=0;lp<BOSS_SECTION_MODEL.locations.length;lp++) {
+				hull_life[hull_life.length] = BOSS_SECTION_MODEL.durability;
+			}
+			for(var lp=0;lp<BOSS_CORE_MODEL.locations.length;lp++) {
+				core_life[core_life.length] = BOSS_CORE_MODEL.durability;
+			}
+		} else {
+			var hull_life = [MOBILE_MODEL.hull_life];
+			var core_life = [0];
+		}
+		
+		var mob = {
+			type: mobile_model_id,
+			x: mx,
+			y: my,
+			sx: MOBILE_MODEL.sx,
+			sy: MOBILE_MODEL.sy,
+			ax: 0,
+			ay: 0,
+			time: 0,
+			hull_life: hull_life,
+			armor_life: armor_life,
+			core_life: core_life,
+			dead: 0
+			
+		};
+		
+		this.MOBILES.push(mob);
+		console.log(mob);
 	},
 	
 	render_player: function() {
@@ -841,8 +872,6 @@ var GAME = {
 		}
 	},
 	render_projectile: function(proj) {
-		//console.log(proj);
-		
 		switch(proj.type) {
 			case 0: // player shot
 			case 1: // player bomb
@@ -895,7 +924,6 @@ var GAME = {
 		}
 	},
 	render_particle: function(part) {
-		// player fire - ratcheting position!
 		var x = Math.floor(part.x);
 		var y = Math.floor(part.y);
 		//var ox = (part.x%1);
@@ -933,19 +961,30 @@ var GAME = {
 		
 		switch(GAME.GAME_STATE) {
 			case 0: // title
+				GAME.render_title();
 				break;
-			case 1: //	demo
+			case 2: // game intro
+				GAME.render_intro();
+				break;
+			case 1: // demo
+			case 3: // stage intro
+			case 4: // stage 
 				GAME.render_player();
 				GAME.render_projectiles();
 				GAME.render_mobiles();
 				GAME.render_particles();
 				break;
-			case 2: //
-			case 3: //
-			case 4: //
-			case 5: //
-			case 6: //
-			case 7: //
+			case 5: // waiting to respawn
+				GAME.render_projectiles();
+				GAME.render_mobiles();
+				GAME.render_particles();
+				break;
+			case 6: // game end lose
+				GAME.render_game_over();
+				break;
+			case 7: // game end win
+				GAME.render_game_win();
+			case 8: // game off
 				break;
 		}
 	},
@@ -960,7 +999,7 @@ var GAME = {
 		
 		// add acceleration
 		if(GAME.PLAYER.ax != 0) {
-			GAME.PLAYER.sx += GAME.PLAYER.ax;
+			GAME.PLAYER.sx += GAME.PLAYER.ax * GAME.ELAPSED / 1000;
 		} else {
 			GAME.PLAYER.sx /= 2;
 		}
@@ -991,6 +1030,10 @@ var GAME = {
 		mob.y += mob.sy * GAME.ELAPSED / 1000;
 		
 		mob.time += GAME.ELAPSED;
+		
+		if(mob.x < 0 || mob.x > 7 || mob.y < 0 || mob.y > 15) {
+			mob.dead = 1;
+		}
 	},
 
 	dispose_mobiles: function() {
@@ -1249,6 +1292,63 @@ var GAME = {
 		
 		return collided;
 	},
+	collide_player_mobile: function(mob_id) {
+		var PLAYER = this.PLAYER;
+		if(TPROJ.dead == 1) {
+			return false;
+		}
+		PLAYER.x1 = Math.floor(PLAYER.x);
+		PLAYER.y1 = Math.floor(PLAYER.y);
+		PLAYER.x2 = PLAYER.x1;
+		PLAYER.y2 = PLAYER.y1 + 1;
+		
+		var TMOB = this.MOBILES[mob_id];
+		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
+		
+		var collided = false;
+		
+		if(MOB_MODEL.boss_model_id > -1) {
+			// it's a boss - do nothing
+		} else {
+			// check against simple ship hull
+			TMOB.x1 = TMOB.x;
+			TMOB.y1 = TMOB.y;
+			TMOB.x2 = TMOB.x + (MOB_MODEL.w - 1);
+			TMOB.y2 = TMOB.y + (MOB_MODEL.h - 1);
+			
+			if(TMOB.x2 < PLAYER.x1 || TMOB.x1 > PLAYER.x2 || TMOB.y2 < PLAYER.y1 || TMOB.y1 > PLAYER.y2) {
+				collided = false;
+			} else {
+				// damage to mobile
+				this.MOBILES[mob_id].hull_life[0] -= 5;
+				
+				if(this.MOBILES[mob_id].hull_life[0] < 1) {
+					this.MOBILES[mob_id].dead = 1;
+					console.log('enemy #'+mob_id+' dead.');
+					this.create_explosion(Math.floor((TMOB.x1+TMOB.x2)/2),Math.floor((TMOB.y1+TMOB.y2)/2),0);
+				}
+				
+				// damage to player
+				this.PLAYER.dead = 1;
+				this.PLAYER.lives -= 1;
+				this.create_explosion(PLAYER.x1,PLAYER.y1,1);
+				console.log('player dead');
+				
+				if(this.PLAYER.lives < 0) {
+					// game is over!
+					console.log('player out of lives');
+					this.GAME_STATE = 6; // game over!
+				} else {
+					this.GAME_STATE = 5; // waiting to respawn!
+					this.PLAYER.RESPAWN_TIME = this.CLOCK + 1000;
+				}
+				
+				
+				collided = true;
+			}
+		}
+		return collided;
+	},
 	collide_proj_mobile: function(proj_id,mob_id) {
 		var TPROJ = this.PROJECTILES[proj_id];
 		if(TPROJ.dead == 1) {
@@ -1258,7 +1358,7 @@ var GAME = {
 		TPROJ.x1 = Math.floor(TPROJ.x);
 		TPROJ.y1 = Math.floor(TPROJ.y);
 		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
-		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h); // make projectiles taller for collision?
 		
 		var TMOB = this.MOBILES[mob_id];
 		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
@@ -1294,6 +1394,83 @@ var GAME = {
 	animate: function(time) {
 		GAME.ELAPSED = time - GAME.CLOCK;
 		GAME.CLOCK = time;
+		
+		// title screen done! roll demo!
+		if(GAME.GAME_STATE == 0 && GAME.CLOCK > GAME.STAGE_TICK) {
+			console.log('start demo');
+			GAME.GAME_STATE = 1;
+			GAME.STAGE_TICK = GAME.CLOCK + 6000;
+		}
+		
+		// demo done! return to title screen!
+		if(GAME.GAME_STATE == 1 && GAME.CLOCK > GAME.STAGE_TICK) {
+			console.log('back to title');
+			GAME.GAME_STATE = 0;
+			GAME.STAGE_TICK = GAME.CLOCK + 12000;
+		}
+		
+		// game intro done! start stage intro!
+		if(GAME.GAME_STATE == 2 && GAME.CLOCK > GAME.STAGE_TICK) {
+			console.log('start stage intro');
+			GAME.start_stage();
+		}
+		
+		// stage intro done! start action!
+		if(GAME.GAME_STATE == 3 && GAME.CLOCK > GAME.STAGE_TICK) {
+			console.log('start action');
+			GAME.GAME_STATE = 4;
+			GAME.STAGE_TICK = GAME.CLOCK + 1;
+		}
+		
+		// game over screen done! return to title!
+		if((GAME.GAME_STATE == 6 || GAME.GAME_STATE ==  7) && GAME.CLOCK > GAME.STAGE_TICK) {
+			GAME.GAME_STATE = 0;
+			GAME.STAGE_TICK = GAME.CLOCK + 3000;
+		}
+		
+		// stage tick during game!
+		if(GAME.GAME_STATE == 4 && GAME.CLOCK > GAME.STAGE_TICK) {
+			// stage tick!
+			console.log('stage tick');
+			GAME.STAGE_TICK = GAME.CLOCK + 2000;
+			
+			
+			
+			// add next stage of minions?
+			if(GAME.MOBILES.length < 1) {
+				GAME.STAGE_SECTION_COUNTER++;
+				console.log('next section: '+GAME.STAGE_SECTION_COUNTER);
+				
+				if(GAME.STAGE_SECTION_COUNTER >= GAME.STAGE_MODELS[GAME.STAGE_COUNTER].waves.length) {
+					// reset section counter
+					GAME.STAGE_SECTION_COUNTER = 0;
+					
+					// new stage
+					GAME.STAGE_COUNTER++;
+					console.log('next stage: '+GAME.STAGE_COUNTER);
+					
+					if(GAME.STAGE_COUNTER >= GAME.STAGE_MODELS.length) {
+						// end of game, you win!
+						GAME.GAME_STATE = 7;
+						GAME.STAGE_TICK = GAME.CLOCK + 15000;
+						console.log('YOU WIN!');
+					} else {
+						GAME.start_stage();
+					}
+				} else {
+					// spawn stuff!
+					console.log('spawn stuff');
+					
+					var STAGE_MODEL = GAME.STAGE_MODELS[GAME.STAGE_COUNTER];
+					var WAVE_MODEL = GAME.WAVE_MODELS[STAGE_MODEL.waves[GAME.STAGE_SECTION_COUNTER]];
+					
+					for(var lp=0;lp<WAVE_MODEL.types.length;lp++) {
+						GAME.create_mobile(WAVE_MODEL.locations[lp].x,WAVE_MODEL.locations[lp].y,WAVE_MODEL.types[lp]);
+					}
+				}
+			}
+		}
+		
 		
 		// handle other controls - fire bomb select start
 		if(GAME.CONTROL_HANDLER[2] == 1) { // fire
