@@ -580,7 +580,7 @@ var GAME = {
 	start: function() {
 		// animate!
 		GAME.GAME_STATE = 0;
-		GAME.STAGE_TICK = GAME.CLOCK + 5000;
+		GAME.STAGE_TICK = GAME.CLOCK + 10000;
 		
 		requestAnimationFrame(this.animate);
 	},
@@ -605,8 +605,6 @@ var GAME = {
 		this.GAME_STATE = 3;
 		this.STAGE_TICK = this.CLOCK + this.STAGE_MODELS[this.STAGE_COUNTER].intro_length;
 	},
-	finish_stage: function() {},
-	finish: function() {},
 
 	clear: function() {
 		GAME.CONTEXT.clearRect(0,0,this.CANVAS_WIDTH,this.CANVAS_HEIGHT);
@@ -1147,14 +1145,25 @@ var GAME = {
 			}
 			
 		}
+		
+		// mobiles
+		if(this.GAME_STATE == 4 && this.MOBILES.length > 0) {
+			//console.log(this.MOBILES);
+			for(var lm=0;lm<this.MOBILES.length;lm++) {
+				if(this.collide_player_mobile(lm)) {
+					console.log('enemy '+lm+' hit player.');
+				}
+			}
+		}
+		
 	},
 	collide_proj_player: function(proj_id) {
 		var TPROJ = this.PROJECTILES[proj_id];
 		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
 		TPROJ.x1 = Math.floor(TPROJ.x);
 		TPROJ.y1 = Math.floor(TPROJ.y);
-		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
-		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		TPROJ.x2 = TPROJ.x1 + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y1 + (PROJ_MODEL.h - 1);
 		
 		var collided = true;
 		if(this.PLAYER.x < TPROJ.x1 || this.PLAYER.x > TPROJ.x2 || this.PLAYER.y < TPROJ.y1 || this.PLAYER.y+1>TPROJ.y2) {
@@ -1171,8 +1180,8 @@ var GAME = {
 		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
 		TPROJ.x1 = Math.floor(TPROJ.x);
 		TPROJ.y1 = Math.floor(TPROJ.y);
-		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
-		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		TPROJ.x2 = TPROJ.x1 + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y1 + (PROJ_MODEL.h - 1);
 		//console.log(TPROJ.x1+','+TPROJ.y1+' '+TPROJ.x2+','+TPROJ.y2);
 		
 		var TMOB = this.MOBILES[mob_id];
@@ -1209,8 +1218,8 @@ var GAME = {
 		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
 		TPROJ.x1 = Math.floor(TPROJ.x);
 		TPROJ.y1 = Math.floor(TPROJ.y);
-		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
-		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h - 1);
+		TPROJ.x2 = TPROJ.x1 + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y1 + (PROJ_MODEL.h - 1);
 		
 		var TMOB = this.MOBILES[mob_id];
 		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
@@ -1224,8 +1233,8 @@ var GAME = {
 			var BOSS_CORE_MODEL = this.BOSS_CORE_MODELS[MOB_MODEL.boss_model_id];
 			
 			for(lp=0;lp<BOSS_CORE_MODEL.locations.length;lp++) {
-				var bsx = TMOB.x + BOSS_CORE_MODEL.locations[lp].x;
-				var bsy = TMOB.y + BOSS_CORE_MODEL.locations[lp].y;
+				var bsx = Math.floor(TMOB.x) + BOSS_CORE_MODEL.locations[lp].x;
+				var bsy = Math.floor(TMOB.y) + BOSS_CORE_MODEL.locations[lp].y;
 
 				if(bsx >= TPROJ.x1 && bsx <= TPROJ.x2 && bsy >= TPROJ.y1 && bsy <= TPROJ.y2) {
 					if(this.MOBILES[mob_id].core_life[lp] > 0) {
@@ -1293,14 +1302,14 @@ var GAME = {
 		return collided;
 	},
 	collide_player_mobile: function(mob_id) {
-		var PLAYER = this.PLAYER;
-		if(TPROJ.dead == 1) {
+		var TPLAYER = this.PLAYER;
+		if(TPLAYER.dead == 1) {
 			return false;
 		}
-		PLAYER.x1 = Math.floor(PLAYER.x);
-		PLAYER.y1 = Math.floor(PLAYER.y);
-		PLAYER.x2 = PLAYER.x1;
-		PLAYER.y2 = PLAYER.y1 + 1;
+		TPLAYER.x1 = Math.floor(TPLAYER.x);
+		TPLAYER.y1 = Math.floor(TPLAYER.y);
+		TPLAYER.x2 = TPLAYER.x1;
+		TPLAYER.y2 = TPLAYER.y1 + 1;
 		
 		var TMOB = this.MOBILES[mob_id];
 		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
@@ -1311,12 +1320,12 @@ var GAME = {
 			// it's a boss - do nothing
 		} else {
 			// check against simple ship hull
-			TMOB.x1 = TMOB.x;
-			TMOB.y1 = TMOB.y;
-			TMOB.x2 = TMOB.x + (MOB_MODEL.w - 1);
-			TMOB.y2 = TMOB.y + (MOB_MODEL.h - 1);
+			TMOB.x1 = Math.floor(TMOB.x);
+			TMOB.y1 = Math.floor(TMOB.y);
+			TMOB.x2 = TMOB.x1 + (MOB_MODEL.w - 1);
+			TMOB.y2 = TMOB.y1 + (MOB_MODEL.h - 1);
 			
-			if(TMOB.x2 < PLAYER.x1 || TMOB.x1 > PLAYER.x2 || TMOB.y2 < PLAYER.y1 || TMOB.y1 > PLAYER.y2) {
+			if(TMOB.x2 < TPLAYER.x1 || TMOB.x1 > TPLAYER.x2 || TMOB.y2 < TPLAYER.y1 || TMOB.y1 > TPLAYER.y2) {
 				collided = false;
 			} else {
 				// damage to mobile
@@ -1331,7 +1340,7 @@ var GAME = {
 				// damage to player
 				this.PLAYER.dead = 1;
 				this.PLAYER.lives -= 1;
-				this.create_explosion(PLAYER.x1,PLAYER.y1,1);
+				this.create_explosion(TPLAYER.x1,TPLAYER.y1,1);
 				console.log('player dead');
 				
 				if(this.PLAYER.lives < 0) {
@@ -1369,8 +1378,8 @@ var GAME = {
 			// it's a boss - do nothing
 		} else {
 			// check against simple ship hull
-			TMOB.x1 = TMOB.x;
-			TMOB.y1 = TMOB.y;
+			TMOB.x1 = Math.floor(TMOB.x);
+			TMOB.y1 = Math.floor(TMOB.y);
 			TMOB.x2 = TMOB.x + (MOB_MODEL.w - 1);
 			TMOB.y2 = TMOB.y + (MOB_MODEL.h - 1);
 			
@@ -1420,6 +1429,14 @@ var GAME = {
 			console.log('start action');
 			GAME.GAME_STATE = 4;
 			GAME.STAGE_TICK = GAME.CLOCK + 1;
+		}
+		
+		// respawn timer done! respawn!
+		if(GAME.GAME_STATE == 5 && GAME.CLOCK > GAME.STAGE_TICK) {
+			console.log('respawn!');
+			GAME.GAME_STATE = 4;
+			GAME.STAGE_TICK = GAME.CLOCK + 2000;
+			GAME.PLAYER.dead = 0;
 		}
 		
 		// game over screen done! return to title!
