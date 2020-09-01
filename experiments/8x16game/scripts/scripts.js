@@ -352,64 +352,68 @@ var GAME = {
 		];
 		
 		this.WAVE_MODELS = [
-			{ // 0: simple simple
+			{ // 0: simple #1
 				types: [0,0,0,0],
-				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+				locations: [{x:1,y:1},{x:2,y:4},{x:4,y:3},{x:6,y:5}]
 			},
-			{ // 1: simple simple
-				types: [0,0,1,0],
-				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			{ // 1: simple #2
+				types: [0,0,0,0],
+				locations: [{x:1,y:1},{x:2,y:3},{x:3,y:5},{x:4,y:2}]
 			},
-			{ // 2: simple hard
-				types: [0,1,1,0],
-				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			{ // 2: simple #3
+				types: [0,0,0,0],
+				locations: [{x:3,y:1},{x:3,y:5},{x:5,y:3},{x:5,y:6}]
 			},
-			{ // 3: hard simple
-				types: [1,1,0,1],
-				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			{ // 3: simple #4
+				types: [0,0,0,0],
+				locations: [{x:1,y:1},{x:3,y:5},{x:4,y:3},{x:6,y:1}]
 			},
-			{ // 4: hard hard
-				types: [1,1,1,1],
-				locations: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}]
+			{ // 4: invasion #1
+				types: [0,0,0,0,0,0,1,1,1,1,1,1],
+				locations: [{x:1,y:1},{x:5,y:1},{x:4,y:3},{x:3,y:5},{x:2,y:7},{x:6,y:7},{x:3,y:1},{x:2,y:3},{x:6,y:3},{x:1,y:5},{x:5,y:5},{x:4,y:7}]
 			},
-			{ // 5: boss 1
+			{ // 5: invasion #2
+				types: [0,0,0,0,0,0,1,1,1,1,1,1],
+				locations: [{x:4,y:1},{x:3,y:3},{x:6,y:3},{x:1,y:5},{x:4,y:5},{x:3,y:7},{x:1,y:1},{x:6,y:1},{x:1,y:3},{x:6,y:5},{x:1,y:7},{x:6,y:7}]
+			},
+			{ // 6: boss #1
 				types: [2],
-				locations: [{x:4,y:2}]
+				locations: [{x:2,y:1}]
 			},
-			{ // 6: boss 2
+			{ // 7: boss #2
 				types: [3],
-				locations: [{x:4,y:2}]
+				locations: [{x:2,y:1}]
 			},
-			{ // 7: boss 3
+			{ // 8: boss #3
 				types: [4],
-				locations: [{x:4,y:2}]
+				locations: [{x:2,y:1}]
 			},
 		];
 		this.STAGE_MODELS = [
 			{
 				name: 'STAGE 1',
 				intro_length: 2000,
-				waves: [0,0,0,0,4]
+				waves: [0,1,2,3,4,6]
 			},
 			{
 				name: 'STAGE 2',
 				intro_length: 2000,
-				waves: [1,1,1,1,5]
+				waves: [0,3,2,1,5,7]
 			},
 			{
 				name: 'STAGE 3',
 				intro_length: 2000,
-				waves: [2,2,2,2,6]
+				waves: [3,2,1,0,5,6]
 			},
 			{
 				name: 'STAGE 4',
 				intro_length: 2000,
-				waves: [3,3,3,4,6]
+				waves: [3,1,0,2,4,7]
 			},
 			{
 				name: 'STAGE 5',
 				intro_length: 2000,
-				waves: [3,2,1,5,7]
+				waves: [0,1,2,3,4,5,8]
 			}
 		];
 		
@@ -1366,8 +1370,8 @@ var GAME = {
 		var PROJ_MODEL = this.PROJECTILE_MODELS[TPROJ.type];
 		TPROJ.x1 = Math.floor(TPROJ.x);
 		TPROJ.y1 = Math.floor(TPROJ.y);
-		TPROJ.x2 = TPROJ.x + (PROJ_MODEL.w - 1);
-		TPROJ.y2 = TPROJ.y + (PROJ_MODEL.h); // make projectiles taller for collision?
+		TPROJ.x2 = TPROJ.x1 + (PROJ_MODEL.w - 1);
+		TPROJ.y2 = TPROJ.y1 + (PROJ_MODEL.h); // make projectiles taller for collision?
 		
 		var TMOB = this.MOBILES[mob_id];
 		var MOB_MODEL = this.MOBILE_MODELS[TMOB.type];
@@ -1380,8 +1384,8 @@ var GAME = {
 			// check against simple ship hull
 			TMOB.x1 = Math.floor(TMOB.x);
 			TMOB.y1 = Math.floor(TMOB.y);
-			TMOB.x2 = TMOB.x + (MOB_MODEL.w - 1);
-			TMOB.y2 = TMOB.y + (MOB_MODEL.h - 1);
+			TMOB.x2 = TMOB.x1 + (MOB_MODEL.w - 1);
+			TMOB.y2 = TMOB.y1 + (MOB_MODEL.h - 1);
 			
 			if(TMOB.x2 < TPROJ.x1 || TMOB.x1 > TPROJ.x2 || TMOB.y2 < TPROJ.y1 || TMOB.y1 > TPROJ.y2) {
 				collided = false;
@@ -1531,10 +1535,13 @@ var GAME = {
 		GAME.dispose_mobiles();
 		GAME.dispose_particles();
 		
+		
 		// render things
 		GAME.clear();
 		GAME.render();
 		
+		
+		// more animation frames!
 		requestAnimationFrame(GAME.animate);
 	},
 }
