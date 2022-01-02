@@ -21,6 +21,7 @@ var GAME_WORLD = {
 	objects: null,
 	npcs: null,
 	fx: null,
+	scripts: null, // script GUID, tick time, pointer, actions // for default talk scripts, use NPC guid	
 	
 	// fetch sprite data --------------------
 	get_sprite_data: function() {
@@ -349,7 +350,7 @@ var GAME_WORLD = {
 								[ // frame 3
 									72,56,79,63,75,63,72,56,79,63
 								],
-							]
+							],
 						]
 					],
 				},
@@ -393,6 +394,53 @@ var GAME_WORLD = {
 								],
 							]
 						]
+					],
+				},
+				{	// sprite 22
+					name: 'Snake',
+					frames: [
+						[ // stance 0
+							[ // facing 0
+								[ // frame 0
+									1,57,6,63,3,63,1,57,6,63
+								],
+							], 
+							[ // facing 1
+								[ // frame 0
+									9,57,14,63,11,63,9,57,14,63
+								],
+							],
+						],
+						[ // stance 1
+							[ // facing 0
+								[ // frame 0
+									1,57,6,63,3,63,1,57,6,63
+								],
+								[ // frame 0
+									1,57,6,63,3,63,1,57,6,63
+								],
+								[ // frame 0
+									1,57,6,63,3,63,1,57,6,63
+								],
+								[ // frame 0
+									1,57,6,63,3,63,1,57,6,63
+								],
+							], 
+							[ // facing 1
+								[ // frame 0
+									9,57,14,63,11,63,9,57,14,63
+								],
+								[ // frame 0
+									9,57,14,63,11,63,9,57,14,63
+								],
+								[ // frame 0
+									9,57,14,63,11,63,9,57,14,63
+								],
+								[ // frame 0
+									9,57,14,63,11,63,9,57,14,63
+								],
+							],
+						],
 					],
 				},
 			],
@@ -502,111 +550,48 @@ var GAME_WORLD = {
 		};
 		
 		this.object_defs = {
-			list: [{ // 0
-				type: 'item',
-				name: 'Gold Key',
-				sprite: 1,
-				flags: ['gold_key','gravity'],
-			},{ // 1
-				type: 'item',
-				name: 'Silver Key',
-				sprite: 2,
-				flags: ['silver_key','gravity'],
-			},{ // 2
-				type: 'item',
-				name: 'Mythic Key',
-				sprite: 3,
-				flags: ['orange_key','gravity'],
-			},{ // 3
-				type: 'item',
-				name: 'Axe',
-				sprite: 4,
-				flags: ['axe','gravity'],
-			},{ // 4
-				type: 'item',
-				name: 'Hammer',
-				sprite: 5,
-				flags: ['hammer','gravity'],
-			},{ // 5
-				type: 'item',
-				name: 'Knife',
-				sprite: 6,
-				flags: ['knife','gravity'],
-			},{ // 6
-				type: 'item',
-				name: 'Gun',
-				sprite: 7,
-				flags: ['gun','gravity'],
-			},{ // 7
-				type: 'item',
-				name: 'Crowbar',
-				sprite: 8,
-				flags: ['crowbar','gravity'],
-			},{ // 8
-				type: 'furniture',
-				name: 'Crate',
-				sprite: 9,
-				flags: ['stand_on','solid','gravity'],
-			},{ // 9
-				type: 'furniture',
-				name: 'Chest',
-				sprite: 10,
-				flags: ['gravity'],
-			},{ // 10
-				type: 'furniture',
-				name: 'Chair',
-				sprite: 11,
-				flags: ['gravity'],
-			},{ // 11
-				type: 'furniture',
-				name: 'Table',
-				sprite: 12,
-				flags: ['stand_on','gravity'],
-			},{ // 12
-				type: 'furniture',
-				name: 'Stove',
-				sprite: 14,
-				flags: ['stand_on','gravity'],
-			},{ // 13
-				type: 'furniture',
-				name: 'Refrigerator',
-				sprite: 15,
-				flags: ['gravity'],
-			},{ // 14
-				type: 'furniture',
-				name: 'Dresser',
-				sprite: 16,
-				flags: ['gravity'],
-			},{ // 15
-				type: 'furniture',
-				name: 'Counter',
-				sprite: 17,
-				flags: ['stand_on','gravity'],
-			},{ // 16
-				type: 'obstacle',
-				name: 'Fire',
-				sprite: 18,
-				flags: ['fire_damage','animated','gravity'],
-			},{ // 17
-				type: 'item',
-				name: 'Shovel',
-				sprite: 19,
-				flags: ['shovel','gravity'],
-			},{ // 18
-				type: 'furniture',
-				name: 'Door Up',
-				sprite: 20,
-				flags: [],
-			},{ // 19
-				type: 'furniture',
-				name: 'Door Down',
-				sprite: 21,
-				flags: [],
-			},],
+			list: [
+		/*  0 */ { type: 'item', name: 'Gold Key',	sprite: 1, flags: ['gold_key','gravity'],},
+		/*  1 */ { type: 'item', name: 'Silver Key', sprite: 2, flags: ['silver_key','gravity'],},
+		/*  2 */ { type: 'item', name: 'Mythic Key', sprite: 3, flags: ['orange_key','gravity'],},
+		/*  3 */ { type: 'item', name: 'Axe', sprite: 4, flags: ['axe','gravity'],},
+		/*  4 */ { type: 'item', name: 'Hammer', sprite: 5, flags: ['hammer','gravity'],},
+		/*  5 */ { type: 'item', name: 'Knife', sprite: 6, flags: ['knife','gravity'],},
+		/*  6 */ { type: 'item', name: 'Gun', sprite: 7, flags: ['gun','gravity'],},
+		/*  7 */ { type: 'item', name: 'Crowbar', sprite: 8, flags: ['crowbar','gravity'],},
+		/*  8 */ { type: 'furniture', name: 'Crate', sprite: 9, flags: ['stand_on','solid','gravity'],},
+		/*  9 */ { type: 'furniture', name: 'Chest', sprite: 10, flags: ['gravity'],},
+		/* 10 */ { type: 'furniture', name: 'Chair', sprite: 11, flags: ['gravity'],},
+		/* 11 */ { type: 'furniture', name: 'Table', sprite: 12, flags: ['stand_on','gravity'],},
+		/* 12 */ { type: 'furniture', name: 'Stove', sprite: 14, flags: ['stand_on','gravity'],},
+		/* 13 */ { type: 'furniture', name: 'Refrigerator', sprite: 15, flags: ['gravity'],},
+		/* 14 */ { type: 'furniture', name: 'Dresser', sprite: 16, flags: ['gravity'],},
+		/* 15 */ { type: 'furniture', name: 'Counter', sprite: 17, flags: ['stand_on','gravity'],},
+		/* 16 */ { type: 'obstacle', name: 'Fire', sprite: 18, flags: ['fire_damage','animated','gravity'],},
+		/* 17 */ { type: 'item', name: 'Shovel', sprite: 19, flags: ['shovel','gravity'],},
+		/* 18 */ { type: 'furniture', name: 'Door Up', sprite: 20, flags: [],},
+		/* 19 */ { type: 'furniture', name: 'Door Down', sprite: 21, flags: [],},
+			],
 		};
 		
 		this.npc_defs = {
-			list: [],
+			list: [
+		/*  0 */ {
+					name: 'Person',
+					race: 'Human',
+					sprite: 0,
+					flags: ['speaks','gravity'],
+					hp: 10,
+				},
+		/*  1 */ {
+					name: 'Snake',
+					race: 'Snake',
+					sprite: 22,
+					flags: ['aggressive'],
+					hp: 5,
+				},
+		/* xx */ //{},
+			],
 		};
 		
 		this.map_defs = {
@@ -684,7 +669,28 @@ var GAME_WORLD = {
 						locked: true,
 						key_item: 0,
 						key_special: -1,
-						loot: [3],
+						loot: [3], // axe?
+						loot_money: 10,
+					},
+					{
+						guid: 'TALKNPCx0000',
+						type: 'speak_npc',
+						one_time: true,
+						locked: true,
+						speech_script: ['Thank you, traveler!','That snake was keeping me from getting the keys I dropped.','With those you should be able to move forward!','Take these too; they will help you on your way.'],
+						key_event_ids: ['OBJx0000'], // KILLNPCx0001
+						loot: [7], // crowbar?
+						loot_money: 20,
+					},
+					{
+						guid: 'TALKNPCx0001',
+						type: 'speak_npc',
+						one_time: false,
+						locked: true,
+						speech_script: ['Thank you, traveler!'],
+						key_event_ids: ['TALKNPCx0000'],
+						loot: [],
+						loot_money: 0,
 					},
 				],
 				objects:[
@@ -742,7 +748,21 @@ var GAME_WORLD = {
 						open_event: 'DOOROPENx0001',
 					},
 				],
-				npcs:[],
+				npcs:[
+					{
+						name: 'Guard',
+						guid: 'NPCx0000',
+						unique: true,
+						no_respawn: false,
+						loc_x: 117,
+						loc_y: 63,
+						facing: 1,
+						npc_id: 0,
+						aggressive: false,
+						default_speech: ['Hello, traveler.','You can climb the ledge by jumping again when you\'re close enough to reach it!'],
+						talk_events: ['TALKNPCx0001','TALKNPCx0000'],
+					},
+				],
 			},{
 				name: 'cave house',
 				tile_grid: [
@@ -753,8 +773,8 @@ var GAME_WORLD = {
 					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[0,0,2,0],	],
 					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[0,0,2,0],	],
 					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[0,0,2,0],	],
-					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],[0,0,2,0],	],
-					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],[0,0,2,0],	],
+					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0], [0,0,2,0],	],
+					[	[0,0,2,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0],	[14,0,0,0], [0,0,2,0],	],
 					[	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	[0,0,2,0],	],
 				],
 				events: [
@@ -773,7 +793,23 @@ var GAME_WORLD = {
 							x: 172,
 							y: 63,
 						},
-					}
+					},
+					{
+						guid: 'AGGRONPCx0001',
+						type: 'npc_aggroed',
+						one_time: true,
+						locked: false,
+						key_event_ids: [],
+					},
+					{
+						guid: 'KILLNPCx0001',
+						type: 'npc_killed',
+						one_time: true,
+						locked: false,
+						key_event_ids: [],
+						loot: [],
+						loot_money: 0,
+					},
 				],
 				objects: [
 					{
@@ -808,7 +844,21 @@ var GAME_WORLD = {
 						open_event: 'DOOROPENx0000',
 					},				
 				],
-				npcs: [],
+				npcs: [
+					{
+						guid: 'NPCx0001',
+						name: 'Solid Snake',
+						unique: true,
+						no_respawn: false,
+						loc_x: 38,
+						loc_y: 71,
+						facing: 0,
+						npc_id: 1, // snake
+						aggressive: true,
+						aggro_event: 'AGGRONPCx0001',
+						kill_event: 'KILLNPCx0001',
+					},
+				],
 			}
 			//,{
 			//	name: '',
@@ -835,7 +885,7 @@ var GAME_WORLD = {
 	
 	
 	// functions --------------------------------------------------------------------
-	// find tile under this
+	// find map tile under
 	find_tile_under: function(obj) {
 		var tx = Math.floor(obj.loc.x / 8);
 		var ty = Math.floor((obj.loc.y + 1) / 8);
@@ -843,6 +893,7 @@ var GAME_WORLD = {
 		var tile_id = tile_array[2]; // foreground tile!
 		return this.tile_defs.list[tile_id];
 	},
+	// find map tile here
 	find_tile_behind: function(obj) {
 		var tx = Math.floor(obj.loc.x / 8);
 		var ty = Math.floor(obj.loc.y / 8);
@@ -850,6 +901,7 @@ var GAME_WORLD = {
 		var tile_id = tile_array[2]; // foreground tile!
 		return this.tile_defs.list[tile_id];
 	},
+	// find event here
 	find_event_behind: function(obj) {
 		var tx = Math.floor(obj.loc.x / 8);
 		var ty = Math.floor(obj.loc.y / 8);
@@ -861,8 +913,9 @@ var GAME_WORLD = {
 		}
 		return null;
 	},
+	// find objects here
 	find_objects_behind: function(obj) {
-		object_list = [];
+		var object_list = [];
 		var objects = this.objects;
 		for(obj of objects) {
 			if(this.player.precollide_to_object(obj)) {
@@ -870,9 +923,46 @@ var GAME_WORLD = {
 			}
 		}
 		return object_list;
+	},
+	// find NPCs here
+	find_npcs_behind: function(obj) {
+		var npc_list = [];
+		var npcs = this.npcs;
+		for(npc of npcs) {
+			if(this.player.precollide_to_npc(npc)) {
+				npc_list.push(npc);
+			}
+		}
+		return npc_list;
 	},	
+
+
+
 	
-	
+	// find NPCs by guid
+	find_npc_by_guid: function(guid) {
+		var found_npc = null;
+		
+		for(npc of this.npcs) {
+			if(npc.guid == guid) {
+				found_npc = npc;
+			}
+		}
+		return found_npc;
+	},
+
+	// find events by guid
+	find_map_event_by_guid: function(guid) {
+		var found_event = null;
+		var this_map = this.map_defs.list[this.player.loc.map];
+		
+		for(event of this_map.events) {
+			if(event.guid == guid) {
+				found_event = event;
+			}
+		}
+		return found_event;
+	},
 	
 	
 	// player inventory
@@ -913,6 +1003,9 @@ var GAME_WORLD = {
 		return is_carrying_special;
 	},
 	
+
+
+
 	// player events
 	player_check_event: function(evt) {
 		var has_event = false;
@@ -925,10 +1018,144 @@ var GAME_WORLD = {
 	},
 	player_add_event: function(evt) {
 		this.player.EVENTS[evt.guid] = true;
-		console.log(this.player.EVENTS);
+	},
+
+
+
+	
+	// check if an event's key events are satisfied
+	is_event_satisfied: function(evt) {
+		var satisfied = false;
+		var number_satisfied = 0;
+		
+		if(evt.locked != true) { // if the event isn't locked, automatically pass
+			satisfied = true;
+		} else { 
+			// check key event IDs
+			for(evt_id of evt.key_event_ids) {
+				if(typeof this.player.EVENTS[evt_id] != 'undefined') {
+					number_satisfied++;
+				}
+			}
+			
+			// count passes - if not 100%, fail altogether
+			if(number_satisfied == evt.key_event_ids.length) {
+				satisfied = true;
+			}
+		}
+		
+		// send results
+		return satisfied;
+	},
+
+
+
+	//scripts
+	// find active script by GUID
+	find_active_script_by_guid: function(guid) {
+		for(script of this.scripts) {
+			if(script.guid == guid) {
+				return script;
+			}
+		}
+		return null;
+	},
+	find_active_script_by_owner: function(guid) {
+		for(script of this.scripts) {
+			if(script.owner == guid) {
+				return script;
+			}
+		}
+		return null;
 	},
 	
 	
+	// queueing up scripts
+	add_default_npc_speech_script: function(npc,time) {
+		// for default talk scripts, use NPC guid
+		
+		if(!this.find_active_script_by_guid(npc.guid)) {
+			var new_script = {
+				type: 'npc_default_speech',
+				guid: npc.guid,
+				owner: npc.guid,
+				next_tick: time + 5000,
+				tick_progress: 0, // percentage for fading!
+				pointer: 0,
+				persist: false,
+				actions: npc.default_speech,
+			};
+			this.scripts.push(new_script);
+		}
+	},
+	add_npc_talk_script: function(npc,evt,time) {
+		if(!this.find_active_script_by_guid(evt.guid) && !this.find_active_script_by_owner(npc.guid)) {
+			//console.log('add_npc_talk_script');
+			var new_script = {
+				type: 'talk_script',
+				guid: evt.guid,
+				owner: npc.guid,
+				next_tick: time + 5000,
+				tick_progress: 0, // percentage for fading!
+				pointer: 0,
+				persist: false,
+				actions: evt.speech_script,
+				loot: evt.loot,
+				loot_money: evt.loot_money,
+			};
+			this.scripts.push(new_script);
+
+			
+			// loot!
+			// get items
+			var item_buf = '';
+			//this.object_defs
+			if(typeof evt.loot != 'undefined') {
+				for(item_id of evt.loot) {
+					this.player_add_item({thing_id:item_id,guid:evt.guid});
+					
+					item_buf += this.object_defs.list[item_id].name+', ';
+				}
+				if(item_buf != "") {
+					item_buf = item_buf.substr(0,item_buf.length-2)
+				}
+			}
+			// add money
+			var money_buf = '';
+			if(typeof evt.loot_money != 'undefined') {
+				if(evt.loot_money > 0) {
+					this.player.money += evt.loot_money;
+					money_buf = evt.loot_money+' dollars';
+				}
+			}
+			
+			// add script for gaining the items/money if there are any!
+			if(item_buf != '' || money_buf != '') {
+				var loot_script_text = npc.name+' gave you ';
+				if(item_buf != '' && money_buf != '') {
+					loot_script_text += item_buf + ' and ' + money_buf;
+				} else if(item_buf != '') {
+					loot_script_text += item_buf;
+				} else {
+					loot_script_text += money_buf;
+				}
+				loot_script_text += '.';
+				
+				var loot_script = {
+					type: 'loot_message',
+					guid: evt.guid,
+					owner: evt.guid,
+					next_tick: time + 5000,
+					tick_progress: 0, // percentage for fading!
+					pointer: 0,
+					persist: false,
+					actions: [loot_script_text],
+				};
+				console.log(loot_script);
+				this.scripts.push(loot_script);
+			}
+		}
+	},	
 	
 	
 	
@@ -950,11 +1177,14 @@ var GAME_WORLD = {
 		this.renderBackground();
 		this.renderMap();
 		this.renderObjects(0);
+		this.renderNpcs();
 		this.renderPlayer();
 		this.renderObjects(1);
 		this.renderForeground();
 		this.renderEffects();
 		this.renderElements();
+		this.renderConversations();
+		this.renderHUD();
 		
 		if(this.EDITOR != null) {
 			this.EDITOR.render();
@@ -967,7 +1197,7 @@ var GAME_WORLD = {
 		
 		for(var lrow=0;lrow<this_grid.length;lrow++) {
 			for(var lcol=0;lcol<this_grid[lrow].length;lcol++) {
-				// background layer first
+				// background layer
 				var this_tile = this_grid[lrow][lcol];
 				var tile_def = this.tile_defs.list[this_tile[0]];
 				var aframe = tile_def.frame;
@@ -1066,6 +1296,37 @@ var GAME_WORLD = {
 				
 				// remove object
 				GAME_WORLD.objects.splice(lp,1);
+			}
+		}
+	},
+	// render objects
+	renderNpcs: function() {
+		if(this.npcs.length > 0) {
+			var source_image = document.getElementById('game_tiles');
+			for(npc of this.npcs) {
+				//var aframe = this.object_defs.list[npc.thing_id].sprite_frame;
+				//var this_sprite = this.sprite_defs.list[this.object_defs.list[npc.thing_id].sprite];
+				var this_sprite = this.sprite_defs.list[this.npc_defs.list[npc.npc_id].sprite];
+				var aframe = this_sprite.frames[0][npc.facing][npc.frame];
+				var s_width = aframe[2] - aframe[0] + 1;
+				var s_height = aframe[3] - aframe[1] + 1;
+				var loc_x = npc.loc.x - (aframe[4] - aframe[0]); // origin_x - left
+				var loc_y = npc.loc.y - (aframe[5] - aframe[1]); // origin_y - top
+				this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_x,loc_y,s_width,s_height);
+			}
+		}
+	},
+	cleanNpcs: function() {
+		// destroy objects if they're supposed to be gone
+		for(lp in GAME_WORLD.npcs) {
+			if(GAME_WORLD.npcs[lp].DESTROY_THIS) {
+				// initiate destroy affect?
+				
+				
+				
+				
+				// remove object
+				GAME_WORLD.npcs.splice(lp,1);
 			}
 		}
 	},
@@ -1261,6 +1522,65 @@ var GAME_WORLD = {
 		}
 
 	},
+	
+	
+	// render the HUD
+	renderHUD: function() { // this didn't work - pixel sizes prevent it - figure out another way!
+		this.gfx.fillStyle = '#000000';
+		this.gfx.fillRect(386,2,12,12);
+		this.gfx.fillRect(370,2,12,12);
+		this.gfx.strokeStyle = '#ff0000';
+		this.gfx.strokeRect(386,2,12,12);
+		this.gfx.strokeRect(370,2,12,12);
+	},
+	
+	// render conversations
+	renderConversations: function() {
+		for(script of this.scripts) {
+			if(script.type == "npc_default_speech") {
+				var frame = script.pointer;
+				var progress = script.tick_progress;
+
+				var npc = this.find_npc_by_guid(script.owner);
+				var loc_x = npc.loc.x;
+				var loc_y = npc.loc.y - 16;
+				
+				this.gfx.font = '8px sans-serif';
+				this.gfx.fillStyle = 'rgba(255,255,255,'+(1.00-script.tick_progress)+')';
+				this.gfx.strokeStyle = 'rgba(128,128,128,'+(1.00-script.tick_progress)+')';
+				this.gfx.beginPath();
+				this.gfx.moveTo(loc_x,loc_y);
+				this.gfx.lineTo(20, 14);
+				this.gfx.stroke();
+				this.gfx.fillText(script.actions[frame],10,10);
+			}
+			if(script.type == "talk_script") {
+				var frame = script.pointer;
+				var progress = script.tick_progress;
+
+				var npc = this.find_npc_by_guid(script.owner);
+				var loc_x = npc.loc.x;
+				var loc_y = npc.loc.y - 16;
+				
+				this.gfx.font = '8px sans-serif';
+				this.gfx.fillStyle = 'rgba(255,255,255,'+(1.00-script.tick_progress)+')';
+				this.gfx.strokeStyle = 'rgba(128,128,128,'+(1.00-script.tick_progress)+')';
+				this.gfx.beginPath();
+				this.gfx.moveTo(loc_x,loc_y);
+				this.gfx.lineTo(20, 14);
+				this.gfx.stroke();
+				this.gfx.fillText(script.actions[frame],10,10);
+			}
+			if(script.type == "loot_message") {
+				var frame = script.pointer;
+				var progress = script.tick_progress;
+
+				this.gfx.font = '8px sans-serif';
+				this.gfx.fillStyle = 'rgba(255,255,0,'+(1.00-script.tick_progress)+')';
+				this.gfx.fillText(script.actions[frame],10,20);
+			}
+		}
+	},
 	// functions --------------------------------------------------------------------
 	
 	
@@ -1316,6 +1636,53 @@ var GAME_WORLD = {
 				});
 			}
 		}
+		
+		// clean out npcs
+		this.npcs = [];
+		
+		// add new npcs
+		var map_npcs = this.map_defs.list[new_map].npcs;
+		
+		for(npc of map_npcs) {
+			// check if NPC should spawn
+			if(((npc.no_respawn) && !this.player_check_event(npc)) || (!npc.no_respawn)) {
+				var this_frame = 0;
+				if(typeof npc.open_event != 'undefined') {
+					if(typeof this.player.EVENTS[npc.open_event] != 'undefined') {
+						this_frame = 1;
+					}
+				}
+				
+				this.npcs.push({
+					DESTROY_THIS: false,
+					name: npc.name,
+					guid: npc.guid,
+					npc_id: npc.npc_id,
+					unique: npc.unique,
+					no_respawn: npc.no_respawn,
+					stance: 0,
+					facing: npc.facing,
+					frame: this_frame,
+					next_animate_tick: 0,
+					default_speech: npc.default_speech,
+					talk_events: npc.talk_events,
+					aggro_event: npc.aggro_event,
+					kill_event: npc.kill_event,
+					loc: {
+						map: new_map,
+						x: npc.loc_x,
+						y: npc.loc_y,
+					},
+					vel: {x:0,y:0},
+					accel: {x:0,y:0},
+				});
+			}
+		}
+		
+		
+		// clean out scripts? revisit later for persist scripts
+		this.scripts = [];
+		
 		
 		// update map number and name!
 		document.getElementById('editor_map').value = this.player.loc.map;
@@ -1380,8 +1747,42 @@ var GAME_WORLD = {
 		var tile_behind = this.find_tile_behind(this.player);
 		var tile_under = this.find_tile_under(this.player);
 
-		// check for ladder or stairs
+
+		// handle UP control
 		if(this.controls.up == 1) {
+			// check for NPC to talk to?
+			var npcs_behind = this.find_npcs_behind(this.player);
+			if(npcs_behind.length > 0) {
+				//console.log(npcs_behind);
+				for(npc of npcs_behind) {
+					var did_talk_event = false;
+					if(npc.talk_events) {
+						for(tk_evt_id of npc.talk_events) {
+							var evt = this.find_map_event_by_guid(tk_evt_id);
+							if(this.is_event_satisfied(evt)) {
+								if(evt.one_time == true && this.player_check_event(evt)) {
+									// do nothing - one time events don't trigger another time
+									if(this.find_active_script_by_guid(evt.guid)) { // check if it's still active
+										did_talk_event = true;
+									}
+								} else {
+									if(!this.find_active_script_by_guid(evt.guid)) {
+										if(evt.one_time == true) {
+											this.player_add_event(evt);
+										}
+										this.add_npc_talk_script(npc,evt,time);
+									}
+									did_talk_event = true;
+								}
+							}
+						}
+					}
+					if(!did_talk_event && npc.default_speech) {
+						this.add_default_npc_speech_script(npc,time);
+					}
+				}
+			}
+			
 			// check for door up?
 			var event_behind = this.find_event_behind(this.player);	
 			if(event_behind != null) {
@@ -1535,9 +1936,10 @@ var GAME_WORLD = {
 									obj.frame = 1;
 									
 									// loot chest!
-									var loot = evt.loot;
-									for(lt of loot) {
-										this.player_add_item(lt,evt.guid);
+									if(evt.loot.length > 0) {
+										for(lt of evt.loot) {
+											this.player_add_item(lt,evt.guid);
+										}
 									}
 								 } else {
 									 // nothing happens?
@@ -1806,7 +2208,9 @@ var GAME_WORLD = {
 		
 		// animate all the things!
 		this.animatePlayer(time);
+		this.animateNpcs(time);
 		this.animateObjects(time);
+		this.animateConversations(time);
 	},
 	
 	animatePlayer: function(time) {
@@ -1838,6 +2242,44 @@ var GAME_WORLD = {
 				break;
 		}
 	},
+	animateNpcs: function(time) {
+		for(npc of this.npcs) {
+			var npc_def = this.npc_defs.list[npc.npc_id];
+			if(npc_def.flags.indexOf('inanimate') < 0) {
+				this.animateNpc(npc,time);
+			}
+			
+		}
+	},
+	animateNpc: function(obj,time) {
+		// player animation - setup
+		if(obj.next_animate_tick == 0) {
+			obj.next_animate_tick = time + 120;
+		}
+		var elapsed = time - GAME_WORLD.last_tick;
+		
+		switch(obj.stance) {
+			case 0: // idle
+				break;
+			case 1: // walking/running
+				if(time > obj.next_animate_tick) {
+					obj.frame++;
+					if(obj.frame > 3) {
+						obj.frame = 0;
+					}
+					
+					// if moving faster than 330/1000 pix/ms
+					if(obj.slope_left || obj.slope_right) {
+						obj.next_animate_tick = time + 150;
+					} else if(Math.abs(obj.vel.x) > 500/1000) {
+						obj.next_animate_tick = time + 120;
+					} else {
+						obj.next_animate_tick = time + 180;
+					}
+				}
+				break;
+		}
+	},
 	animateObjects: function(time) {
 		for(obj of this.objects) {
 			var obj_def = this.object_defs.list[obj.thing_id];
@@ -1862,6 +2304,34 @@ var GAME_WORLD = {
 			obj.next_animate_tick = time + 200;
 		}
 	},
+	cleanConversations: function() {
+		for(lp in this.scripts) {
+			if(this.scripts[lp].DESTROY_THIS && !this.scripts[lp].persist) {
+				this.scripts.splice(lp,1);
+			}
+		}
+	},
+	animateConversations: function(time) {
+		for(script of this.scripts) {
+			if(script.type == "npc_default_speech" || script.type == "talk_script" || script.type == "loot_message") {
+				if(time > script.next_tick) {
+					if(script.pointer < (script.actions.length - 1)) {
+						script.pointer++;
+						script.next_tick = time + 5000;
+					} else {
+						script.DESTROY_THIS = true;
+					}
+				} else {
+					var last_time = script.next_tick - 5000;
+					var dif = time - last_time;
+					var pct = dif / 5000;
+					script.tick_progress = pct;
+				}
+			}
+		}
+	},
+
+
 	
 	game_loop: function(time) {
 		// everything animation - setup
@@ -1874,6 +2344,10 @@ var GAME_WORLD = {
 		
 		// deal with collisions with objects
 		GAME_WORLD.cleanObjects();
+		GAME_WORLD.cleanNpcs();
+		
+		// dispose of finished conversations
+		GAME_WORLD.cleanConversations();
 		
 		// animate everything!
 		GAME_WORLD.animateAll(time);
@@ -2339,6 +2813,9 @@ var GAME_WORLD = {
 		
 		// effects array
 		this.effects = [];
+		
+		// scripts array
+		this.scripts = [];
 
 		// set up game controls
 		this.controls = {
@@ -2355,7 +2832,7 @@ var GAME_WORLD = {
 
 		// set up player
 		this.player = {
-			sprite_id: 0,
+			sprite_id: 0, //22,
 			stance: 0,
 			facing: 0,
 			frame: 0,
@@ -2406,6 +2883,7 @@ var GAME_WORLD = {
 			// events array - for handling event flags
 			EVENTS: [],
 		};
+		
 		
 		// COLLISION
 		this.player.collide_to_boundaries = function() {
@@ -2767,6 +3245,33 @@ var GAME_WORLD = {
 			}
 			
 			return hit_object;
+		};
+		this.player.precollide_to_npc = function(npc) {
+			var hit_npc = true;
+			
+			// figure out if we hit a wall
+			// sprite stance facing frame
+			var sprite_frame = GAME_WORLD.sprite_defs.list[GAME_WORLD.player.sprite_id].frames[GAME_WORLD.player.stance][GAME_WORLD.player.facing][GAME_WORLD.player.frame];
+			var pl_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[6]);
+			var pr_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[8]);
+			var pt_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y - (sprite_frame[5] - sprite_frame[7]);
+			var pb_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y + (sprite_frame[5] - sprite_frame[9]);
+			
+			// find npc
+			var npc_def = GAME_WORLD.npc_defs.list[npc.npc_id];
+			var npc_sprite = GAME_WORLD.sprite_defs.list[npc_def.sprite];
+			var npc_frame = npc_sprite.frames[0][npc.facing][npc.frame];
+			var ol_x = npc.loc.x - (npc_frame[4] - npc_frame[6]);
+			var or_x = npc.loc.x - (npc_frame[4] - npc_frame[8]);
+			var ot_y = npc.loc.y - (npc_frame[5] - npc_frame[7]);
+			var ob_y = npc.loc.y + (npc_frame[5] - npc_frame[9]);
+			
+			// check corners 
+			if((pr_x < ol_x) || (pl_x > or_x) || (pb_y < ot_y) || (pt_y > ob_y)) {
+				hit_npc = false;
+			}
+			
+			return hit_npc;
 		}
 		this.player.collide_to_object = function(obj) {
 			var hit_object = true;
