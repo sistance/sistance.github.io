@@ -21,7 +21,7 @@ var GAME_WORLD = {
 	objects: null,
 	npcs: null,
 	fx: null,
-	scripts: null, // script GUID, tick time, pointer, actions // for default talk scripts, use NPC guid	
+	scripts: null,
 	
 	// fetch sprite data --------------------
 	get_sprite_data: function() {
@@ -32,12 +32,13 @@ var GAME_WORLD = {
 			left: 'KeyA',
 			right: 'KeyD',
 			jump: 'Space',
-			fire1: 'Digit1',
-			fire2: 'Digit2',
-			fire3: 'Digit3',
+			fire1: 'KeyM',
+			fire2: 'Comma',
+			fire3: 'Period',
+			cycle1: 'Digit1',
+			cycle2: 'Digit2',
 			run: '',
 			float_on: 'F1',
-			float_off: 'F2',
 		};
 		
 		// set up sprite defs
@@ -50,15 +51,15 @@ var GAME_WORLD = {
 						[ // stance 0 - idle
 							[ // facing 0 - right
 								[ // frame 0
-									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom
-									4,1,11,15,7,15,5,1,10,15,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									4,1,11,15,7,15,5,1,10,15,10,9,4,9,
 								], // frame 0
 								//{}, // frame 1
 							], // facing 0 - right
 							[ // facing 1 - left
 								[ // frame 0
-									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom
-									21,1,28,15,24,15,22,1,27,15,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									21,1,28,15,24,15,22,1,27,15,27,9,21,9,
 								], // frame 0
 								//{}, // frame 1
 							], // facing 1 - left
@@ -66,38 +67,38 @@ var GAME_WORLD = {
 						[ // stance 1 - walking
 							[ // facing - right
 								[ // frame 0
-									// left, top, right, bottom, origin_x, origin_y
-									4,33,11,47,7,47,5,33,10,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									4,33,11,47,7,47,5,33,10,47,10,41,4,41,
 								], // frame 0
 								[ // frame 1
-									// left, top, right, bottom, origin_x, origin_y
-									22,33,25,47,23,47,21,33,26,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									22,33,25,47,23,47,21,33,26,47,25,41,24,41,
 								], // frame 1
 								[ // frame 2
-									// left, top, right, bottom, origin_x, origin_y
-									36,33,43,47,39,47,37,33,42,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									36,33,43,47,39,47,37,33,42,47,36,41,42,41,
 								], // frame 2
 								[ // frame 3
-									// left, top, right, bottom, origin_x, origin_y
-									54,33,57,47,55,47,53,33,58,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									54,33,57,47,55,47,53,33,58,47,56,41,55,41,
 								], // frame 3
 							], // facing - right
 							[ // facing - left
 								[ // frame 0
-									// left, top, right, bottom, origin_x, origin_y
-									116,33,123,47,119,47,117,33,122,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									116,33,123,47,119,47,117,33,122,47,122,41,116,41,
 								], // frame 0
 								[ // frame 1
-									// left, top, right, bottom, origin_x, origin_y
-									102,33,105,47,103,47,101,33,106,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									102,33,105,47,103,47,101,33,106,47,103,41,102,41,
 								], // frame 1
 								[ // frame 2
-									// left, top, right, bottom, origin_x, origin_y
-									84,33,91,47,87,47,85,33,90,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									84,33,91,47,87,47,85,33,90,47,84,41,90,41,
 								], // frame 2
 								[ // frame 3
-									// left, top, right, bottom, origin_x, origin_y
-									70,33,73,47,71,47,69,33,74,47,
+									// left, top, right, bottom, origin_x, origin_y, c_left, c_top, c_right, c_bottom, lhx, lhy, rhx, rhy
+									70,33,73,47,71,47,69,33,74,47,71,40,70,40,
 								], // frame 3
 							], // facing - left
 						], // stance 1 - walking
@@ -151,7 +152,20 @@ var GAME_WORLD = {
 									0,106,6,111,3,111,0,106,6,111
 								]
 							]
-						]
+						],
+						[ // stance 1
+							[ // facing 0
+								[ // frame 0
+									0,106,6,111,1,110,0,106,6,111
+								]
+							],
+							[ // facing 1
+								[ // frame 0
+									//0,106,6,111,0,111,0,106,6,111
+									81,146,87,151,86,150,81,146,87,151
+								]
+							],
+						],
 					],
 				},
 				{	// sprite 5
@@ -163,7 +177,20 @@ var GAME_WORLD = {
 									8,105,14,111,11,111,8,105,14,111
 								]
 							]
-						]
+						],
+						[ // stance 1 - held in hand
+							[ // facing 0
+								[ // frame 0
+									8,105,14,111,7,110,8,105,14,111
+								]
+							],
+							[ // facing 1
+								[ // frame 0
+									//8,105,14,111,8,111,8,105,14,111
+									89,145,95,151,94,150,89,145,95,151
+								]
+							],
+						],
 					],
 				},
 				{	// sprite 6
@@ -172,10 +199,23 @@ var GAME_WORLD = {
 						[ // stance 0
 							[ // facing 0
 								[ // frame 0
-									16,106,21,111,18,111,16,106,21,111
+									16,105,21,110,19,110,16,105,21,110
 								]
 							]
-						]
+						],
+						[ // stance 1
+							[ // facing 0
+								[ // frame 0
+									16,105,21,110,17,109,16,105,21,110
+								]
+							],
+							[ // facing 1
+								[ // frame 0
+									//16,106,21,111,16,111,16,106,21,111
+									98,146,103,151,102,150,98,146,103,151
+								]
+							],
+						],
 					],
 				},
 				{	// sprite 7
@@ -187,7 +227,20 @@ var GAME_WORLD = {
 									24,106,31,111,27,111,24,106,31,111
 								]
 							]
-						]
+						],
+						[ // stance 1
+							[ // facing 0
+								[ // frame 0
+									24,106,31,111,24,111,24,106,31,111
+								]
+							],
+							[ // facing 1
+								[ // frame 0
+									//24,106,31,111,24,111,24,106,31,111
+									104,146,111,151,111,149,104,146,111,151
+								]
+							],
+						],
 					],
 				},
 				{	// sprite 8
@@ -199,7 +252,20 @@ var GAME_WORLD = {
 									32,107,38,111,35,111,32,107,38,111
 								]
 							]
-						]
+						],
+						[ // stance 1
+							[ // facing 0
+								[ // frame 0
+									32,107,38,111,33,110,32,107,38,111
+								]
+							],
+							[ // facing 1
+								[ // frame 0
+									//32,107,38,111,32,111,32,107,38,111
+									113,147,119,151,118,150,113,147,119,151
+								]
+							]
+						],
 					],
 				},
 				{	// sprite 9
@@ -360,10 +426,23 @@ var GAME_WORLD = {
 						[ // stance 0
 							[ // facing 0
 								[ // frame 0
-									40,104,47,111,40,111,40,104,47,111
+									40,104,47,111,43,111,40,104,47,111
 								]
 							]
-						]
+						],
+						[ // stance 1
+							[ // facing 0
+								[ // frame 0
+									40,104,47,111,41,110,40,104,47,111
+								]
+							],
+							[ // facing 1
+								[ // frame 0
+									//40,104,47,111,40,111,40,104,47,111
+									120,144,127,151,126,150,120,144,127,151
+								]
+							],
+						],
 					],
 				},
 				{	// sprite 20
@@ -416,28 +495,28 @@ var GAME_WORLD = {
 								[ // frame 0
 									1,57,6,63,3,63,1,57,6,63
 								],
-								[ // frame 0
+								[ // frame 1
+									1,49,6,55,3,55,1,49,6,55
+								],
+								[ // frame 2
 									1,57,6,63,3,63,1,57,6,63
 								],
-								[ // frame 0
-									1,57,6,63,3,63,1,57,6,63
-								],
-								[ // frame 0
-									1,57,6,63,3,63,1,57,6,63
+								[ // frame 3
+									1,49,6,55,3,55,1,49,6,55
 								],
 							], 
 							[ // facing 1
 								[ // frame 0
 									9,57,14,63,11,63,9,57,14,63
 								],
-								[ // frame 0
+								[ // frame 1
+									9,49,14,55,11,55,9,49,14,55
+								],
+								[ // frame 2
 									9,57,14,63,11,63,9,57,14,63
 								],
-								[ // frame 0
-									9,57,14,63,11,63,9,57,14,63
-								],
-								[ // frame 0
-									9,57,14,63,11,63,9,57,14,63
+								[ // frame 3
+									9,49,14,55,11,55,9,49,14,55
 								],
 							],
 						],
@@ -554,11 +633,11 @@ var GAME_WORLD = {
 		/*  0 */ { type: 'item', name: 'Gold Key',	sprite: 1, flags: ['gold_key','gravity'],},
 		/*  1 */ { type: 'item', name: 'Silver Key', sprite: 2, flags: ['silver_key','gravity'],},
 		/*  2 */ { type: 'item', name: 'Mythic Key', sprite: 3, flags: ['orange_key','gravity'],},
-		/*  3 */ { type: 'item', name: 'Axe', sprite: 4, flags: ['axe','gravity'],},
-		/*  4 */ { type: 'item', name: 'Hammer', sprite: 5, flags: ['hammer','gravity'],},
-		/*  5 */ { type: 'item', name: 'Knife', sprite: 6, flags: ['knife','gravity'],},
-		/*  6 */ { type: 'item', name: 'Gun', sprite: 7, flags: ['gun','gravity'],},
-		/*  7 */ { type: 'item', name: 'Crowbar', sprite: 8, flags: ['crowbar','gravity'],},
+		/*  3 */ { type: 'item', name: 'Axe', sprite: 4, flags: ['axe','wield','gravity'],},
+		/*  4 */ { type: 'item', name: 'Hammer', sprite: 5, flags: ['hammer','wield','gravity'],},
+		/*  5 */ { type: 'item', name: 'Knife', sprite: 6, flags: ['knife','wield','gravity'],},
+		/*  6 */ { type: 'item', name: 'Gun', sprite: 7, flags: ['gun','wield','gravity'],},
+		/*  7 */ { type: 'item', name: 'Crowbar', sprite: 8, flags: ['crowbar','wield','gravity'],},
 		/*  8 */ { type: 'furniture', name: 'Crate', sprite: 9, flags: ['stand_on','solid','gravity'],},
 		/*  9 */ { type: 'furniture', name: 'Chest', sprite: 10, flags: ['gravity'],},
 		/* 10 */ { type: 'furniture', name: 'Chair', sprite: 11, flags: ['gravity'],},
@@ -568,7 +647,7 @@ var GAME_WORLD = {
 		/* 14 */ { type: 'furniture', name: 'Dresser', sprite: 16, flags: ['gravity'],},
 		/* 15 */ { type: 'furniture', name: 'Counter', sprite: 17, flags: ['stand_on','gravity'],},
 		/* 16 */ { type: 'obstacle', name: 'Fire', sprite: 18, flags: ['fire_damage','animated','gravity'],},
-		/* 17 */ { type: 'item', name: 'Shovel', sprite: 19, flags: ['shovel','gravity'],},
+		/* 17 */ { type: 'item', name: 'Shovel', sprite: 19, flags: ['shovel','wield','gravity'],},
 		/* 18 */ { type: 'furniture', name: 'Door Up', sprite: 20, flags: [],},
 		/* 19 */ { type: 'furniture', name: 'Door Down', sprite: 21, flags: [],},
 			],
@@ -612,85 +691,53 @@ var GAME_WORLD = {
 				],
 				events:[
 					{
-						guid: 'DOOROPENx0000',
-						type: 'door_up',
-						tile_x: 21,
-						tile_y: 7,
-						one_time: false,
-						hidden: false,
-						locked: true, // true
-						key_item: 2, // 2 magic key
-						key_special: -1,
-						target: {
-							map: 1,
-							x: 60,
-							y: 71,
-						},
+						guid: 'DOOROPENx0000', type: 'door_up',
+						tile_x: 21,	tile_y: 7,
+						one_time: false, hidden: false, locked: true,
+						key_item: 2, key_special: -1,
+						target: { map: 1, x: 60, y: 71 },
 					},
 					{
-						guid: 'DOOROPENx0001',
-						type: 'door_down',
-						tile_x: 13,
-						tile_y: 7,
-						one_time: false,
-						hidden: false,
-						locked: true,
-						key_item: 1,
-						key_special: -1,
-						target: {
-							map: 2,
-							x: 43,
-							y: 135,
-						},
+						guid: 'DOOROPENx0001', type: 'door_down',
+						tile_x: 13,	tile_y: 7,
+						one_time: false, hidden: false,	locked: true,
+						key_item: 1, key_special: -1,
+						target: { map: 2, x: 43, y: 135 },
 					},
 					{
-						guid: 'EXITx0001',
-						type: 'touch_exit',
-						tile_x: 0,
-						tile_y: 7,
-						one_time: false,
-						hidden: false,
-						locked: false,
-						key_item: -1,
-						key_special: -1,
-						target: {
-							map: 2,
-							x: 388,
-							y: 175,
-						},
+						guid: 'EXITx0001', type: 'touch_exit',
+						tile_x: 0, tile_y: 7,
+						one_time: false, hidden: false, locked: false,
+						key_item: -1, key_special: -1,
+						target: { map: 2, x: 388, y: 175 },
 					},
 					{
-						guid: 'CHESTLOOTx0000',
-						type: 'chest_open',
-						tile_x: -1,
-						tile_y: -1,
-						one_time: true,
-						hidden: false,
-						locked: true,
-						key_item: 0,
-						key_special: -1,
-						loot: [3], // axe?
-						loot_money: 10,
+						guid: 'CHESTLOOTx0000', type: 'chest_open',
+						tile_x: -1,	tile_y: -1,
+						one_time: true,	hidden: false, locked: true,
+						key_item: 0, key_special: -1,
+						loot: [3], loot_money: 10,
 					},
 					{
-						guid: 'TALKNPCx0000',
-						type: 'speak_npc',
-						one_time: true,
-						locked: true,
-						speech_script: ['Thank you, traveler!','That snake was keeping me from getting the keys I dropped.','With those you should be able to move forward!','Take these too; they will help you on your way.'],
-						key_event_ids: ['OBJx0000'], // KILLNPCx0001
-						loot: [7], // crowbar?
-						loot_money: 20,
+						guid: 'TALKNPCx0000', type: 'speak_npc',
+						one_time: true, locked: true,
+						speech_script: [{cmd:'say',val:'Thank you, traveler!',d:2000},{cmd:'say',val:'That snake was keeping me from getting the keys I dropped.',d:5000},{cmd:'say',val:'With those you should be able to move forward!',d:5000},{cmd:'set_event',val:'TALKNPCx0000END'}],
+						key_event_ids: ['OBJx0000'],
+						loot: [], loot_money: 0,
 					},
 					{
-						guid: 'TALKNPCx0001',
-						type: 'speak_npc',
-						one_time: false,
-						locked: true,
-						speech_script: ['Thank you, traveler!'],
-						key_event_ids: ['TALKNPCx0000'],
-						loot: [],
-						loot_money: 0,
+						guid: 'TALKNPCx0001', type: 'speak_npc',
+						one_time: true, locked: true,
+						speech_script: [{cmd:'give_loot',val:'',d:0},{cmd:'say',val:'Take these too; they will help you on your way.',d:5000},],
+						key_event_ids: ['TALKNPCx0000END'],
+						loot: [7], loot_money: 20,
+					},
+					{
+						guid: 'TALKNPCx0002', type: 'speak_npc',
+						one_time: false, locked: true,
+						speech_script: [{cmd:'say',val:'Thank you, traveler!',d:5000}],
+						key_event_ids: ['TALKNPCx0001'],
+						loot: [], loot_money: 0,
 					},
 				],
 				objects:[
@@ -759,8 +806,8 @@ var GAME_WORLD = {
 						facing: 1,
 						npc_id: 0,
 						aggressive: false,
-						default_speech: ['Hello, traveler.','You can climb the ledge by jumping again when you\'re close enough to reach it!'],
-						talk_events: ['TALKNPCx0001','TALKNPCx0000'],
+						default_speech: [{cmd:'say',val:'Hello, traveler.',d:2000},{cmd:'say',val:'You can climb the ledge by jumping again when you\'re close enough to reach it!',d:5000}],
+						talk_events: ['TALKNPCx0002','TALKNPCx0001','TALKNPCx0000'],
 					},
 				],
 			},{
@@ -779,36 +826,22 @@ var GAME_WORLD = {
 				],
 				events: [
 					{
-						guid: 'DOOROPENx0002',
-						type: 'door_down',
-						tile_x: 7,
-						tile_y: 8,
-						one_time: false,
-						hidden: false,
-						locked: false,
-						key_item: -1,
-						key_special: -1,
-						target: {
-							map: 0,
-							x: 172,
-							y: 63,
-						},
+						guid: 'DOOROPENx0002', type: 'door_down',
+						tile_x: 7, tile_y: 8,
+						one_time: false, hidden: false, locked: false,
+						key_item: -1, key_special: -1,
+						target: { map: 0, x: 172, y: 63 },
 					},
 					{
-						guid: 'AGGRONPCx0001',
-						type: 'npc_aggroed',
-						one_time: true,
-						locked: false,
+						guid: 'AGGRONPCx0001', type: 'npc_aggroed',
+						one_time: true, locked: false,
 						key_event_ids: [],
 					},
 					{
-						guid: 'KILLNPCx0001',
-						type: 'npc_killed',
-						one_time: true,
-						locked: false,
+						guid: 'KILLNPCx0001', type: 'npc_killed',
+						one_time: true,	locked: false,
 						key_event_ids: [],
-						loot: [],
-						loot_money: 0,
+						loot: [], loot_money: 0,
 					},
 				],
 				objects: [
@@ -978,15 +1011,26 @@ var GAME_WORLD = {
 			var item = inv[lp];
 			if(key_item == item.thing_id) {
 				can_consume = true;
+			}
+		}
+		
+		// found the item?
+		return can_consume;
+	},
+	player_consume: function(key_item) {
+		var inv = this.player.inventory;
+		var consume_ID = -1;
+		
+		for(lp in inv) {
+			var item = inv[lp];
+			if(key_item == item.thing_id) {
+				can_consume = true;
 				consume_ID = lp;
 			}
 		}
 		if(can_consume) {
 			this.player.inventory.splice(consume_ID,1);
 		}
-		
-		// found the item
-		return can_consume;
 	},
 	player_is_carrying_special: function(key_special) {
 		var is_carrying_special = false;
@@ -1002,7 +1046,51 @@ var GAME_WORLD = {
 		// found the item
 		return is_carrying_special;
 	},
-	
+	player_cycle_gear: function(slot) {
+		// rotate the equipped item
+		var curr_gear_this = GAME_WORLD.player.gear[slot];
+		var curr_gear_other = GAME_WORLD.player.gear[1-slot];
+		
+		// find all wieldable items in inventory
+		var wieldable = [];
+		for(inv_item of GAME_WORLD.player.inventory) {
+			var item_def = GAME_WORLD.object_defs.list[inv_item.thing_id];
+			
+			if(item_def.flags.indexOf('wield') > -1) {
+				if(curr_gear_other != inv_item.guid) {
+					wieldable.push(inv_item);
+				}
+			}
+		}
+
+		if(wieldable.length > 0) {
+			// check if there's a current item in this slot
+			if(curr_gear_this == "") { // if none, take the first item and we're done?
+				GAME_WORLD.player.gear[slot] = wieldable[0].guid;
+			} else {
+				// find the current in the list
+				var wielded_index = -1;
+				for(w_id in wieldable) {
+					var wd = wieldable[w_id];
+					if(wd.guid == curr_gear_this) {
+						wielded_index = parseInt(w_id);
+					}
+				}
+				
+				// check if there are any more?
+				if(wielded_index + 1 < wieldable.length) {
+					// take the next
+					GAME_WORLD.player.gear[slot] = wieldable[wielded_index+1].guid;
+				} else {
+					// empty hand!
+					GAME_WORLD.player.gear[slot] = '';
+				}
+			}
+		} else {
+			// remove an item you're already holding? maybe?
+		}
+	},
+
 
 
 
@@ -1019,10 +1107,6 @@ var GAME_WORLD = {
 	player_add_event: function(evt) {
 		this.player.EVENTS[evt.guid] = true;
 	},
-
-
-
-	
 	// check if an event's key events are satisfied
 	is_event_satisfied: function(evt) {
 		var satisfied = false;
@@ -1050,6 +1134,7 @@ var GAME_WORLD = {
 
 
 
+
 	//scripts
 	// find active script by GUID
 	find_active_script_by_guid: function(guid) {
@@ -1068,20 +1153,20 @@ var GAME_WORLD = {
 		}
 		return null;
 	},
-	
-	
 	// queueing up scripts
 	add_default_npc_speech_script: function(npc,time) {
 		// for default talk scripts, use NPC guid
 		
 		if(!this.find_active_script_by_guid(npc.guid)) {
+			//var first_action = npc.default_speech[0];
+			
 			var new_script = {
 				type: 'npc_default_speech',
 				guid: npc.guid,
 				owner: npc.guid,
-				next_tick: time + 5000,
+				next_tick: time-1, // + first_action.d,
 				tick_progress: 0, // percentage for fading!
-				pointer: 0,
+				pointer: -1,
 				persist: false,
 				actions: npc.default_speech,
 			};
@@ -1090,70 +1175,21 @@ var GAME_WORLD = {
 	},
 	add_npc_talk_script: function(npc,evt,time) {
 		if(!this.find_active_script_by_guid(evt.guid) && !this.find_active_script_by_owner(npc.guid)) {
+			//var first_action = evt.speech_script[0];
 			//console.log('add_npc_talk_script');
 			var new_script = {
 				type: 'talk_script',
 				guid: evt.guid,
 				owner: npc.guid,
-				next_tick: time + 5000,
+				next_tick: time-1, // + first_action.d,
 				tick_progress: 0, // percentage for fading!
-				pointer: 0,
+				pointer: -1,
 				persist: false,
 				actions: evt.speech_script,
 				loot: evt.loot,
 				loot_money: evt.loot_money,
 			};
 			this.scripts.push(new_script);
-
-			
-			// loot!
-			// get items
-			var item_buf = '';
-			//this.object_defs
-			if(typeof evt.loot != 'undefined') {
-				for(item_id of evt.loot) {
-					this.player_add_item({thing_id:item_id,guid:evt.guid});
-					
-					item_buf += this.object_defs.list[item_id].name+', ';
-				}
-				if(item_buf != "") {
-					item_buf = item_buf.substr(0,item_buf.length-2)
-				}
-			}
-			// add money
-			var money_buf = '';
-			if(typeof evt.loot_money != 'undefined') {
-				if(evt.loot_money > 0) {
-					this.player.money += evt.loot_money;
-					money_buf = evt.loot_money+' dollars';
-				}
-			}
-			
-			// add script for gaining the items/money if there are any!
-			if(item_buf != '' || money_buf != '') {
-				var loot_script_text = npc.name+' gave you ';
-				if(item_buf != '' && money_buf != '') {
-					loot_script_text += item_buf + ' and ' + money_buf;
-				} else if(item_buf != '') {
-					loot_script_text += item_buf;
-				} else {
-					loot_script_text += money_buf;
-				}
-				loot_script_text += '.';
-				
-				var loot_script = {
-					type: 'loot_message',
-					guid: evt.guid,
-					owner: evt.guid,
-					next_tick: time + 5000,
-					tick_progress: 0, // percentage for fading!
-					pointer: 0,
-					persist: false,
-					actions: [loot_script_text],
-				};
-				console.log(loot_script);
-				this.scripts.push(loot_script);
-			}
 		}
 	},	
 	
@@ -1347,6 +1383,7 @@ var GAME_WORLD = {
 			this_frame = 0;
 		}
 		
+		// player sprite info
 		var aframe = this.sprite_defs.list[this.player.sprite_id].frames[this_stance][this.player.facing][this_frame];
 		var s_width = aframe[2] - aframe[0] + 1;
 		var s_height = aframe[3] - aframe[1] + 1;
@@ -1354,6 +1391,45 @@ var GAME_WORLD = {
 		var loc_rx = this.player.loc.x - (aframe[4] - aframe[2]); // origin_x - right
 		var loc_y = this.player.loc.y - (aframe[5] - aframe[1]); // origin_y - top
 		var b_y = this.player.loc.y - (aframe[5] - aframe[3]); // origin_y - bottom
+		
+		if(this.player.gear[0] !== '') {
+			var lh_sprite_id;
+			for(linv_item of this.player.inventory) {
+				if(linv_item.guid == this.player.gear[0]) {
+					var obj_def = this.object_defs.list[linv_item.thing_id];
+					lh_sprite_id = obj_def.sprite;
+				}
+			}
+			var lhframe = this.sprite_defs.list[lh_sprite_id].frames[1][this.player.facing][0];
+			var ploc_lh_x = this.player.loc.x - (aframe[4] - aframe[10]);
+			var ploc_lh_y = this.player.loc.y - (aframe[5] - aframe[11]);
+			var iloc_lh_x = ploc_lh_x - (lhframe[4] - lhframe[0]); // origin_x - left
+			var iloc_lh_y = ploc_lh_y - (lhframe[5] - lhframe[1]); // origin_y - top
+			var lh_width = lhframe[2] - lhframe[0] + 1;
+			var lh_height = lhframe[3] - lhframe[1] + 1;
+			this.gfx.drawImage(source_image,lhframe[0],lhframe[1],lh_width,lh_height,iloc_lh_x,iloc_lh_y,lh_width,lh_height);
+		}
+		if(this.player.gear[1] !== '') {
+			var rh_sprite_id;
+			for(rinv_item of this.player.inventory) {
+				if(rinv_item.guid == this.player.gear[1]) {
+					var obj_def = this.object_defs.list[rinv_item.thing_id];
+					rh_sprite_id = obj_def.sprite;
+				}
+			}
+			var rhframe = this.sprite_defs.list[rh_sprite_id].frames[1][this.player.facing][0];
+			var ploc_rh_x = this.player.loc.x - (aframe[4] - aframe[12]);
+			var ploc_rh_y = this.player.loc.y - (aframe[5] - aframe[13]);			
+			var iloc_rh_x = ploc_rh_x - (rhframe[4] - rhframe[0]); // origin_x - left
+			var iloc_rh_y = ploc_rh_y - (rhframe[5] - rhframe[1]); // origin_y - top
+			var rh_width = rhframe[2] - rhframe[0] + 1;
+			var rh_height = rhframe[3] - rhframe[1] + 1;
+			this.gfx.drawImage(source_image,rhframe[0],rhframe[1],rh_width,rh_height,iloc_rh_x,iloc_rh_y,rh_width,rh_height);
+		}
+		
+		
+		
+		// draw the player sprite
 		this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,loc_y,s_width,s_height);
 		
 		//// red box for frame "boundaries"
@@ -1525,59 +1601,99 @@ var GAME_WORLD = {
 	
 	
 	// render the HUD
-	renderHUD: function() { // this didn't work - pixel sizes prevent it - figure out another way!
+	renderHUD: function() { 
+		var source_image = document.getElementById('game_tiles');
+		
+		// render items in hands - background boxes
 		this.gfx.fillStyle = '#000000';
 		this.gfx.fillRect(386,2,12,12);
 		this.gfx.fillRect(370,2,12,12);
 		this.gfx.strokeStyle = '#ff0000';
 		this.gfx.strokeRect(386,2,12,12);
 		this.gfx.strokeRect(370,2,12,12);
+		
+		// render inventory box
+		this.gfx.fillRect(344,18,54,32);
+		this.gfx.strokeRect(344,18,54,32);
+		
+		// render inventory
+		var inventory = this.player.inventory;
+		if(inventory.length > 0) {
+			var gear_not_found = -1; // track unworn item slots
+
+			for(item of inventory) {
+				var thing = this.object_defs.list[item.thing_id];
+				var sprite = this.sprite_defs.list[thing.sprite];
+				
+				var aframe = sprite.frames[0][0][0];
+				var s_width = aframe[2] - aframe[0] + 1;
+				var s_height = aframe[3] - aframe[1] + 1;
+				
+				// check against gear
+				var gear = this.player.gear;
+				var gear_found = false;
+				for(var gpid=0;gpid<2;gpid++) {
+					var gpc = gear[gpid];
+					if(gpc == item.guid) {
+						gear_found = true;
+						var hloc_x = 370 + 6 + (gpid * 16);
+						var hloc_y = 10;
+						var loc_lx = hloc_x - (aframe[4] - aframe[0]); // origin_x - left
+						var nloc_y = hloc_y - (aframe[5] - aframe[1]); // origin_y - top
+						this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,nloc_y,s_width,s_height);
+					}
+				}
+				
+				// if not in gear, show in inventory below
+				if(!gear_found) {
+					gear_not_found++;
+					var gnf_mod_5 = gear_not_found % 5;
+					var gnf_div_5 = Math.floor(gear_not_found / 5);
+					var loc_y = 27 + (10 * gnf_div_5);
+					var loc_x = 391 - (10 * gnf_mod_5);
+					var loc_lx = loc_x - (aframe[4] - aframe[0]); // origin_x - left
+					var nloc_y = loc_y - (aframe[5] - aframe[1]); // origin_y - top
+					this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,nloc_y,s_width,s_height);
+				}
+			}
+		}
+		
+		// render money
+		var money_buf = '$'+this.player.money;
+		
+		this.gfx.font = '8px sans-serif';
+		this.gfx.fillStyle = 'rgb(255,255,255)';
+		this.gfx.fillText(money_buf,340,11);
 	},
 	
 	// render conversations
 	renderConversations: function() {
 		for(script of this.scripts) {
-			if(script.type == "npc_default_speech") {
-				var frame = script.pointer;
-				var progress = script.tick_progress;
-
-				var npc = this.find_npc_by_guid(script.owner);
-				var loc_x = npc.loc.x;
-				var loc_y = npc.loc.y - 16;
+			if(script.type == "npc_default_speech" || script.type == "talk_script") {
+				var action = script.actions[script.pointer];
 				
-				this.gfx.font = '8px sans-serif';
-				this.gfx.fillStyle = 'rgba(255,255,255,'+(1.00-script.tick_progress)+')';
-				this.gfx.strokeStyle = 'rgba(128,128,128,'+(1.00-script.tick_progress)+')';
-				this.gfx.beginPath();
-				this.gfx.moveTo(loc_x,loc_y);
-				this.gfx.lineTo(20, 14);
-				this.gfx.stroke();
-				this.gfx.fillText(script.actions[frame],10,10);
-			}
-			if(script.type == "talk_script") {
-				var frame = script.pointer;
-				var progress = script.tick_progress;
-
-				var npc = this.find_npc_by_guid(script.owner);
-				var loc_x = npc.loc.x;
-				var loc_y = npc.loc.y - 16;
-				
-				this.gfx.font = '8px sans-serif';
-				this.gfx.fillStyle = 'rgba(255,255,255,'+(1.00-script.tick_progress)+')';
-				this.gfx.strokeStyle = 'rgba(128,128,128,'+(1.00-script.tick_progress)+')';
-				this.gfx.beginPath();
-				this.gfx.moveTo(loc_x,loc_y);
-				this.gfx.lineTo(20, 14);
-				this.gfx.stroke();
-				this.gfx.fillText(script.actions[frame],10,10);
+				switch(action.cmd) {
+					case 'say':
+						var speech_buf = action.val;
+						var npc = this.find_npc_by_guid(script.owner);
+						var loc_x = npc.loc.x;
+						var loc_y = npc.loc.y - 16;
+						
+						this.gfx.font = '8px sans-serif';
+						this.gfx.fillStyle = 'rgba(255,255,255,'+(1.00-script.tick_progress)+')';
+						this.gfx.strokeStyle = 'rgba(128,128,128,'+(1.00-script.tick_progress)+')';
+						this.gfx.beginPath();
+						this.gfx.moveTo(loc_x,loc_y);
+						this.gfx.lineTo(20, 14);
+						this.gfx.stroke();
+						this.gfx.fillText(speech_buf,10,10);
+						break;
+				}
 			}
 			if(script.type == "loot_message") {
-				var frame = script.pointer;
-				var progress = script.tick_progress;
-
 				this.gfx.font = '8px sans-serif';
-				this.gfx.fillStyle = 'rgba(255,255,0,'+(1.00-script.tick_progress)+')';
-				this.gfx.fillText(script.actions[frame],10,20);
+				this.gfx.fillStyle = 'rgba(255,255,80,'+(1.00-script.tick_progress)+')';
+				this.gfx.fillText(script.actions[script.pointer],10,20);
 			}
 		}
 	},
@@ -1732,10 +1848,10 @@ var GAME_WORLD = {
 			dy = 0;
 		}
 		if(this.controls.float_on == 1) {
-			this.player.FLOATING = false;
-		}
-		if(this.controls.float_off == 1) {
-			this.player.FLOATING = true;
+			if(this.controls.float_on_once == 0) {
+				this.controls.float_on_once = 1;
+				this.player.FLOATING = !this.player.FLOATING;
+			}
 		}
 
 
@@ -1794,6 +1910,7 @@ var GAME_WORLD = {
 							if(this.player_can_consume(event_behind.key_item)) {
 								has_key = true;
 								this.player_add_event(event_behind);
+								this.player_consume(event_behind.key_item);
 							}
 						} else {
 							has_key = true;
@@ -1887,6 +2004,7 @@ var GAME_WORLD = {
 							if(this.player_can_consume(event_behind.key_item)) {
 								has_key = true;
 								this.player_add_event(event_behind);
+								this.player_consume(event_behind.key_item);
 							}
 						} else {
 							has_key = true;
@@ -1933,12 +2051,15 @@ var GAME_WORLD = {
 							if((!evt.locked) || (evt.locked && this.player_can_consume(evt.key_item))) {
 								 if(!this.player_check_event(evt)) {
 									this.player_add_event(evt);
+									this.player_consume(evt.key_item);
 									obj.frame = 1;
 									
 									// loot chest!
-									if(evt.loot.length > 0) {
-										for(lt of evt.loot) {
-											this.player_add_item(lt,evt.guid);
+									if(typeof evt.loot != 'undefined') {
+										if(evt.loot.length > 0) {
+											for(lt of evt.loot) {
+												this.player_add_item(lt,evt.guid);
+											}
 										}
 									}
 								 } else {
@@ -2006,25 +2127,38 @@ var GAME_WORLD = {
 		// check for jump
 		if(this.controls.jump == 1) {
 			if(!this.player.falling) {
-				//console.log('jumped');
+				if(this.controls.jump_once == 0) {
+					this.controls.jump_once = 1;
+					this.player.falling = true;
+					this.player.slope_left = false;
+					this.player.slope_right = false;
+					this.player.climbing = false;
+					
+					if(this.controls.down == 0) { // if not holding down
+						this.player.vel.y = -1; // -1;
+						if(Math.abs(this.player.vel.x) > 500/1000) {
+							if(this.player.high_jump) {
+								this.player.vel.y = -1.3;
+							} else {
+								this.player.vel.y = -1.17; // -1.17;
+							}
+						}
+					} else {
+						if(tile_under.stand_on && !tile_under.solid) { // jump down if ground has stand_on but not solid!
+							this.player.vel.y = 1;
+						}
+					}
+				}
+			} else {
+				// second jump - pull up if there's a platform to stand on!
 				this.player.falling = true;
 				this.player.slope_left = false;
 				this.player.slope_right = false;
 				this.player.climbing = false;
 				
-				if(this.controls.down == 0) { // if not holding down
-					this.player.vel.y = -1; // -1;
-					if(Math.abs(this.player.vel.x) > 500/1000) {
-						if(this.player.high_jump) {
-							this.player.vel.y = -1.3;
-						} else {
-							this.player.vel.y = -1.17; // -1.15;
-						}
-					}
-				} else {
-					if(tile_under.stand_on && !tile_under.solid) { // jump down if ground has stand_on but not solid!
-						this.player.vel.y = 1;
-					}
+				if(tile_under.stand_on) { // jump up on the platform?
+					this.player.vel.y = -.5;
+					this.player.vel.x /= 2;
 				}
 			}
 		}
@@ -2064,20 +2198,29 @@ var GAME_WORLD = {
 		
 		// velocity x
 		if(this.player.accel.x != 0) { // accelerating? go faster!
-			this.player.vel.x += (this.player.accel.x * elapsed);
-			if(this.player.sprinting == true) {
-				if(this.player.vel.x < -900/1000) {
-					this.player.vel.x = -900/1000; // 900/1000 running speed 
-				}
-				if(this.player.vel.x > 900/1000) {
-					this.player.vel.x = 900/1000;
+			if(!this.player.falling) {
+				this.player.vel.x += (this.player.accel.x * elapsed);
+				if(this.player.sprinting == true) {
+					if(this.player.vel.x < -900/1000) {
+						this.player.vel.x = -900/1000; // 900/1000 running speed 
+					}
+					if(this.player.vel.x > 900/1000) {
+						this.player.vel.x = 900/1000;
+					}
+				} else {
+					if(this.player.vel.x < -500/1000) {
+						this.player.vel.x = -500/1000; // 450/1000 walking speed 
+					}
+					if(this.player.vel.x > 500/1000) {
+						this.player.vel.x = 500/1000;
+					}
 				}
 			} else {
-				if(this.player.vel.x < -500/1000) {
-					this.player.vel.x = -500/1000; // 450/1000 walking speed 
+				if(this.player.accel.x > 0 && this.player.vel.x < 900/1000) {
+					this.player.vel.x += (this.player.accel.x * elapsed);
 				}
-				if(this.player.vel.x > 500/1000) {
-					this.player.vel.x = 500/1000;
+				if(this.player.accel.x < 0 && this.player.vel.x > -900/1000) {
+					this.player.vel.x += (this.player.accel.x * elapsed);
 				}
 			}
 		} else { // stopped accelerating/moving? apply friction!
@@ -2317,18 +2460,141 @@ var GAME_WORLD = {
 				if(time > script.next_tick) {
 					if(script.pointer < (script.actions.length - 1)) {
 						script.pointer++;
-						script.next_tick = time + 5000;
+						var action = script.actions[script.pointer];
+						script.next_tick = time + action.d;
+						
+						// add event on command
+						if(action.cmd == "set_event") {
+							this.player.EVENTS[action.val] = true;
+
+							// cycle past the loot event so it only triggers once!
+							if(script.pointer < (script.actions.length - 1)) {
+								script.pointer++;
+								action = script.actions[script.pointer];
+								script.next_tick = time + action.d;
+							} else {
+								script.DESTROY_THIS = true;
+							}
+						} else
+						
+						// clear event on command
+						if(action.cmd == "clear_event") {
+							delete this.player.EVENTS[action.val];
+
+							// cycle past the loot event so it only triggers once!
+							if(script.pointer < (script.actions.length - 1)) {
+								script.pointer++;
+								action = script.actions[script.pointer];
+								script.next_tick = time + action.d;
+							} else {
+								script.DESTROY_THIS = true;
+							}
+						} else
+						
+						// add loot on command?
+						if(action.cmd == "give_loot") {
+							// get items
+							var item_buf = '';
+							if(typeof script.loot != 'undefined') {
+								for(item_id of script.loot) {
+									this.player_add_item(item_id,script.guid);
+									
+									item_buf += this.object_defs.list[item_id].name+', ';
+								}
+								if(item_buf != "") {
+									item_buf = item_buf.substr(0,item_buf.length-2)
+								}
+							}
+							// add money
+							var money_buf = '';
+							if(typeof script.loot_money != 'undefined') {
+								if(script.loot_money > 0) {
+									this.player.money += script.loot_money;
+									money_buf = script.loot_money+' dollars';
+								}
+							}
+							
+							// add script for gaining the items/money if there are any!
+							if(item_buf != '' || money_buf != '') {
+								var loot_script_text = npc.name+' gave you ';
+								if(item_buf != '' && money_buf != '') {
+									loot_script_text += item_buf + ' and ' + money_buf;
+								} else if(item_buf != '') {
+									loot_script_text += item_buf;
+								} else {
+									loot_script_text += money_buf;
+								}
+								loot_script_text += '.';
+								
+								var loot_script = {
+									type: 'loot_message',
+									guid: script.guid,
+									owner: script.guid,
+									next_tick: time + 5000,
+									tick_progress: 0, // percentage for fading!
+									pointer: 0,
+									persist: false,
+									actions: [loot_script_text],
+								};
+								this.scripts.push(loot_script);
+							}
+							
+							
+							// cycle past the loot event so it only triggers once!
+							if(script.pointer < (script.actions.length - 1)) {
+								script.pointer++;
+								action = script.actions[script.pointer];
+								script.next_tick = time + action.d;
+							} else {
+								script.DESTROY_THIS = true;
+							}
+						}
 					} else {
 						script.DESTROY_THIS = true;
 					}
 				} else {
-					var last_time = script.next_tick - 5000;
+					var action = script.actions[script.pointer];
+					var action_time = action.d;
+					if(script.type == "loot_message") {
+						action_time = 5000;
+					}
+					var last_time = script.next_tick - action_time;
 					var dif = time - last_time;
-					var pct = dif / 5000;
+					var pct = dif / action_time;
 					script.tick_progress = pct;
 				}
 			}
 		}
+	},
+
+
+	// other controller actions!
+	controlActions: function(time) {
+		// handle other controls
+		
+		// cycle left hand equipment
+		if(GAME_WORLD.controls.cycle1 > 0) {
+			if(GAME_WORLD.controls.cycle1_once == 0) {
+				GAME_WORLD.controls.cycle1_once = 1;
+				
+				GAME_WORLD.player_cycle_gear(0); // slot 0 - left hand
+			}
+		}
+		
+		// cycle right hand equipment
+		if(GAME_WORLD.controls.cycle2 > 0) {
+			if(GAME_WORLD.controls.cycle2_once == 0) {
+				GAME_WORLD.controls.cycle2_once = 1;
+				
+				GAME_WORLD.player_cycle_gear(1); // slot 1 - right hand
+			}
+		}
+		
+		// use left hand
+		
+		
+		// use right hand
+		
 	},
 
 
@@ -2338,6 +2604,9 @@ var GAME_WORLD = {
 		if(GAME_WORLD.last_tick == 0) {
 			GAME_WORLD.last_tick = time;
 		}
+		
+		// control actions
+		GAME_WORLD.controlActions(time);
 		
 		// move everything!
 		GAME_WORLD.moveAll(time);
@@ -2824,10 +3093,17 @@ var GAME_WORLD = {
 			left: 0,
 			right: 0,
 			jump: 0,
+			jump_once: 0,
 			sprint: 0,
 			fire1: 0,
 			fire2: 0,
 			fire3: 0,
+			cycle1: 0,
+			cycle1_once: 0,
+			cycle2: 0,
+			cycle2_once: 0,
+			float_on: 0,
+			float_on_once: 0,
 		};
 
 		// set up player
@@ -2869,7 +3145,7 @@ var GAME_WORLD = {
 				y: 0,
 			},
 			
-			// stats / items
+			// stats
 			stats: [
 				{stat:"str",score:10},
 				{stat:"dex",score:10},
@@ -2878,7 +3154,13 @@ var GAME_WORLD = {
 				{stat:"wis",score:10},
 				{stat:"cha",score:10},
 			],
-			inventory: [],
+
+			
+			// inventory and gear
+			money: 0,
+			inventory: [{thing_id:5,guid:'STARTER_LEFT'}],
+			gear: ['','','','','','','','','',''], // 0 = left, 1 = right, 2 = head, 3 = body, 4 = legs, 5 = arms, 6 = ring, 7 = ring, 8 = artifact, 9 = artifact
+
 			
 			// events array - for handling event flags
 			EVENTS: [],
@@ -3380,7 +3662,7 @@ var GAME_WORLD = {
 		
 		// add handlers for controls
 		document.addEventListener('keydown',(e)=>{
-			//console.log(e.code);
+			console.log(e.code);
 			if(!GAME_WORLD.player.TYPING) {
 				if(e.code == this.control_defs.up) {
 					this.controls.up = 1;
@@ -3406,11 +3688,14 @@ var GAME_WORLD = {
 				if(e.code == this.control_defs.fire3) {
 					this.controls.fire3 = 1;
 				}
+				if(e.code == this.control_defs.cycle1) {
+					this.controls.cycle1 = 1;
+				}
+				if(e.code == this.control_defs.cycle2) {
+					this.controls.cycle2 = 1;
+				}
 				if(e.code == this.control_defs.float_on) {
 					this.controls.float_on = 1;
-				}
-				if(e.code == this.control_defs.float_off) {
-					this.controls.float_off = 1;
 				}
 				
 				// sprinting with Shift key
@@ -3458,6 +3743,7 @@ var GAME_WORLD = {
 			}
 			if(e.code == this.control_defs.jump) {
 				this.controls.jump = 0;
+				this.controls.jump_once = 0;
 			}
 			if(e.code == this.control_defs.fire1) {
 				this.controls.fire1 = 0;
@@ -3468,11 +3754,17 @@ var GAME_WORLD = {
 			if(e.code == this.control_defs.fire3) {
 				this.controls.fire3 = 0;
 			}
+			if(e.code == this.control_defs.cycle1) {
+				this.controls.cycle1 = 0;
+				this.controls.cycle1_once = 0;
+			}
+			if(e.code == this.control_defs.cycle2) {
+				this.controls.cycle2 = 0;
+				this.controls.cycle2_once = 0;
+			}
 			if(e.code == this.control_defs.float_on) {
 				this.controls.float_on = 0;
-			}
-			if(e.code == this.control_defs.float_off) {
-				this.controls.float_off = 0;
+				this.controls.float_on_once = 0;
 			}
 			
 			// sprinting with Shift key
