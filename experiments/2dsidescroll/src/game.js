@@ -602,10 +602,10 @@ var GAME_WORLD = {
 		/* 72 */ { name: 'roof_aqua_right',frame: [64,144], slope_left: false, slope_right: true, can_climb: false, solid: true, stand_on: false },
 		/* 73 */ { name: 'background_tan_siding',frame: [120,56], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: false },
 		/* 74 */ { name: 'background_tan_siding_bottom',frame: [120,64], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: false },
-		/* 75 */ { name: 'stairs_concrete_small',frame: [32,128], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: true },
-		/* 76 */ { name: 'stairs_concrete_left',frame: [40,128], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: true },
-		/* 77 */ { name: 'stairs_concrete_middle',frame: [48,128], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: true },
-		/* 78 */ { name: 'stairs_concrete_right',frame: [56,128], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: true },
+		/* 75 */ { name: 'stairs_concrete_small',frame: [32,128], slope_left: false, slope_right: false, can_climb: true, solid: false, stand_on: true },
+		/* 76 */ { name: 'stairs_concrete_left',frame: [40,128], slope_left: false, slope_right: false, can_climb: true, solid: false, stand_on: true },
+		/* 77 */ { name: 'stairs_concrete_middle',frame: [48,128], slope_left: false, slope_right: false, can_climb: true, solid: false, stand_on: true },
+		/* 78 */ { name: 'stairs_concrete_right',frame: [56,128], slope_left: false, slope_right: false, can_climb: true, solid: false, stand_on: true },
 		/* 79 */ { name: 'tree_trunk_small',frame: [160,128], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: false },
 		/* 80 */ { name: 'fence_metal',frame: [112,120], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: false },
 		/* 81 */ { name: 'fence_chain_top_left',frame: [96,128], slope_left: false, slope_right: false, can_climb: false, solid: false, stand_on: false },
@@ -633,11 +633,11 @@ var GAME_WORLD = {
 		/*  0 */ { type: 'item', name: 'Gold Key',	sprite: 1, flags: ['gold_key','gravity'],},
 		/*  1 */ { type: 'item', name: 'Silver Key', sprite: 2, flags: ['silver_key','gravity'],},
 		/*  2 */ { type: 'item', name: 'Mythic Key', sprite: 3, flags: ['orange_key','gravity'],},
-		/*  3 */ { type: 'item', name: 'Axe', sprite: 4, flags: ['axe','wield','gravity'],},
-		/*  4 */ { type: 'item', name: 'Hammer', sprite: 5, flags: ['hammer','wield','gravity'],},
-		/*  5 */ { type: 'item', name: 'Knife', sprite: 6, flags: ['knife','wield','gravity'],},
-		/*  6 */ { type: 'item', name: 'Gun', sprite: 7, flags: ['gun','wield','gravity'],},
-		/*  7 */ { type: 'item', name: 'Crowbar', sprite: 8, flags: ['crowbar','wield','gravity'],},
+		/*  3 */ { type: 'item', name: 'Axe', sprite: 4, flags: ['axe','wield','gravity'],atk_dmg: 6,},
+		/*  4 */ { type: 'item', name: 'Hammer', sprite: 5, flags: ['hammer','wield','gravity'],atk_dmg: 3,},
+		/*  5 */ { type: 'item', name: 'Knife', sprite: 6, flags: ['knife','wield','gravity'],atk_dmg: 2,},
+		/*  6 */ { type: 'item', name: 'Gun', sprite: 7, flags: ['gun','wield','gravity'],atk_dmg: 12,},
+		/*  7 */ { type: 'item', name: 'Crowbar', sprite: 8, flags: ['crowbar','wield','gravity'],atk_dmg: 5,},
 		/*  8 */ { type: 'furniture', name: 'Crate', sprite: 9, flags: ['stand_on','solid','gravity'],},
 		/*  9 */ { type: 'furniture', name: 'Chest', sprite: 10, flags: ['gravity'],},
 		/* 10 */ { type: 'furniture', name: 'Chair', sprite: 11, flags: ['gravity'],},
@@ -647,7 +647,7 @@ var GAME_WORLD = {
 		/* 14 */ { type: 'furniture', name: 'Dresser', sprite: 16, flags: ['gravity'],},
 		/* 15 */ { type: 'furniture', name: 'Counter', sprite: 17, flags: ['stand_on','gravity'],},
 		/* 16 */ { type: 'obstacle', name: 'Fire', sprite: 18, flags: ['fire_damage','animated','gravity'],},
-		/* 17 */ { type: 'item', name: 'Shovel', sprite: 19, flags: ['shovel','wield','gravity'],},
+		/* 17 */ { type: 'item', name: 'Shovel', sprite: 19, flags: ['shovel','wield','gravity'],atk_dmg: 7,},
 		/* 18 */ { type: 'furniture', name: 'Door Up', sprite: 20, flags: [],},
 		/* 19 */ { type: 'furniture', name: 'Door Down', sprite: 21, flags: [],},
 			],
@@ -660,6 +660,9 @@ var GAME_WORLD = {
 					race: 'Human',
 					sprite: 0,
 					flags: ['speaks','gravity'],
+					sight_range: 32,
+					hearing_range: 32,
+					interact_range: 0, // talk range?
 					hp: 10,
 				},
 		/*  1 */ {
@@ -667,7 +670,10 @@ var GAME_WORLD = {
 					race: 'Snake',
 					sprite: 22,
 					flags: ['aggressive'],
-					hp: 5,
+					sight_range: 0,
+					hearing_range: 0,
+					interact_range: 0,
+					hp: 4,
 				},
 		/* xx */ //{},
 			],
@@ -801,13 +807,14 @@ var GAME_WORLD = {
 						guid: 'NPCx0000',
 						unique: true,
 						no_respawn: false,
-						loc_x: 117,
+						loc_x: 115,
 						loc_y: 63,
 						facing: 1,
 						npc_id: 0,
 						aggressive: false,
 						default_speech: [{cmd:'say',val:'Hello, traveler.',d:2000},{cmd:'say',val:'You can climb the ledge by jumping again when you\'re close enough to reach it!',d:5000}],
 						talk_events: ['TALKNPCx0002','TALKNPCx0001','TALKNPCx0000'],
+						idle_script: [{cmd:'move',val:-16,d:1600},{cmd:'wait',val:0,d:5000},{cmd:'move',val:16,d:1600},{cmd:'wait',val:0,d:5000},],
 					},
 				],
 			},{
@@ -883,11 +890,12 @@ var GAME_WORLD = {
 						name: 'Solid Snake',
 						unique: true,
 						no_respawn: false,
-						loc_x: 38,
+						loc_x: 11,
 						loc_y: 71,
 						facing: 0,
 						npc_id: 1, // snake
 						aggressive: true,
+						idle_script: [{cmd:'move',val:48,d:3000},{cmd:'wait',val:'',d:2000},{cmd:'move',val:-48,d:3000},{cmd:'wait',val:'',d:2000}],
 						aggro_event: 'AGGRONPCx0001',
 						kill_event: 'KILLNPCx0001',
 					},
@@ -1343,7 +1351,7 @@ var GAME_WORLD = {
 				//var aframe = this.object_defs.list[npc.thing_id].sprite_frame;
 				//var this_sprite = this.sprite_defs.list[this.object_defs.list[npc.thing_id].sprite];
 				var this_sprite = this.sprite_defs.list[this.npc_defs.list[npc.npc_id].sprite];
-				var aframe = this_sprite.frames[0][npc.facing][npc.frame];
+				var aframe = this_sprite.frames[npc.stance][npc.facing][npc.frame];
 				var s_width = aframe[2] - aframe[0] + 1;
 				var s_height = aframe[3] - aframe[1] + 1;
 				var loc_x = npc.loc.x - (aframe[4] - aframe[0]); // origin_x - left
@@ -1709,6 +1717,9 @@ var GAME_WORLD = {
 		
 		// move player
 		this.movePlayer(time);
+		
+		// move NPCs
+		this.moveNpcs(time);
 	},
 	
 	transition_to_map: function(new_map) {
@@ -1761,29 +1772,29 @@ var GAME_WORLD = {
 		
 		for(npc of map_npcs) {
 			// check if NPC should spawn
-			if(((npc.no_respawn) && !this.player_check_event(npc)) || (!npc.no_respawn)) {
-				var this_frame = 0;
-				if(typeof npc.open_event != 'undefined') {
-					if(typeof this.player.EVENTS[npc.open_event] != 'undefined') {
-						this_frame = 1;
-					}
-				}
-				
+			if((!npc.no_respawn) || ((npc.no_respawn) && !this.player_check_event(npc))) {
+				// create new NPC
 				this.npcs.push({
+					// bookkeeping
 					DESTROY_THIS: false,
 					name: npc.name,
 					guid: npc.guid,
 					npc_id: npc.npc_id,
 					unique: npc.unique,
 					no_respawn: npc.no_respawn,
+					
+					// animation
 					stance: 0,
 					facing: npc.facing,
-					frame: this_frame,
+					frame: 0,
 					next_animate_tick: 0,
-					default_speech: npc.default_speech,
-					talk_events: npc.talk_events,
-					aggro_event: npc.aggro_event,
-					kill_event: npc.kill_event,
+					
+					// idle script
+					is_idle: (npc.aggressive)?false:true,
+					idle_script_frame: -1,
+					idle_frame_tick: 0,
+					
+					// location & movement
 					loc: {
 						map: new_map,
 						x: npc.loc_x,
@@ -1791,6 +1802,15 @@ var GAME_WORLD = {
 					},
 					vel: {x:0,y:0},
 					accel: {x:0,y:0},
+					
+					// AI
+					default_speech: npc.default_speech,
+					talk_events: npc.talk_events,
+					aggro_event: npc.aggro_event,
+					kill_event: npc.kill_event,
+					aggressize: npc.aggressive,
+					current_action: (npc.aggressive)?'patrol':'idle',
+					idle_script: npc.idle_script,
 				});
 			}
 		}
@@ -2330,6 +2350,23 @@ var GAME_WORLD = {
 			}
 		}
 	},
+	moveNpcs: function(time) {
+		for(npc of this.npcs) {
+			this.moveNpc(npc,time);
+		}
+	},
+	moveNpc: function(npc,time) {
+		var elapsed = time - GAME_WORLD.last_tick;
+		
+		// collision with walls?
+		// collision with objects?
+		
+		
+		// add velocity
+		npc.loc.x += npc.vel.x * elapsed;
+		npc.loc.y += npc.vel.y * elapsed;
+	},
+	
 	
 	animateAll: function(time) {
 		// water animation - setup
@@ -2394,30 +2431,32 @@ var GAME_WORLD = {
 			
 		}
 	},
-	animateNpc: function(obj,time) {
-		// player animation - setup
-		if(obj.next_animate_tick == 0) {
-			obj.next_animate_tick = time + 120;
+	animateNpc: function(npc,time) {
+		// npc animation - setup
+		if(npc.next_animate_tick == 0) {
+			npc.next_animate_tick = time + 120;
 		}
 		var elapsed = time - GAME_WORLD.last_tick;
 		
-		switch(obj.stance) {
+		
+		// handle stance
+		switch(npc.stance) {
 			case 0: // idle
 				break;
 			case 1: // walking/running
-				if(time > obj.next_animate_tick) {
-					obj.frame++;
-					if(obj.frame > 3) {
-						obj.frame = 0;
+				if(time > npc.next_animate_tick) {
+					npc.frame++;
+					if(npc.frame > 3) {
+						npc.frame = 0;
 					}
 					
 					// if moving faster than 330/1000 pix/ms
-					if(obj.slope_left || obj.slope_right) {
-						obj.next_animate_tick = time + 150;
-					} else if(Math.abs(obj.vel.x) > 500/1000) {
-						obj.next_animate_tick = time + 120;
+					if(npc.slope_left || npc.slope_right) {
+						npc.next_animate_tick = time + 150;
+					} else if(Math.abs(npc.vel.x) > 500/1000) {
+						npc.next_animate_tick = time + 120;
 					} else {
-						obj.next_animate_tick = time + 180;
+						npc.next_animate_tick = time + 180;
 					}
 				}
 				break;
@@ -2598,6 +2637,70 @@ var GAME_WORLD = {
 	},
 
 
+	// AI for NPCs
+	npcAI: function(time) {
+		for(npc of this.npcs) {
+			// handle AI and NPC "controls"
+			switch(npc.current_action) {
+				case "idle":
+				case "patrol":
+					if(npc.is_idle == false) { // start script if it hasn't started?
+						npc.is_idle = true; // set to idle if it isn't already
+						
+						// handle NPC's idle scripts?
+						if(npc.idle_script != "") { // start script if there is one?
+							npc.idle_script_frame = 0;
+							
+							// get first duration
+							var duration = npc.idle_script[npc.idle_script_frame].d;
+							npc.idle_frame_tick = time + duration;
+						}
+					}
+					
+					// handle idle script if there is one
+					if((npc.is_idle == true) && (npc.idle_script != "")) {
+						if(time > npc.idle_frame_tick) { // advance frame?
+							npc.idle_script_frame++;
+							
+							if(npc.idle_script_frame >= npc.idle_script.length) { // wrap around back to frame 0?
+								npc.idle_script_frame = 0;
+							}
+							
+							// figure next tick time
+							var duration = npc.idle_script[npc.idle_script_frame].d;
+							npc.idle_frame_tick = time + duration;
+						}
+						
+						// do the script command!
+						var script_frame = npc.idle_script[npc.idle_script_frame];
+
+						switch(script_frame.cmd) {
+							case "move":
+								npc.stance = 1;
+								
+								// figure out velocity?
+								npc.vel.x = script_frame.val/script_frame.d;
+								npc.facing = (npc.vel.x>=0)?0:1;
+								break;
+							case "wait":
+								npc.stance = 0;
+								npc.frame = 0;
+								npc.vel.x = 0;
+								npc.vel.y = 0;
+								break;
+						}
+					}
+					break;
+				case "fight_player":
+				case "fight_npc":
+				case "flee_player":
+				case "flee_npc":
+					break;
+			}
+		}
+	},
+
+
 	
 	game_loop: function(time) {
 		// everything animation - setup
@@ -2607,6 +2710,7 @@ var GAME_WORLD = {
 		
 		// control actions
 		GAME_WORLD.controlActions(time);
+		GAME_WORLD.npcAI(time);
 		
 		// move everything!
 		GAME_WORLD.moveAll(time);
@@ -3542,7 +3646,7 @@ var GAME_WORLD = {
 			// find npc
 			var npc_def = GAME_WORLD.npc_defs.list[npc.npc_id];
 			var npc_sprite = GAME_WORLD.sprite_defs.list[npc_def.sprite];
-			var npc_frame = npc_sprite.frames[0][npc.facing][npc.frame];
+			var npc_frame = npc_sprite.frames[npc.stance][npc.facing][npc.frame];
 			var ol_x = npc.loc.x - (npc_frame[4] - npc_frame[6]);
 			var or_x = npc.loc.x - (npc_frame[4] - npc_frame[8]);
 			var ot_y = npc.loc.y - (npc_frame[5] - npc_frame[7]);
@@ -3662,7 +3766,7 @@ var GAME_WORLD = {
 		
 		// add handlers for controls
 		document.addEventListener('keydown',(e)=>{
-			console.log(e.code);
+			//console.log(e.code);
 			if(!GAME_WORLD.player.TYPING) {
 				if(e.code == this.control_defs.up) {
 					this.controls.up = 1;
