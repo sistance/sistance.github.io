@@ -107,90 +107,90 @@ var GAME_WORLD = {
 						[ // stance 2 - attacking with left hand
 							[ // facing 0
 								[ // frame 0
-								
+									243,33,249,47,247,47,245,33,250,47,243,35,249,41,
 								], // frame 0
 								[ // frame 1
-								
+									262,33,268,47,263,47,261,33,266,47,268,35,262,41,
 								], // frame 1
 								[ // frame 2
-								
+									278,33,285,47,279,47,278,33,285,47,285,37,278,41,
 								], // frame 2
 								[ // frame 3
-								
+									294,33,302,47,295,47,294,33,299,47,302,40,295,41,
 								], // frame 3
 							], // facing 0
 							[ // facing 1
 								[ // frame 0
-								
+									245,17,252,31,248,31,246,17,250,31,252,18,245,25,
 								], // frame 0
 								[ // frame 1
-								
+									259,17,265,31,264,31,262,17,266,31,259,19,265,25,
 								], // frame 1
 								[ // frame 2
-								
+									274,17,281,31,280,31,278,17,282,31,274,21,281,25,
 								], // frame 2
 								[ // frame 3
-								
+									290,17,297,31,296,31,294,17,298,31,291,24,296,25,
 								], // frame 3
 							], // facing 1
 						], // stance 2 - attacking with left hand
 						[ // stance 3 - attacking with right hand
 							[ // facing 0
 								[ // frame 0
-								
+									179,33,186,47,183,47,181,33,185,47,186,41,179,34,
 								], // frame 0
 								[ // frame 1
-
+									198,33,204,47,199,47,197,33,201,47,198,41,204,35,
 								], // frame 1
 								[ // frame 2
-								
+									214,33,221,47,215,47,213,33,217,47,214,41,221,37,
 								], // frame 2
 								[ // frame 3
-
+									230,33,237,47,231,47,229,33,233,47,231,41,237,40,
 								], // frame 3
 							], // facing 0
 							[ // facing 1
 								[ // frame 0
-								
+									182,17,188,31,184,31,182,17,186,31,182,25,188,19,
 								], // frame 0
 								[ // frame 1
-								
+									195,17,201,31,200,31,198,17,202,31,201,25,195,19,
 								], // frame 1
 								[ // frame 2
-								
+									210,17,217,31,216,31,214,17,218,31,217,25,210,21,
 								], // frame 2
 								[ // frame 3
-								
+									225,17,233,31,232,31,230,17,234,31,232,25,225,24,
 								], // frame 3
 							], // facing 1
 						], // stance 3 - attacking with right hand
 						[ // stance 4 - climbing ladder/stairs
 							[ // facing 0
 								[ // frame 0
-									132,33,138,47,135,46,132,33,138,47,132,36,138,40
+									132,33,138,47,135,46,132,33,138,47,132,36,138,40,
 								], // frame 0
 								[ // frame 1
-									148,33,154,46,151,46,148,33,154,46,148,40,154,40
+									148,33,154,46,151,46,148,33,154,46,148,40,154,40,
 								], // frame 1
 								[ // frame 2
-									164,33,170,47,167,46,164,33,170,47,164,40,170,36
+									164,33,170,47,167,46,164,33,170,47,164,40,170,36,
 								], // frame 2
 								[ // frame 3
-									148,33,154,46,151,46,148,33,154,46,148,40,154,40
+									148,33,154,46,151,46,148,33,154,46,148,40,154,40,
 								], // frame 3
 							], // facing 0
 							[ // facing 1
 								[ // frame 0
-									132,33,138,47,135,46,132,33,138,47,132,36,138,40
+									132,33,138,47,135,46,132,33,138,47,132,36,138,40,
 								], // frame 0
 								[ // frame 1
-									148,33,154,46,151,46,148,33,154,46,148,40,154,40
+									148,33,154,46,151,46,148,33,154,46,148,40,154,40,
 								], // frame 1
 								[ // frame 2
-									164,33,170,47,167,46,164,33,170,47,164,40,170,36
+									164,33,170,47,167,46,164,33,170,47,164,40,170,36,
 								], // frame 2
 								[ // frame 3
-									148,33,154,46,151,46,148,33,154,46,148,40,154,40
+									148,33,154,46,151,46,148,33,154,46,148,40,154,40,
 								], // frame 3
 							], // facing 1
 						], // stance 4 - climbing ladder/stairs
@@ -347,6 +347,36 @@ var GAME_WORLD = {
 								]
 							],
 						],
+						[ // stance 2
+							[ // facing 0
+								[ // frame 0
+									82,153,87,159,87,159,82,153,87,159
+								],
+								[ // frame 1
+									0,106,6,111,0,111,0,106,6,111
+								],
+								[ // frame 2
+									80,163,87,166,80,163,80,163,87,166
+								],
+								[ // frame 3
+									80,168,85,174,80,168,80,168,85,174
+								],
+							],
+							[ // facing 1
+								[ // frame 0
+									80,177,85,183,80,183,80,177,85,183
+								],
+								[ // frame 1
+									81,146,87,151,87,151,81,146,87,151
+								],
+								[ // frame 2
+									80,187,87,190,87,187,80,187,87,190
+								],
+								[ // frame 3
+									82,192,87,198,87,192,82,192,87,198
+								],
+							],
+						],
 					],
 				},
 				{	// sprite 5
@@ -396,6 +426,36 @@ var GAME_WORLD = {
 									98,146,103,151,102,150,98,146,103,151
 								]
 							],
+						],
+						[ // stance 2
+							[	// facing 0
+								[ // frame 0
+									97,153,102,158,102,158,97,153,102,158
+								],
+								[ // frame 1
+									16,105,21,110,16,110,16,105,21,110
+								],
+								[ // frame 2
+									96,162,103,164,96,163,96,162,103,164
+								],
+								[ // frame 3
+									97,169,102,174,97,169,97,169,102,174
+								],
+							],
+							[  // facing 1
+								[ // frame 0
+									97,177,102,182,97,182,97,177,102,182
+								],
+								[ // frame 1
+									97,145,102,150,102,150,97,145,102,150
+								],
+								[ // frame 2
+									96,186,103,188,103,187,96,186,103,188
+								],
+								[ // frame 3
+									97,193,102,198,102,193,97,193,102,198
+								],
+							], 
 						],
 					],
 				},
@@ -733,6 +793,28 @@ var GAME_WORLD = {
 						],
 					],
 				},
+				{	// sprite 23
+				name: 'blood',
+				frames: [
+					[ // stance 0
+						[ // facing 0
+							[ // frame 0
+								132,156,132,156,132,156,132,156,132,156
+							],
+							[ // frame 1
+								131,162,133,165,132,163,131,162,133,165
+							],
+							[ // frame 2
+								130,170,134,173,132,171,130,170,134,173
+							],
+							[ // frame 3
+								129,179,134,181,132,179,129,179,134,181
+							],
+						],
+					],
+				],
+					
+				},
 			],
 		};
 		this.tile_defs = {
@@ -864,6 +946,12 @@ var GAME_WORLD = {
 			],
 		};
 		
+		this.fx_defs = {
+			list: [
+		/*  0 */ { guid: 'blood_splash', type: 'simple', sprite: 23, tick: 125, flags: [],},
+			]
+		};
+		
 		this.npc_defs = {
 			list: [
 		/*  0 */ {
@@ -875,6 +963,9 @@ var GAME_WORLD = {
 					hearing_range: 32,
 					interact_range: 0, // talk range?
 					hp: 10,
+					sp: 5,
+					mp: 0,
+					bp: 0,
 					attack_range: 8,
 					attack_time: 600,
 					attack_cd_time: 1500,
@@ -889,10 +980,13 @@ var GAME_WORLD = {
 					hearing_range: 0,
 					interact_range: 0,
 					hp: 4,
+					sp: 5,
+					mp: 0,
+					bp: 0,
 					attack_range: 14,
 					attack_time: 250,
 					attack_cd_time: 1000,
-					attack_damage: 3,
+					attack_damage: 2,
 				},
 		/* xx */ //{},
 			],
@@ -933,7 +1027,7 @@ var GAME_WORLD = {
 					},
 					{
 						guid: 'EXITx0001', type: 'touch_exit',
-						tile_x: 0, tile_y: 7,
+						tile_x: 0, tile_y: 6,
 						one_time: false, hidden: false, locked: false,
 						key_item: -1, key_special: -1,
 						target: { map: 2, x: 388, y: 175 },
@@ -1033,6 +1127,7 @@ var GAME_WORLD = {
 						facing: 1,
 						npc_id: 0,
 						aggressive: false,
+						pacifist: true,
 						default_speech: [{cmd:'say',val:'Hello, traveler.',d:2000},{cmd:'say',val:'You can climb the ledge by jumping again when you\'re close enough to reach it!',d:5000}],
 						talk_events: ['TALKNPCx0002','TALKNPCx0001','TALKNPCx0000'],
 						idle_script: [{cmd:'move',val:-16,d:1600},{cmd:'wait',val:0,d:5000},{cmd:'move',val:16,d:1600},{cmd:'wait',val:0,d:5000},{cmd:'move',val:-16,d:1600},{cmd:'wait',val:0,d:5000},{cmd:'move',val:16,d:1600},{cmd:'wait',val:0,d:1000},{cmd:'say',val:'Hmm.',d:3000},{cmd:'wait',val:0,d:1000},],
@@ -1118,6 +1213,7 @@ var GAME_WORLD = {
 						facing: 0,
 						npc_id: 1, // snake
 						aggressive: true,
+						pacifist: false,
 						idle_script: [{cmd:'move',val:48,d:3000},{cmd:'wait',val:'',d:2000},{cmd:'move',val:-48,d:3000},{cmd:'wait',val:'',d:2000}],
 						aggro_event: 'AGGRONPCx0001',
 						kill_event: 'KILLNPCx0001',
@@ -1327,6 +1423,24 @@ var GAME_WORLD = {
 	},
 
 
+	// do damage to a player or NPC - trigger scripts!
+	do_damage: function(dmg_from,dmg_to,dmg_amt) {
+		dmg_to.chp -= dmg_amt;
+		
+		// trigger NPC damage scripts?
+		if(dmg_to != this.player) {
+			// NPC died?
+			if(dmg_to.chp <= 0) {
+				// destroy it
+				dmg_to.DESTROY_THIS = true;
+			}
+		}
+		
+		// trigger player damage scripts?
+		if(dmg_to == this.player) {
+			
+		}
+	},
 
 
 	// player events
@@ -1365,6 +1479,43 @@ var GAME_WORLD = {
 		
 		// send results
 		return satisfied;
+	},
+	
+	
+
+
+	// add fx
+	add_fx: function(guid,target,loc) { // loc:{x:atkw_l_x,y:atkw_t_y}
+		var fx_type = -1;
+		for(fx of this.fx_defs.list) {
+			if(guid == fx.guid) {
+				fx_type = fx;
+			}
+		}
+		
+		if(fx_type != -1) {
+			this.fx.push({
+				guid: guid,
+				type: fx.type,
+				fxid: fx_type,
+				sprite: fx.sprite,
+				stance: 0,
+				facing: 0,
+				frame: 0,
+				next_animate_tick: this.last_tick + fx.tick,
+				tick_time: fx.tick,
+				DESTROY_THIS: false,
+				
+				loc: {
+					x: loc.x,
+					y: loc.y,
+				},
+				vel: {
+					x: 0,
+					y: 0,
+				},
+			});
+		}
 	},
 
 
@@ -1442,6 +1593,271 @@ var GAME_WORLD = {
 			this.scripts.push(new_script);
 		}
 	},
+	
+	
+	
+	// COLLISION ---------------------------------------------------------------------------
+	collision_NPC_to_boundaries: function(npc) {
+		// figure out if we're going to hit the edge of the screen
+		if(typeof npc.npc_id != 'undefined') { // NPC
+			var npc_def = this.npc_defs.list[npc.npc_id];
+			var sprite_frame = this.sprite_defs.list[npc_def.sprite].frames[npc.stance][npc.facing][npc.frame];
+		} else { // player
+			var sprite_frame = this.sprite_defs.list[npc.sprite_id].frames[npc.stance][npc.facing][npc.frame];
+		}
+		
+		var bl_x = npc.loc.x + npc.vel.x - (sprite_frame[4] - sprite_frame[6]);
+		var br_x = npc.loc.x + npc.vel.x - (sprite_frame[4] - sprite_frame[8]);
+		var top_y = npc.loc.y + npc.vel.y - (sprite_frame[5] - sprite_frame[7]);
+		var bottom_y = npc.loc.y + npc.vel.y + (sprite_frame[5] - sprite_frame[9]);
+		
+		var map_def = this.map_defs.list[npc.loc.map].tile_grid;
+		var offx = this.map_defs.list[npc.loc.map].left_col;
+		var offy = this.map_defs.list[npc.loc.map].top_row;
+		var x_limit = (map_def[0].length + offx) * 8 - 2;
+		var y_limit = (map_def.length + offy) * 8 - 2;
+		
+		if(bl_x < 2 || br_x > x_limit) {
+			npc.accel.x = 0;
+			npc.vel.x = 0;
+		}
+		if(top_y < 2 || bottom_y > y_limit) {
+			npc.accel.y = 0;
+			npc.vel.y = 0;
+		}
+	},
+	collision_NPC_to_ceiling: function(npc) {
+		var hitting_ceiling = false;
+		
+		// figure out if we're going to hit the ceiling
+		if(typeof npc.npc_id != 'undefined') { // NPC
+			var npc_def = this.npc_defs.list[npc.npc_id];
+			var sprite_frame = this.sprite_defs.list[npc_def.sprite].frames[npc.stance][npc.facing][npc.frame];
+		} else { // player
+			var sprite_frame = this.sprite_defs.list[npc.sprite_id].frames[npc.stance][npc.facing][npc.frame];
+		}
+		var bl_x = npc.loc.x + npc.vel.x - (sprite_frame[4] - sprite_frame[6]);
+		var br_x = npc.loc.x + npc.vel.x - (sprite_frame[4] - sprite_frame[8]);
+		var top_y = npc.loc.y + npc.vel.y - (sprite_frame[5] - sprite_frame[7]) - 1;
+		var bl_x_tile = Math.floor(bl_x / 8);
+		var br_x_tile = Math.floor(br_x / 8);
+		var top_y_tile = Math.floor(top_y / 8);
+		var bty = GAME_WORLD.map_defs.list[npc.loc.map].top_row;
+		var blx = GAME_WORLD.map_defs.list[npc.loc.map].left_col;
+		
+		// check top left
+		var tile_id_at_tl = GAME_WORLD.map_defs.list[npc.loc.map].tile_grid[top_y_tile-bty][bl_x_tile-blx][2];
+		var tile_at_tl = GAME_WORLD.tile_defs.list[tile_id_at_tl];
+		if(tile_at_tl.solid) {
+			hitting_ceiling = true;
+		}
+		// check top right
+		var tile_id_at_tr = GAME_WORLD.map_defs.list[npc.loc.map].tile_grid[top_y_tile-bty][br_x_tile-blx][2];
+		var tile_at_tr = GAME_WORLD.tile_defs.list[tile_id_at_tr];
+		if(tile_at_tr.solid) {
+			hitting_ceiling = true;
+		}
+		
+		
+		if(hitting_ceiling) { // find height
+			if(npc.vel.y < 0) {
+				npc.vel.y = 0;
+			}
+		}
+	},
+	collision_NPC_to_wall: function(npc) {
+		var hit_wall = false;
+		var hit_ramp_left = false;
+		var hit_ramp_right = false;
+		
+		// figure out if we hit a wall
+		if(typeof npc.npc_id != 'undefined') { // NPC
+			var npc_def = this.npc_defs.list[npc.npc_id];
+			var sprite_frame = this.sprite_defs.list[npc_def.sprite].frames[npc.stance][npc.facing][npc.frame];
+		} else { // player
+			var sprite_frame = this.sprite_defs.list[npc.sprite_id].frames[npc.stance][npc.facing][npc.frame];
+		}
+		var bl_x = npc.loc.x + npc.vel.x - (sprite_frame[4] - sprite_frame[6]);
+		var br_x = npc.loc.x + npc.vel.x - (sprite_frame[4] - sprite_frame[8]);
+		var top_y = npc.loc.y + npc.vel.y - (sprite_frame[5] - sprite_frame[7]);
+		var bottom_y = npc.loc.y + npc.vel.y + (sprite_frame[5] - sprite_frame[9]);
+		var bl_x_tile = Math.floor(bl_x / 8);
+		var br_x_tile = Math.floor(br_x / 8);
+		var top_y_tile = Math.floor(top_y / 8);
+		var bottom_y_tile = Math.floor(bottom_y / 8);
+		var bty = GAME_WORLD.map_defs.list[npc.loc.map].top_row;
+		var blx = GAME_WORLD.map_defs.list[npc.loc.map].left_col;
+		
+		// check corners 
+		if(npc.vel.x < 0) {
+			// check top left
+			var tile_id_at_tl = GAME_WORLD.map_defs.list[npc.loc.map].tile_grid[top_y_tile-bty][bl_x_tile-blx][2];
+			var tile_at_tl = GAME_WORLD.tile_defs.list[tile_id_at_tl];
+			if(tile_at_tl.solid) {
+				hit_wall = true;
+			}
+			// check bottom left if not on stairs
+			if(!npc.slope_left && !npc.slope_right) {
+				var tile_id_at_bl = GAME_WORLD.map_defs.list[npc.loc.map].tile_grid[bottom_y_tile-bty][bl_x_tile-blx][2];
+				var tile_at_bl = GAME_WORLD.tile_defs.list[tile_id_at_bl];
+				if(tile_at_bl.solid) {
+					hit_wall = true;
+				}
+				if(tile_at_bl.slope_right) {
+					hit_ramp_right = true;
+				}
+			}
+		} else if(npc.vel.x > 0) {
+			// check top right
+			var tile_id_at_tr = GAME_WORLD.map_defs.list[npc.loc.map].tile_grid[top_y_tile-bty][br_x_tile-blx][2];
+			var tile_at_tr = GAME_WORLD.tile_defs.list[tile_id_at_tr];
+			if(tile_at_tr.solid) {
+				hit_wall = true;
+			}
+			// check bottom left if not on stairs
+			if(!npc.slope_left && !npc.slope_right) {
+				var tile_id_at_br = GAME_WORLD.map_defs.list[npc.loc.map].tile_grid[bottom_y_tile-bty][br_x_tile-blx][2];
+				var tile_at_br = GAME_WORLD.tile_defs.list[tile_id_at_br];
+				if(tile_at_br.solid) {
+					hit_wall = true;
+				}
+				if(tile_at_br.slope_left) {
+					hit_ramp_left = true;
+				}
+			}
+		}
+
+		
+		
+		// if hit wall
+		if(hit_wall) {
+			if(hit_ramp_left) { // start climbing left ramp
+				npc.starting_left_ramp = true;
+			}
+			else if(hit_ramp_right) { // start climbing right ramp
+				npc.starting_right_ramp = true;
+			} else {
+				npc.vel.x = 0;
+			}
+		}
+	},
+	
+	collide_npcs_to_weapons: function() {
+		for(npc of this.npcs) {
+			// collide with player's weapon?
+			if(!npc.pacifist) {
+				this.collision_NPC_to_player_weapon(npc);
+			}
+			
+			//collide with an NPC's weapon?
+		}
+	},
+	collision_NPC_to_player_weapon: function(npc) {
+		if(this.player.stance == 2 && this.player.frame > 0) { // if player is attacking
+			if(this.player.gear[0] != "") { // player is equipped
+				this.collision_NPC_to_weapon(this.player,npc);
+			}
+		}
+		if(this.player.stance == 3 && this.player.frame > 0) { // if player is attacking
+			if(this.player.gear[1] != "") { // player is equipped
+				this.collision_NPC_to_weapon(this.player,npc);
+			}
+		}
+	},
+	collision_NPC_to_weapon: function(atk,tgt) {
+		var hit_weapon = true;
+		
+		// figure out if an NPC is getting hit by an attacker's weapon
+		if(typeof tgt.npc_id != 'undefined') { // target sprite
+			var tgt_npc_def = this.npc_defs.list[tgt.npc_id];
+			var tgt_sprite_frame = this.sprite_defs.list[tgt_npc_def.sprite].frames[tgt.stance][tgt.facing][tgt.frame];
+		} else { // player
+			var tgt_sprite_frame = this.sprite_defs.list[tgt.sprite_id].frames[tgt.stance][tgt.facing][tgt.frame];
+		}
+		if(typeof atk.npc_id != 'undefined') { // attacker sprite
+			var atk_npc_def = this.npc_defs.list[atk.npc_id];
+			var atk_sprite_frame = this.sprite_defs.list[atk_npc_def.sprite].frames[atk.stance][atk.facing][atk.frame];
+		} else { // player
+			var atk_sprite_frame = this.sprite_defs.list[atk.sprite_id].frames[atk.stance][atk.facing][atk.frame];
+		}
+
+
+
+		// attacker
+		// hand
+		if(atk.attacking_with_hand == 0) {
+			var atk_h_x = atk.loc.x + atk.vel.x - (atk_sprite_frame[4] - atk_sprite_frame[10]);
+			var atk_h_y = atk.loc.y + atk.vel.y - (atk_sprite_frame[5] - atk_sprite_frame[11]);
+			var wpn_guid = this.player.gear[0];
+		} else if(atk.attacking_with_hand == 1) {
+			var atk_h_x = atk.loc.x + atk.vel.x - (atk_sprite_frame[4] - atk_sprite_frame[12]);
+			var atk_h_y = atk.loc.y + atk.vel.y - (atk_sprite_frame[5] - atk_sprite_frame[13]);			
+			var wpn_guid = this.player.gear[1];
+		}
+		
+		// weapon
+		var wpn = -1;
+		for(itm of this.player.inventory) {
+			if(itm.guid == wpn_guid) {
+				wpn = itm;
+			}
+		}
+		// weapon collision area
+		if(wpn != -1) {
+			var wpn_obj_def = this.object_defs.list[wpn.thing_id];
+			var wpn_sprite_frame = this.sprite_defs.list[wpn_obj_def.sprite].frames[atk.stance][atk.facing][atk.frame];
+			var atkw_l_x = atk_h_x - (wpn_sprite_frame[4] - wpn_sprite_frame[6]);
+			var atkw_t_y = atk_h_y - (wpn_sprite_frame[5] - wpn_sprite_frame[7]);
+			var atkw_r_x = atk_h_x - (wpn_sprite_frame[4] - wpn_sprite_frame[8]);
+			var atkw_b_y = atk_h_y - (wpn_sprite_frame[5] - wpn_sprite_frame[9]);
+		} else {
+			return;
+		}
+
+
+
+		// target collision area
+		var tgt_l_x = tgt.loc.x + tgt.vel.x - (tgt_sprite_frame[4] - tgt_sprite_frame[6]);
+		var tgt_t_y = tgt.loc.y + tgt.vel.y - (tgt_sprite_frame[5] - tgt_sprite_frame[7]);
+		var tgt_r_x = tgt.loc.x + tgt.vel.x - (tgt_sprite_frame[4] - tgt_sprite_frame[8]);
+		var tgt_b_y = tgt.loc.y + tgt.vel.y + (tgt_sprite_frame[5] - tgt_sprite_frame[9]);
+		
+		
+		
+		// collision area?
+		if(atkw_r_x < tgt_l_x || atkw_l_x > tgt_r_x || atkw_b_y < tgt_t_y || atkw_t_y > tgt_b_y) {
+			hit_weapon = false;
+		}
+		
+		// collision point instead?
+		//if(atkw_l_x < tgt_l_x || atkw_l_x > tgt_r_x || atkw_t_y < tgt_t_y || atkw_t_y > tgt_b_y) {
+		//	hit_weapon = false;
+		//}
+
+
+		// weapon hit!
+		if(hit_weapon) {
+			// do damage
+			if((typeof atk.HITNPC[tgt.guid] == 'undefined') || (atk.HITNPC[tgt.guid] == false)) {
+				// figure damage
+				var dmg = wpn_obj_def.atk_dmg;
+				
+				// one hit per NPC per swing!
+				atk.HITNPC[tgt.guid] = true;
+				
+				// do damage
+				this.do_damage(atk,tgt,dmg);
+				
+				// hit script?
+				
+				// blood?
+				this.add_fx('blood_splash',tgt,{x:atkw_l_x,y:atkw_t_y});
+			}
+		}
+	},
+	// COLLISION ------------------------------------------------------------------------
+	
+	
 	
 	
 	// clear canvas
@@ -1630,7 +2046,7 @@ var GAME_WORLD = {
 		var this_frame = this.player.frame;
 		
 		// change displayed stance
-		if(this.player.falling && !this.player.climbing) {
+		if(this.player.falling && !this.player.climbing && this.player.stance != 2 && this.player.stance != 3) {
 			this_stance = 0;
 			this_frame = 0;
 		}
@@ -1652,14 +2068,24 @@ var GAME_WORLD = {
 					lh_sprite_id = obj_def.sprite;
 				}
 			}
-			var lhframe = this.sprite_defs.list[lh_sprite_id].frames[1][this.player.facing][0];
+			var left_facing = this.player.facing;
+			if(this.player.climbing && this.player.stance != 2 && this.player.stance != 3) {
+				left_facing = 1;
+			}
+			var left_stance = 1;
+			var left_frame = 0;
+			if(this.player.stance == 2) {
+				left_stance = 2;
+				left_frame = this.player.frame;
+			}
+			var lhframe = this.sprite_defs.list[lh_sprite_id].frames[left_stance][left_facing][left_frame];
 			var ploc_lh_x = this.player.loc.x - (aframe[4] - aframe[10]);
 			var ploc_lh_y = this.player.loc.y - (aframe[5] - aframe[11]);
 			var iloc_lh_x = ploc_lh_x - (lhframe[4] - lhframe[0]); // origin_x - left
 			var iloc_lh_y = ploc_lh_y - (lhframe[5] - lhframe[1]); // origin_y - top
 			var lh_width = lhframe[2] - lhframe[0] + 1;
 			var lh_height = lhframe[3] - lhframe[1] + 1;
-			this.gfx.drawImage(source_image,lhframe[0],lhframe[1],lh_width,lh_height,iloc_lh_x,iloc_lh_y,lh_width,lh_height);
+			//this.gfx.drawImage(source_image,lhframe[0],lhframe[1],lh_width,lh_height,iloc_lh_x,iloc_lh_y,lh_width,lh_height);
 		}
 		if(this.player.gear[1] !== '') {
 			var rh_sprite_id;
@@ -1669,20 +2095,44 @@ var GAME_WORLD = {
 					rh_sprite_id = obj_def.sprite;
 				}
 			}
-			var rhframe = this.sprite_defs.list[rh_sprite_id].frames[1][this.player.facing][0];
+			var right_facing = this.player.facing;
+			if(this.player.climbing && this.player.stance != 2 && this.player.stance != 3) {
+				right_facing = 0;
+			}
+			var right_stance = 1;
+			var right_frame = 0;
+			if(this.player.stance == 3) {
+				right_stance = 2;
+				right_frame = this.player.frame;
+			}
+			var rhframe = this.sprite_defs.list[rh_sprite_id].frames[right_stance][right_facing][right_frame];
 			var ploc_rh_x = this.player.loc.x - (aframe[4] - aframe[12]);
 			var ploc_rh_y = this.player.loc.y - (aframe[5] - aframe[13]);			
 			var iloc_rh_x = ploc_rh_x - (rhframe[4] - rhframe[0]); // origin_x - left
 			var iloc_rh_y = ploc_rh_y - (rhframe[5] - rhframe[1]); // origin_y - top
 			var rh_width = rhframe[2] - rhframe[0] + 1;
 			var rh_height = rhframe[3] - rhframe[1] + 1;
-			this.gfx.drawImage(source_image,rhframe[0],rhframe[1],rh_width,rh_height,iloc_rh_x,iloc_rh_y,rh_width,rh_height);
+			//this.gfx.drawImage(source_image,rhframe[0],rhframe[1],rh_width,rh_height,iloc_rh_x,iloc_rh_y,rh_width,rh_height);
 		}
 		
-		
-		
-		// draw the player sprite
-		this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,loc_y,s_width,s_height);
+		// draw everything in order based on facing
+		if(this.player.facing == 1) {
+			if(this.player.gear[1] !== '') {
+				this.gfx.drawImage(source_image,rhframe[0],rhframe[1],rh_width,rh_height,iloc_rh_x,iloc_rh_y,rh_width,rh_height);
+			}
+			this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,loc_y,s_width,s_height);
+			if(this.player.gear[0] !== '') {
+				this.gfx.drawImage(source_image,lhframe[0],lhframe[1],lh_width,lh_height,iloc_lh_x,iloc_lh_y,lh_width,lh_height);
+			}
+		} else {
+			if(this.player.gear[0] !== '') {
+				this.gfx.drawImage(source_image,lhframe[0],lhframe[1],lh_width,lh_height,iloc_lh_x,iloc_lh_y,lh_width,lh_height);
+			}
+			this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,loc_y,s_width,s_height);
+			if(this.player.gear[1] !== '') {
+				this.gfx.drawImage(source_image,rhframe[0],rhframe[1],rh_width,rh_height,iloc_rh_x,iloc_rh_y,rh_width,rh_height);
+			}
+		}
 		
 		//// red box for frame "boundaries"
 		//this.gfx.strokeStyle = 'red';
@@ -1712,7 +2162,20 @@ var GAME_WORLD = {
 		}
 	},
 	renderEffects: function() {
-		// not yet
+		var source_image = document.getElementById('game_tiles');
+		
+		// render list
+		for(fx of this.fx) {
+			// fx sprite info
+			var aframe = this.sprite_defs.list[fx.sprite].frames[fx.stance][fx.facing][fx.frame];
+			var s_width = aframe[2] - aframe[0] + 1;
+			var s_height = aframe[3] - aframe[1] + 1;
+			var loc_lx = fx.loc.x - (aframe[4] - aframe[0]); // origin_x - left
+			var loc_rx = fx.loc.x - (aframe[4] - aframe[2]); // origin_x - right
+			var loc_y = fx.loc.y - (aframe[5] - aframe[1]); // origin_y - top
+			var b_y = fx.loc.y - (aframe[5] - aframe[3]); // origin_y - bottom
+			this.gfx.drawImage(source_image,aframe[0],aframe[1],s_width,s_height,loc_lx,loc_y,s_width,s_height);
+		}
 	},
 	renderElements: function() {
 		var source_image = document.getElementById('game_tiles');
@@ -1919,12 +2382,16 @@ var GAME_WORLD = {
 		this.gfx.fillStyle = 'rgb(255,255,255)';
 		this.gfx.fillText(money_buf,344,11);
 		
-		
-		// render HP
-		var gauge_x_coord = 311;
-		if(this.player.mbp < 1) {
-			gauge_x_coord = 321;
+		// find starting location for gauges
+		var gauge_x_coord = 301;
+		if(this.player.mmp < 1) {
+			gauge_x_coord += 10;
 		}
+		if(this.player.mbp < 1) {
+			gauge_x_coord += 10;
+		}
+		
+		// render HP gauge
 		for(var chpbx=0;chpbx<this.player.mhp;chpbx++) {
 			if(chpbx < this.player.chp) {
 				this.gfx.fillStyle = 'red';
@@ -1934,18 +2401,31 @@ var GAME_WORLD = {
 			this.gfx.fillRect(gauge_x_coord,2+(2*chpbx),8,1);
 		}
 		
-		// render MP
+		// render Stamina gauge
 		gauge_x_coord += 10;
-		for(var cmpbx=0;cmpbx<this.player.mmp;cmpbx++) {
-			if(cmpbx < this.player.cmp) {
-				this.gfx.fillStyle = 'green';
+		for(var cspbx=0;cspbx<this.player.msp;cspbx++) {
+			if(cspbx < this.player.csp) {
+				this.gfx.fillStyle = 'cyan';
 			} else {
 				this.gfx.fillStyle = 'rgba(255,255,255,0.4)';
 			}
-			this.gfx.fillRect(gauge_x_coord,2+(2*cmpbx),8,1);
+			this.gfx.fillRect(gauge_x_coord,2+(2*cspbx),8,1);
 		}
-
-		// render Blood
+		
+		// render MP gauge
+		if(this.player.mmp > 0) {
+			gauge_x_coord += 10;
+			for(var cmpbx=0;cmpbx<this.player.mmp;cmpbx++) {
+				if(cmpbx < this.player.cmp) {
+					this.gfx.fillStyle = 'green';
+				} else {
+					this.gfx.fillStyle = 'rgba(255,255,255,0.4)';
+				}
+				this.gfx.fillRect(gauge_x_coord,2+(2*cmpbx),8,1);
+			}
+		}
+		
+		// render Blood gauge
 		if(this.player.mbp > 0) {
 			gauge_x_coord += 10;
 			for(var cbpbx=0;cbpbx<this.player.mbp;cbpbx++) {
@@ -2057,6 +2537,7 @@ var GAME_WORLD = {
 		
 		for(npc of map_npcs) {
 			// check if NPC should spawn
+			var npc_def = this.npc_defs.list[npc.npc_id];
 			if((!npc.no_respawn) || ((npc.no_respawn) && !this.player_check_event(npc))) {
 				// create new NPC
 				this.npcs.push({
@@ -2088,18 +2569,46 @@ var GAME_WORLD = {
 					vel: {x:0,y:0},
 					accel: {x:0,y:0},
 					
+					// stats
+					stats: { str: 10, dex: 10, con: 10, itl: 10, wis: 10, cha: 10 },
+					mod_stats: { str: 10, dex: 10, con: 10, itl: 10, wis: 10, cha: 10 },
+
+					// resources - hp/stamina/mp/blood
+					chp: npc_def.hp,
+					mhp: npc_def.hp,
+					csp: npc_def.sp,
+					msp: npc_def.sp,
+					cmp: npc_def.mp,
+					mmp: npc_def.mp,
+					cbp: npc_def.bp,
+					mbp: npc_def.bp,
+					
+					
 					// AI
 					default_speech: npc.default_speech,
 					talk_events: npc.talk_events,
 					aggro_event: npc.aggro_event,
 					kill_event: npc.kill_event,
 					aggressive: npc.aggressive,
+					pacifist: npc.pacifist,
 					current_action: (npc.aggressive)?'patrol':'idle',
 					idle_script: npc.idle_script,
 					
 					// actions
 					attack_cooldown: 0,
 					hit_player_cooling_down: false,
+					
+					// movement stuff
+					sprinting: false,
+					high_jump: false,
+					falling: false,
+					jumping: false,
+					flying: false,
+					climbing: false,
+					slope_left: false,
+					starting_left_ramp: false,
+					slope_right: false,
+					starting_right_ramp: false,
 				});
 			}
 		}
@@ -2122,7 +2631,11 @@ var GAME_WORLD = {
 		
 		// check controls
 		if(this.controls.sprint == 1) {
-			this.player.sprinting = true;
+			if(this.player.csp > 0) {
+				this.player.sprinting = true;
+			} else {
+				this.player.sprinting = false;
+			}
 		}
 		if(this.controls.sprint == 0) {
 			this.player.sprinting = false;
@@ -2170,6 +2683,33 @@ var GAME_WORLD = {
 				this.player.FLOATING = !this.player.FLOATING;
 			}
 		}
+		
+		
+		// stamina?
+		if(time > this.player.stamina_tick) {
+			var tick_time = 500;
+			if(this.player.sprinting == true && dx != 0) {
+				this.player.csp--;
+				if(this.player.csp < 0) {
+					this.player.csp = 0;
+				}
+				tick_time = 500;
+			} else {
+				if(dx == 0 && dy == 0) {
+					this.player.csp++;
+					if(this.player.csp > this.player.msp) {
+						this.player.csp = this.player.msp;
+						tick_time = 100;
+					} else {
+						tick_time = 1000;
+					}
+				} else {
+					tick_time = 100;
+				}
+			}
+			this.player.stamina_tick = time + tick_time;
+		}
+		
 
 
 		// find tile and edge information
@@ -2182,7 +2722,7 @@ var GAME_WORLD = {
 
 
 		// handle UP control
-		if(this.controls.up == 1) {
+		if(this.controls.up == 1 && this.controls.down == 0) {
 			// check for NPC to talk to?
 			var npcs_behind = this.find_npcs_behind(this.player);
 			if(npcs_behind.length > 0) {
@@ -2311,7 +2851,7 @@ var GAME_WORLD = {
 				this.player.stance = 4;
 			}
 		}
-		if(this.controls.down == 1) {
+		if(this.controls.down == 1 && this.controls.up == 0) {
 			// door down
 			var event_behind = this.find_event_behind(this.player);	
 			if(event_behind != null) {
@@ -2498,7 +3038,7 @@ var GAME_WORLD = {
 		// horizontal acceleration
 		if(dx != 0) { // is accelerating
 			if(this.player.falling == true) {
-				this.player.accel.x = dx * (elapsed / 1000) * (50 / 1000);
+				this.player.accel.x = dx * (elapsed / 1000) * (25 / 1000);
 			} else { // ground acceleration
 				this.player.accel.x = dx * (elapsed / 1000) * (100 / 1000);			
 			}
@@ -2577,14 +3117,14 @@ var GAME_WORLD = {
 		// COLLISION
 		// check ceiling!
 		if(this.player.vel.y < 0) {
-			this.player.collide_to_ceiling();
+			this.collision_NPC_to_ceiling(this.player);
 		}
 		
 		// check boundaries
-		this.player.collide_to_boundaries();
+		this.collision_NPC_to_boundaries(this.player);
 		
 		// check wall
-		this.player.collide_to_wall();
+		this.collision_NPC_to_wall(this.player);
 
 		// check objects!
 		this.player.collide_to_objects();
@@ -2596,7 +3136,7 @@ var GAME_WORLD = {
 		this.player.collide_to_npcs();
 
 
-
+		// FINAL MOVEMENT
 		// location x
 		this.player.loc.x += this.player.vel.x;
 		
@@ -2620,7 +3160,7 @@ var GAME_WORLD = {
 		}
 
 
-		
+		// AFTER-MOVE CHECKS
 		// check falling/climbing/stairs state
 		if(this.player.falling) {
 			// check if we're going to land
@@ -2671,10 +3211,6 @@ var GAME_WORLD = {
 	moveNpc: function(npc,time) {
 		var elapsed = time - GAME_WORLD.last_tick;
 		
-		// collision with walls?
-		// collision with objects?
-		
-		
 		// add acceleration
 		if(npc.accel.x != 0) {
 			if(Math.sign(npc.accel.x) == Math.sign(npc.vel.x)) {
@@ -2698,6 +3234,13 @@ var GAME_WORLD = {
 				npc.vel.y /= 2;
 			}
 		}
+		
+		
+		// collisions
+		GAME_WORLD.collision_NPC_to_boundaries(npc);
+		GAME_WORLD.collision_NPC_to_ceiling(npc);
+		GAME_WORLD.collision_NPC_to_wall(npc);
+		
 		
 		// add velocity
 		npc.loc.x += npc.vel.x * elapsed;
@@ -2728,6 +3271,10 @@ var GAME_WORLD = {
 		this.animateNpcs(time);
 		this.animateObjects(time);
 		this.animateConversations(time);
+		this.animateFx(time);
+		
+		// clean effects?
+		this.cleanFx();
 	},
 	
 	animatePlayer: function(time) {
@@ -2755,6 +3302,38 @@ var GAME_WORLD = {
 					} else {
 						this.player.next_animate_tick = time + 180;
 					}
+				}
+				break;
+			case 2: // left hand attack
+				if(time > this.player.next_animate_tick) {
+					this.player.frame++;
+					if(this.player.frame > 3) {
+						this.player.frame = 0;
+						this.player.HITNPC = [];
+						
+						if(this.player.climbing) {
+							this.player.stance = 4;
+						} else {
+							this.player.stance = 0;
+						}
+					}
+					this.player.next_animate_tick = time + 50;
+				}
+				break;
+			case 3: // right hand attack
+				if(time > this.player.next_animate_tick) {
+					this.player.frame++;
+					if(this.player.frame > 3) {
+						this.player.frame = 0;
+						this.player.HITNPC = [];
+						
+						if(this.player.climbing) {
+							this.player.stance = 4;
+						} else {
+							this.player.stance = 0;
+						}
+					}
+					this.player.next_animate_tick = time + 50;
 				}
 				break;
 			case 4: // climbing
@@ -2820,8 +3399,8 @@ var GAME_WORLD = {
 				if(time > npc.next_animate_tick) {
 					npc.frame++;
 					if(npc.frame > 3) {
-						npc.frame = 0;
 						npc.stance = 0;
+						npc.frame = 0;
 						npc.hit_player_cooling_down = false;
 					} else {
 						npc.next_animate_tick = time + (npc_def.attack_time / 4);
@@ -2852,6 +3431,29 @@ var GAME_WORLD = {
 			}
 
 			obj.next_animate_tick = time + 200;
+		}
+	},
+	cleanFx: function() {
+		for(fxid in this.fx) {
+			if(this.fx[fxid].DESTROY_THIS) {
+				this.fx.splice(fxid,1);
+			}
+		}
+	},
+	animateFx: function(time) {
+		for(fx of this.fx) {
+			switch(fx.type) {
+				case "simple":
+					if(time > fx.next_animate_tick) {
+						fx.frame++;
+						if(fx.frame > 3) {
+							fx.DESTROY_THIS = true;
+						} else {
+							fx.next_animate_tick = time + fx.tick_time;
+						}
+					}
+					break;
+			}
 		}
 	},
 	cleanConversations: function() {
@@ -3000,9 +3602,29 @@ var GAME_WORLD = {
 
 
 		// use left hand
-		
+		if(GAME_WORLD.controls.fire1 > 0) {
+			if(GAME_WORLD.controls.fire1_once == 0) {
+				GAME_WORLD.controls.fire1_once = 1;
+				
+				GAME_WORLD.player.attacking_with_hand = 0;
+				GAME_WORLD.player.stance = 2;
+				GAME_WORLD.player.frame = 0;
+				GAME_WORLD.player.next_animate_tick = time + 50;
+			}
+		}
 		
 		// use right hand
+		if(GAME_WORLD.controls.fire2 > 0) {
+			if(GAME_WORLD.controls.fire2_once == 0) {
+				GAME_WORLD.controls.fire2_once = 1;
+				
+				GAME_WORLD.player.attacking_with_hand = 1;
+				GAME_WORLD.player.stance = 3;
+				GAME_WORLD.player.frame = 0;
+				GAME_WORLD.player.next_animate_tick = time + 50;
+			}
+		}
+		
 		
 	},
 
@@ -3191,6 +3813,7 @@ var GAME_WORLD = {
 					// run away from player
 					npc.accel.x = Math.sign(dx) * .05/1000;
 					//npc.accel.y = Math.sign(dy) * .06/1000;
+					npc.facing = (dx>=0)?0:1;
 					break;
 				case "fight_npc":
 				case "flee_npc":
@@ -3217,6 +3840,9 @@ var GAME_WORLD = {
 			// move everything!
 			GAME_WORLD.moveAll(time);
 			
+			// collide NPCs to weapons
+			GAME_WORLD.collide_npcs_to_weapons();
+
 			// dispose of finished things
 			GAME_WORLD.cleanObjects();
 			GAME_WORLD.cleanNpcs();
@@ -3701,7 +4327,7 @@ var GAME_WORLD = {
 		this.npcs = [];
 		
 		// effects array
-		this.effects = [];
+		this.fx = [];
 		
 		// scripts array
 		this.scripts = [];
@@ -3716,8 +4342,11 @@ var GAME_WORLD = {
 			jump_once: 0,
 			sprint: 0,
 			fire1: 0,
+			fire1_once: 0,
 			fire2: 0,
+			fire2_once: 0,
 			fire3: 0,
+			fire3_once: 0,
 			cycle1: 0,
 			cycle1_once: 0,
 			cycle2: 0,
@@ -3730,12 +4359,13 @@ var GAME_WORLD = {
 
 		// set up player
 		this.player = {
-			sprite_id: 0, //22,
+			sprite_id: 0,
 			stance: 0,
 			facing: 0,
 			frame: 0,
 			
 			next_tick: 0,
+			stamina_tick: 0,
 			next_animate_tick: 0,
 			attacking_with_hand: -1,
 			
@@ -3772,48 +4402,29 @@ var GAME_WORLD = {
 			stats: { str: 10, dex: 10, con: 10, itl: 10, wis: 10, cha: 10 },
 			mod_stats: { str: 10, dex: 10, con: 10, itl: 10, wis: 10, cha: 10 },
 
-			// resources - hp/mp/blood
-			chp: 8,
+			// resources - hp/stamina/mp/blood
+			chp: 10,
 			mhp: 12,
-			cmp: 7,
-			mmp: 10,
-			cbp: 2,
-			mbp: 4,
+			csp: 10,
+			msp: 10,
+			cmp: 0,
+			mmp: 0,
+			cbp: 0,
+			mbp: 0,
 			
 			// inventory and gear
 			money: 0,
-			inventory: [{thing_id:5,guid:'STARTER_LEFT'},{thing_id:2,guid:'MYSTICKEY'}],
+			inventory: [{thing_id:5,guid:'STARTER_LEFT'}],
 			gear: ['','','','','','','','','',''], // 0 = left, 1 = right, 2 = head, 3 = body, 4 = legs, 5 = arms, 6 = ring, 7 = ring, 8 = artifact, 9 = artifact
 
 			
 			// events array - for handling event flags
 			EVENTS: [],
+			HITNPC: [],
 		};
 		
 		
 		// COLLISION
-		this.player.collide_to_boundaries = function() {
-			var sprite_frame = GAME_WORLD.sprite_defs.list[GAME_WORLD.player.sprite_id].frames[GAME_WORLD.player.stance][GAME_WORLD.player.facing][GAME_WORLD.player.frame];
-			var bl_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[6]);
-			var br_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[8]);
-			var top_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y - (sprite_frame[5] - sprite_frame[7]);
-			var bottom_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y + (sprite_frame[5] - sprite_frame[9]);
-			
-			var map_def = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid;
-			var offx = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].left_col;
-			var offy = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].top_row;
-			var x_limit = (map_def[0].length + offx) * 8 - 2;
-			var y_limit = (map_def.length + offy) * 8 - 2;
-			
-			if(bl_x < 2 || br_x > x_limit) {
-				GAME_WORLD.player.accel.x = 0;
-				GAME_WORLD.player.vel.x = 0;
-			}
-			if(top_y < 2 || bottom_y > y_limit) {
-				GAME_WORLD.player.accel.y = 0;
-				GAME_WORLD.player.vel.y = 0;
-			}
-		};
 		this.player.climbing_ladder = function() {
 			var climbing_ladder = false;
 			
@@ -3837,6 +4448,7 @@ var GAME_WORLD = {
 			if(GAME_WORLD.player.climbing && tile_at_bl.can_climb) {
 				climbing_ladder = true;
 			}
+			
 			// check bottom right
 			var tile_id_at_br = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[bottom_y_tile-bty][br_x_tile-blx][2];
 			var tile_at_br = GAME_WORLD.tile_defs.list[tile_id_at_br];
@@ -3847,7 +4459,7 @@ var GAME_WORLD = {
 				climbing_ladder = true;
 			}
 			
-			
+			// 
 			if(!climbing_ladder) {
 				if(GAME_WORLD.player.climbing) {
 					GAME_WORLD.player.climbing = false;
@@ -3903,112 +4515,6 @@ var GAME_WORLD = {
 				GAME_WORLD.player.slope_right = false;
 			}
 			
-		};
-		this.player.collide_to_ceiling = function() {
-			var hitting_ceiling = false;
-			
-			// figure out if we're going to hit the ceiling
-			var sprite_frame = GAME_WORLD.sprite_defs.list[GAME_WORLD.player.sprite_id].frames[GAME_WORLD.player.stance][GAME_WORLD.player.facing][GAME_WORLD.player.frame];
-			var bl_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[6]);
-			var br_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[8]);
-			var top_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y - (sprite_frame[5] - sprite_frame[7]) - 1;
-			var bl_x_tile = Math.floor(bl_x / 8);
-			var br_x_tile = Math.floor(br_x / 8);
-			var top_y_tile = Math.floor(top_y / 8);
-			var bty = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].top_row;
-			var blx = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].left_col;
-			
-			// check top left
-			var tile_id_at_tl = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[top_y_tile-bty][bl_x_tile-blx][2];
-			var tile_at_tl = GAME_WORLD.tile_defs.list[tile_id_at_tl];
-			if(tile_at_tl.solid) {
-				hitting_ceiling = true;
-			}
-			// check top right
-			var tile_id_at_tr = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[top_y_tile-bty][br_x_tile-blx][2];
-			var tile_at_tr = GAME_WORLD.tile_defs.list[tile_id_at_tr];
-			if(tile_at_tr.solid) {
-				hitting_ceiling = true;
-			}
-			
-			
-			if(hitting_ceiling) { // find height
-				if(GAME_WORLD.player.vel.y < 0) {
-					GAME_WORLD.player.vel.y = 0;
-				}
-			}
-		};
-		this.player.collide_to_wall = function() {
-			var hit_wall = false;
-			var hit_ramp_left = false;
-			var hit_ramp_right = false;
-			
-			// figure out if we hit a wall
-			// sprite stance facing frame
-			var sprite_frame = GAME_WORLD.sprite_defs.list[GAME_WORLD.player.sprite_id].frames[GAME_WORLD.player.stance][GAME_WORLD.player.facing][GAME_WORLD.player.frame];
-			var bl_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[6]);
-			var br_x = GAME_WORLD.player.loc.x + GAME_WORLD.player.vel.x - (sprite_frame[4] - sprite_frame[8]);
-			var top_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y - (sprite_frame[5] - sprite_frame[7]);
-			var bottom_y = GAME_WORLD.player.loc.y + GAME_WORLD.player.vel.y + (sprite_frame[5] - sprite_frame[9]);
-			var bl_x_tile = Math.floor(bl_x / 8);
-			var br_x_tile = Math.floor(br_x / 8);
-			var top_y_tile = Math.floor(top_y / 8);
-			var bottom_y_tile = Math.floor(bottom_y / 8);
-			var bty = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].top_row;
-			var blx = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].left_col;
-			
-			// check corners 
-			if(GAME_WORLD.player.vel.x < 0) {
-				// check top left
-				var tile_id_at_tl = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[top_y_tile-bty][bl_x_tile-blx][2];
-				var tile_at_tl = GAME_WORLD.tile_defs.list[tile_id_at_tl];
-				if(tile_at_tl.solid) {
-					hit_wall = true;
-				}
-				// check bottom left if not on stairs
-				if(!GAME_WORLD.player.slope_left && !GAME_WORLD.player.slope_right) {
-					var tile_id_at_bl = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[bottom_y_tile-bty][bl_x_tile-blx][2];
-					var tile_at_bl = GAME_WORLD.tile_defs.list[tile_id_at_bl];
-					if(tile_at_bl.solid) {
-						hit_wall = true;
-					}
-					if(tile_at_bl.slope_right) {
-						hit_ramp_right = true;
-					}
-				}
-			} else if(GAME_WORLD.player.vel.x > 0) {
-				// check top right
-				var tile_id_at_tr = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[top_y_tile-bty][br_x_tile-blx][2];
-				var tile_at_tr = GAME_WORLD.tile_defs.list[tile_id_at_tr];
-				if(tile_at_tr.solid) {
-					hit_wall = true;
-				}
-				// check bottom left if not on stairs
-				if(!GAME_WORLD.player.slope_left && !GAME_WORLD.player.slope_right) {
-					var tile_id_at_br = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].tile_grid[bottom_y_tile-bty][br_x_tile-blx][2];
-					var tile_at_br = GAME_WORLD.tile_defs.list[tile_id_at_br];
-					if(tile_at_br.solid) {
-						hit_wall = true;
-					}
-					if(tile_at_br.slope_left) {
-						hit_ramp_left = true;
-					}
-				}
-			}
-
-			
-			
-			// if hit wall
-			if(hit_wall) {
-				if(hit_ramp_left) { // start climbing left ramp
-					GAME_WORLD.player.starting_left_ramp = true;
-				}
-				else if(hit_ramp_right) { // start climbing right ramp
-					GAME_WORLD.player.starting_right_ramp = true;
-				} else {
-					GAME_WORLD.player.vel.x = 0;
-				}
-			}
 		};
 		this.player.collide_to_floor = function() {
 			var hitting_floor = false;
@@ -4096,6 +4602,7 @@ var GAME_WORLD = {
 		};
 		this.player.standing_on_floor = function() {
 			var hitting_floor = false;
+			var hitting_object = false;
 			
 			// figure out if the floor is just below us
 			// sprite stance facing frame
@@ -4106,6 +4613,7 @@ var GAME_WORLD = {
 			var bl_x_tile = Math.floor(bl_x / 8);
 			var br_x_tile = Math.floor(br_x / 8);
 			var bottom_y_tile = Math.floor(bottom_y / 8);
+			var bdy = bottom_y % 8;
 			var bl_by = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].top_row;
 			var bl_bx = GAME_WORLD.map_defs.list[GAME_WORLD.player.loc.map].left_col;
 			
@@ -4121,22 +4629,52 @@ var GAME_WORLD = {
 			if(tile_at_br.stand_on) {
 				hitting_floor = true;
 			}
+			
+			// check for objects
+			var objects = GAME_WORLD.objects;
+			for(obj of objects) {
+				if(GAME_WORLD.player.precollide_to_object(obj)) {
+					var flags = GAME_WORLD.object_defs.list[obj.thing_id].flags;
+					if(flags.indexOf('stand_on') > -1) {
+						hitting_object = true;
+					}
+				}
+			}
 
-		
-			// if we're on the floor
-			if(hitting_floor) {
-				// do nothing - we're fine
-				GAME_WORLD.player.falling = false;
-				GAME_WORLD.player.climbing = false;
-				if(GAME_WORLD.player.stance == 4) {
-					GAME_WORLD.player.stance = 0;
-					GAME_WORLD.player.frame = 0;
+			// check if we're above the floor!
+			var above_floor = true;
+			if(bdy > 1) {
+				above_floor = false;
+			}
+			
+			// are we hitting the floor and landing/standing on it?
+			if(GAME_WORLD.player.climbing) {
+				if(hitting_floor || hitting_object) {
+					GAME_WORLD.player.climbing = false;
+					if(bdy < 2) {
+						GAME_WORLD.player.loc.y -= bdy;
+						
+						if(GAME_WORLD.player.vel.y > 0) {
+							GAME_WORLD.player.vel.y = 0;
+						}
+					}
 				}
 			} else {
-				// fall
-				GAME_WORLD.player.falling = true;
-				GAME_WORLD.player.vel.y = 0.5;
+				if(hitting_floor && above_floor) {
+					// do nothing - we're fine
+					GAME_WORLD.player.falling = false;
+					GAME_WORLD.player.climbing = false;
+					if(GAME_WORLD.player.stance == 4) {
+						GAME_WORLD.player.stance = 0;
+						GAME_WORLD.player.frame = 0;
+					}
+				} else {
+					GAME_WORLD.player.falling = true;
+					GAME_WORLD.player.vel.y = 0.5;
+				}
 			}
+			
+			
 		};
 		this.player.collide_to_objects = function() {
 			if(GAME_WORLD.player.OBJECT_COLLISIONS) {
@@ -4282,8 +4820,14 @@ var GAME_WORLD = {
 						case "fight_player": // NPC is fighting player
 							if(npc.stance == 2) { // NPC is attacking right now
 								if(!npc.hit_player_cooling_down) {
-									GAME_WORLD.player.chp -= npc_def.attack_damage;
+									// one damage hit per attack
 									npc.hit_player_cooling_down = true;
+									
+									// do damage
+									GAME_WORLD.player.chp -= npc_def.attack_damage;
+									
+									// blood splash
+									GAME_WORLD.add_fx('blood_splash',GAME_WORLD.player,{x:GAME_WORLD.player.loc.x,y:GAME_WORLD.player.loc.y-8});
 								}
 							}
 							break;
@@ -4292,21 +4836,27 @@ var GAME_WORLD = {
 					// check what player is doing?
 					switch(GAME_WORLD.player.stance) {
 						case 2:	// attacking - left hand
-							if(GAME_WORLD.player.gear[0] == "") {
-								if((typeof GAME_WORLD.player.HITNPC[npc.guid] == 'undefined') || (GAME_WORLD.player.HITNPC[npc.guid] == false)) {
-									npc.chp -= Math.floor((GAME_WORLD.player.mod_stats.str/2) + 0.5);
-									GAME_WORLD.player.HITNPC[npc.guid] = true;
+							if(!npc.pacifist) {
+								if(GAME_WORLD.player.gear[0] == "") { // bare fisted?
+									if((typeof GAME_WORLD.player.HITNPC[npc.guid] == 'undefined') || (GAME_WORLD.player.HITNPC[npc.guid] == false)) {
+										var damage = Math.floor((GAME_WORLD.player.mod_stats.str/5) + 0.5);
+										GAME_WORLD.player.HITNPC[npc.guid] = true;
+										GAME_WORLD.do_damage(GAME_WORLD.player,npc,damage);
+									}
 								}
-							} // bare fisted?
+							}
 							break;
 						case 3:
 							// attacking - right hand
-							if(GAME_WORLD.player.gear[1] == "") {
-								if((typeof GAME_WORLD.player.HITNPC[npc.guid] == 'undefined') || (GAME_WORLD.player.HITNPC[npc.guid] == false)) {
-									npc.chp -= Math.floor((GAME_WORLD.player.mod_stats.str/2) + 0.5);
-									GAME_WORLD.player.HITNPC[npc.guid] = true;
+							if(!npc.pacifist) {
+								if(GAME_WORLD.player.gear[1] == "") { // bare fisted?
+									if((typeof GAME_WORLD.player.HITNPC[npc.guid] == 'undefined') || (GAME_WORLD.player.HITNPC[npc.guid] == false)) {
+										var damage = Math.floor((GAME_WORLD.player.mod_stats.str/5) + 0.5);
+										GAME_WORLD.player.HITNPC[npc.guid] = true;
+										GAME_WORLD.do_damage(GAME_WORLD.player,npc,damage);
+									}
 								}
-							} // bare fisted?
+							}
 							break;
 					}
 				}
@@ -4435,12 +4985,15 @@ var GAME_WORLD = {
 			}
 			if(e.code == this.control_defs.fire1) {
 				this.controls.fire1 = 0;
+				this.controls.fire1_once = 0;
 			}
 			if(e.code == this.control_defs.fire2) {
 				this.controls.fire2 = 0;
+				this.controls.fire2_once = 0;
 			}
 			if(e.code == this.control_defs.fire3) {
 				this.controls.fire3 = 0;
+				this.controls.fire3_once = 0;
 			}
 			if(e.code == this.control_defs.cycle1) {
 				this.controls.cycle1 = 0;
