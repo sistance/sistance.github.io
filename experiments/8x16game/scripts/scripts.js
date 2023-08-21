@@ -17,7 +17,7 @@ var GAME = {
 	CANVAS_HEIGHT: null,
 	
 	// defaults
-	PIXEL_SIZE: 40,
+	PIXEL_SIZE: 20,
 	
 	
 	//-------- CONTROLS -----------//
@@ -92,6 +92,73 @@ var GAME = {
 		this.CONTROL_HANDLER = [0,0,0,0,0,0]; // (x y fire bomb start select)
 		this.CONTROL_QUEUE = [0,0,0,0,0,0]; // (x y fire bomb start select)
 		
+		// TITLE MODELS
+		this.TITLE_MODELS = [
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 0 top of demo screen?
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 1
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 2
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 3
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 4
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 5
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 6
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 7
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 8
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 9
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 10
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 11
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 12 bottom of demo screen
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 13
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 14
+			['#000000','#000000','#ea4066','#ea4066','#000000','#ea4066','#ea4066','#000000'], // 15 //
+			['#000000','#000000','#000000','#000000','#ea4066','#000000','#000000','#000000'], // 16 // 
+			['#000000','#000000','#ea4066','#ea4066','#ea4066','#ea4066','#ea4066','#000000'], // 17 // K
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 18 // (space)
+			['#000000','#000000','#000000','#ea4066','#000000','#ea4066','#000000','#000000'], // 19 //
+			['#000000','#000000','#ea4066','#000000','#000000','#000000','#ea4066','#000000'], // 20 //
+			['#000000','#000000','#000000','#ea4066','#ea4066','#ea4066','#000000','#000000'], // 21 // C
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 22 // (space)
+			['#000000','#000000','#000000','#ea4066','#ea4066','#ea4066','#ea4066','#000000'], // 23 //
+			['#000000','#000000','#ea4066','#000000','#ea4066','#000000','#000000','#000000'], // 24 //
+			['#000000','#000000','#000000','#ea4066','#ea4066','#ea4066','#ea4066','#000000'], // 25 // A
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 26 // (space)
+			['#000000','#000000','#d67053','#000000','#000000','#000000','#000000','#000000'], // 27 //
+			['#000000','#000000','#d67053','#d67053','#d67053','#d67053','#d67053','#000000'], // 28 //
+			['#000000','#000000','#d67053','#000000','#000000','#000000','#000000','#000000'], // 29 // T
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 30 // (space)
+			['#000000','#000000','#d67053','#000000','#000000','#000000','#000000','#000000'], // 31 // 
+			['#000000','#000000','#d67053','#d67053','#d67053','#d67053','#d67053','#000000'], // 32 //
+			['#000000','#000000','#d67053','#000000','#000000','#000000','#000000','#000000'], // 33 // T
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 34 // (space)
+			['#000000','#000000','#000000','#d67053','#d67053','#d67053','#d67053','#000000'], // 35 //
+			['#000000','#000000','#d67053','#000000','#d67053','#000000','#000000','#000000'], // 36 //
+			['#000000','#000000','#000000','#d67053','#d67053','#d67053','#d67053','#000000'], // 37 // A
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 38 // (space)
+			['#000000','#000000','#000000','#000000','#12af70','#000000','#000000','#000000'], // 39 //
+			['#000000','#000000','#000000','#12af70','#72ce4e','#12af70','#000000','#000000'], // 40 //
+			['#000000','#000000','#000000','#000000','#12af70','#000000','#000000','#000000'], // 41 // +
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 42 // (space)
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 43 // (space)
+			['#000000','#000000','#000000','#2669da','#2669da','#2669da','#000000','#000000'], // 44 //
+			['#000000','#000000','#2669da','#000000','#000000','#000000','#2669da','#000000'], // 45 //
+			['#000000','#000000','#000000','#2669da','#2669da','#2669da','#000000','#000000'], // 46 // O
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 47 // (space)
+			['#000000','#000000','#000000','#2669da','#000000','#2669da','#2669da','#000000'], // 48 //
+			['#000000','#000000','#2669da','#000000','#2669da','#000000','#000000','#000000'], // 49 //
+			['#000000','#000000','#2669da','#2669da','#2669da','#2669da','#2669da','#000000'], // 50 // R
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 51 // (space)
+			['#000000','#000000','#2669da','#000000','#000000','#000000','#000000','#000000'], // 52 //
+			['#000000','#000000','#5647a8','#5647a8','#5647a8','#2669da','#2669da','#000000'], // 53 //
+			['#000000','#000000','#5647a8','#000000','#000000','#000000','#000000','#000000'], // 54 // T
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 55 // (space)
+			['#000000','#000000','#5647a8','#000000','#000000','#5647a8','#000000','#000000'], // 56 //
+			['#000000','#000000','#5647a8','#000000','#5647a8','#000000','#5647a8','#000000'], // 57 //
+			['#000000','#000000','#000000','#5647a8','#000000','#000000','#5647a8','#000000'], // 58 // S
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000'], // 59 // (space)
+			['#000000','#000000','#000000','#5647a8','#5647a8','#5647a8','#5647a8','#000000'], // 60 //
+			['#000000','#000000','#5647a8','#000000','#5647a8','#000000','#000000','#000000'], // 61 //
+			['#000000','#000000','#000000','#5647a8','#5647a8','#5647a8','#5647a8','#000000'], // 62 // A
+			['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000']  // 63 // (space)
+		];
 		
 		// PROJECTILE MODELS
 		// set up projectile models!
@@ -166,93 +233,53 @@ var GAME = {
 		this.MOBILE_MODELS = [
 			{
 				name: 'SIMPLE_SHIP_1',
-				w: 1,
-				h: 1,
-				ax: 0,
-				ay: 0,
-				sx: 0,
-				sy: 5,
-				r: 33,
-				g: 163,
-				b: 85,
-				delta_r: 0,
-				delta_g: 0,
-				delta_b: 0,
-				armor_id: -1,
-				boss_model_id: -1,
+				w: 1, h: 1,
+				ax: 0, ay: 0,
+				sx: 0, sy: 5,
+				r: 33, g: 163, b: 85, 
+				delta_r: 0,	delta_g: 0, delta_b: 0,
+				armor_id: -1, boss_model_id: -1,
 				hull_life: 1
 			},
 			{
 				name: 'SIMPLE_SHIP_2',
-				w: 1,
-				h: 1,
-				ax: 0,
-				ay: 0,
-				sx: 0,
-				sy: 4,
-				r: 223,
-				g: 167,
-				b: 49,
-				delta_r: 0,
-				delta_g: 0,
-				delta_b: 0,
-				armor_id: 0,
-				boss_model_id: -1,
+				w: 1, h: 1,
+				ax: 0, ay: 0,
+				sx: 0, sy: 4,
+				r: 223, g: 167,	b: 49,
+				delta_r: 0,	delta_g: 0,	delta_b: 0,
+				armor_id: 0, boss_model_id: -1,
 				hull_life: 2
 			},
 			{
 				name: 'BOSS_SHIP_1',
-				w: 3,
-				h: 3,
-				ax: 0,
-				ay: 0,
-				sx: 0,
-				sy: 0,
-				r: 227,
-				g: 55,
-				b: 99,
-				delta_r: 0,
-				delta_g: 0,
-				delta_b: 0,
-				armor_id: 1,
-				boss_model_id: 0,
+				w: 3, h: 3,
+				ax: 0, ay: 0,
+				sx: 0, sy: 0,
+				r: 227,	g: 55, b: 99,
+				delta_r: 0,	delta_g: 0,	delta_b: 0,
+				armor_id: 1, boss_model_id: 0,
 				hull_life: -1
 			},
 			{
 				name: 'BOSS_SHIP_2',
-				w: 3,
-				h: 3,
-				ax: 0,
-				ay: 0,
-				sx: 0,
-				sy: 0,
-				r: 227,
-				g: 55,
-				b: 99,
-				delta_r: 0,
-				delta_g: 0,
-				delta_b: 0,
-				armor_id: 2,
-				boss_model_id: 1,
+				w: 3, h: 3,
+				ax: 0, ay: 0,
+				sx: 0, sy: 0,
+				r: 227, g: 55, b: 99,
+				delta_r: 0, delta_g: 0, delta_b: 0,
+				armor_id: 2, boss_model_id: 1,
 				hull_life: -1
 
 			},
 			{
 				name: 'BOSS_SHIP_3',
-				w: 3,
-				h: 3,
-				ax: 0,
-				ay: 0,
-				sx: 0,
-				sy: 0,
-				r: 227,
-				g: 55,
-				b: 99,
-				delta_r: 0,
-				delta_g: 0,
-				delta_b: 0,
-				armor_id: 3,
-				boss_model_id: 2,
+				w: 3, h: 3,
+				ax: 0, ay: 0,
+				sx: 0, sy: 0,
+				r: 227,	g: 55, b: 99,
+				delta_r: 0,	delta_g: 0,	delta_b: 0,
+				armor_id: 3, boss_model_id: 2,
 				hull_life: -1
 
 			}
@@ -266,36 +293,28 @@ var GAME = {
 				segments: 1,
 				durability: 2,
 				locations: [{x:0,y:0}],
-				r: 156,
-				g: 132,
-				b: 75
+				r: 156, g: 132,	b: 75
 			},
 			{
 				name: 'BOSS_SHIP_ARMOR_1',
 				segments: 3,
 				durability: 3,
 				locations: [{x:0,y:1},{x:1,y:2},{x:2,y:1}],
-				r: 156,
-				g: 132,
-				b: 75
+				r: 156,	g: 132,	b: 75
 			},
 			{
 				name: 'BOSS_SHIP_ARMOR_2',
 				segments: 2,
 				durability: 4,
 				locations: [{x:0,y:2},{x:2,y:2}],
-				r: 156,
-				g: 132,
-				b: 75
+				r: 156,	g: 132,	b: 75
 			},
 			{
 				name: 'BOSS_SHIP_ARMOR_3',
 				segments: 5,
 				durability: 4,
 				locations: [{x:0,y:1},{x:0,y:2},{x:1,y:2},{x:2,y:1},{x:2,y:2}],
-				r: 156,
-				g: 132,
-				b: 75
+				r: 156,	g: 132,	b: 75
 			}
 		];
 
@@ -306,27 +325,21 @@ var GAME = {
 				segments: 2,
 				durability: 5,
 				locations: [{x:1,y:0},{x:1,y:1}],
-				r: 214,
-				g: 222,
-				b: 54
+				r: 214,	g: 222,	b: 54
 			},
 			{
 				name: 'BOSS_SHIP_CORE_2',
 				segments: 2,		
 				durability: 5,
 				locations: [{x:0,y:0},{x:2,y:0}],
-				r: 214,
-				g: 222,
-				b: 54
+				r: 214,	g: 222,	b: 54
 			},
 			{
 				name: 'BOSS_SHIP_CORE_3',
 				segments: 2,
 				durability: 5,
 				locations: [{x:1,y:0},{x:1,y:1}],
-				r: 214,
-				g: 222,
-				b: 54
+				r: 214,	g: 222,	b: 54
 			}
 		];
 		// BOSS SECTION MODELS
@@ -583,8 +596,8 @@ var GAME = {
 	},
 	start: function() {
 		// animate!
-		GAME.GAME_STATE = 0;
-		GAME.STAGE_TICK = GAME.CLOCK + 10000;
+		this.GAME_STATE = 0;
+		this.STAGE_TICK = this.CLOCK + 1000; // + 10000;
 		
 		requestAnimationFrame(this.animate);
 	},
@@ -614,8 +627,38 @@ var GAME = {
 		GAME.CONTEXT.clearRect(0,0,this.CANVAS_WIDTH,this.CANVAS_HEIGHT);
 	},
 	render_title: function() {
-		GAME.CONTEXT.fillStyle = '#808000';
-		GAME.CONTEXT.fillRect(0,0,this.CANVAS_WIDTH,this.CANVAS_HEIGHT);
+		if(GAME.CLOCK > GAME.STAGE_TICK) {
+			GAME.STAGE_SECTION_COUNTER++;
+			if(GAME.STAGE_SECTION_COUNTER > 48) { // go to demo when the scrolling title ends
+				GAME.STAGE_SECTION_COUNTER = -1;
+				GAME.GAME_STATE = 1; // go to demo!
+				GAME.STAGE_TICK = GAME.CLOCK + 15000;
+				return;
+			}
+
+			// timing of next frame of title
+			if(GAME.STAGE_SECTION_COUNTER == 0) {
+				GAME.STAGE_TICK = GAME.CLOCK + 1000;
+			} else if(GAME.STAGE_SECTION_COUNTER == 48) {
+				GAME.STAGE_TICK = GAME.CLOCK + 5000;
+			} else {
+				GAME.STAGE_TICK = GAME.CLOCK + 100;				
+			}
+		}
+		
+		// render frame of title
+		var starting_line = 48 - GAME.STAGE_SECTION_COUNTER;
+		for(var trc=0;trc<16;trc++) {
+			var this_line = starting_line + trc;
+			//console.log(this_line);
+			var track_x = 0;
+			for(pixel of GAME.TITLE_MODELS[this_line]) {
+				//console.log(pixel);
+				GAME.CONTEXT.fillStyle = pixel;
+				GAME.CONTEXT.fillRect(track_x*GAME.PIXEL_SIZE,trc*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);
+				track_x++;
+			}
+		}
 	},
 	render_intro: function() {
 		GAME.CONTEXT.fillStyle = '#00ff00';
@@ -644,7 +687,7 @@ var GAME = {
 		var proj = {
 			type: shot, // player projectile ID
 			owner: who,
-			x: Math.floor(who.x+0.5),
+			x: Math.floor(who.x), //Math.floor(who.x+0.5),
 			y: who.y - 0.5,
 			sx: this.PROJECTILE_MODELS[0].sx,
 			sy: this.PROJECTILE_MODELS[0].sy,
@@ -734,6 +777,7 @@ var GAME = {
 		var ox = (GAME.PLAYER.x%1);
 		var oy = (GAME.PLAYER.y%1);
 		
+		/* wide/fade player sprite?
 		// player color - fading between pixels
 		var r1 = (1-ox)*GAME.PLAYER.color.r;
 		var g1 = (1-ox)*GAME.PLAYER.color.g;
@@ -748,7 +792,20 @@ var GAME = {
 		GAME.CONTEXT.fillStyle = color1;
 		GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*2);	
 		GAME.CONTEXT.fillStyle = color2;
-		GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*2);	
+		GAME.CONTEXT.fillRect((x+1)*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*2);
+		*/
+		
+
+		// player color - fading between pixels
+		var r1 = GAME.PLAYER.color.r;
+		var g1 = GAME.PLAYER.color.g;
+		var b1 = GAME.PLAYER.color.b;
+		var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+
+		// render all of it
+		GAME.CONTEXT.fillStyle = color1;
+		GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE*2);	
+		
 	},
 	render_mobiles: function() {
 		for(mob of GAME.MOBILES) {
@@ -902,6 +959,7 @@ var GAME = {
 				var color0 = "#"+GAME.color_code(base_r)+GAME.color_code(base_g)+GAME.color_code(base_b);
 				
 				
+				/* fading left and right?
 				// player fire color - fading between pixels
 				var r1 = (1-oy)*base_r;
 				var g1 = (1-oy)*base_g;
@@ -917,6 +975,17 @@ var GAME = {
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);	
 				GAME.CONTEXT.fillStyle = color2;
 				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,(y+1)*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);
+				*/
+
+				// player fire color
+				var r1 = base_r;
+				var g1 = base_g;
+				var b1 = base_b;
+				var color1 = "#"+GAME.color_code(r1)+GAME.color_code(g1)+GAME.color_code(b1);
+				
+				// render all of it
+				GAME.CONTEXT.fillStyle = color1;
+				GAME.CONTEXT.fillRect(x*GAME.PIXEL_SIZE,y*GAME.PIXEL_SIZE,GAME.PIXEL_SIZE,GAME.PIXEL_SIZE);					
 				break;
 		}
 	},
@@ -1409,17 +1478,20 @@ var GAME = {
 		GAME.CLOCK = time;
 		
 		// title screen done! roll demo!
+		/*
 		if(GAME.GAME_STATE == 0 && GAME.CLOCK > GAME.STAGE_TICK) {
 			console.log('start demo');
 			GAME.GAME_STATE = 1;
 			GAME.STAGE_TICK = GAME.CLOCK + 6000;
 		}
+		*/
 		
 		// demo done! return to title screen!
 		if(GAME.GAME_STATE == 1 && GAME.CLOCK > GAME.STAGE_TICK) {
 			console.log('back to title');
 			GAME.GAME_STATE = 0;
-			GAME.STAGE_TICK = GAME.CLOCK + 12000;
+			GAME.STAGE_SECTION_COUNTER = 0;
+			GAME.STAGE_TICK = GAME.CLOCK + 1000;
 		}
 		
 		// game intro done! start stage intro!
@@ -1453,7 +1525,7 @@ var GAME = {
 		if(GAME.GAME_STATE == 4 && GAME.CLOCK > GAME.STAGE_TICK) {
 			// stage tick!
 			console.log('stage tick');
-			GAME.STAGE_TICK = GAME.CLOCK + 2000;
+			GAME.STAGE_TICK = GAME.CLOCK + 500;
 			
 			
 			
