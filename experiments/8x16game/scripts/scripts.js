@@ -17,7 +17,7 @@ var GAME = {
 	CANVAS_HEIGHT: null,
 	
 	// defaults
-	PIXEL_SIZE: 20,
+	PIXEL_SIZE: 40,
 	
 	
 	//-------- CONTROLS -----------//
