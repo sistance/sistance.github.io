@@ -538,7 +538,7 @@ var GAME = {
 			},
 			{ // 4: invasion #1
 				types: [0,0,0,0,0,0,1,1,1,1],
-				locations: [{x:1,y:1},{x:5,y:1},{x:4,y:3},{x:3,y:5},{x:2,y:7},{x:6,y:7},{x:3,y:1},{x:6,y:3},{x:1,y:5},{x:4,y:7}]
+				locations: [{x:1,y:1},{x:5,y:1},{x:4,y:3},{x:3,y:5},{x:2,y:7},{x:6,y:7},{x:2,y:1},{x:6,y:3},{x:1,y:5},{x:5,y:7}]
 			},
 			{ // 5: invasion #2
 				types: [0,0,0,0,0,0,1,1,1,1],
@@ -756,6 +756,68 @@ var GAME = {
 				case 38: // up = bomb
 					GAME.CONTROL_HANDLER[3] = 0;					
 					break;
+			}
+		});
+		
+		// handle control touches?
+		document.querySelector('.controls .movement .left').addEventListener('touchstart',function(e){
+			if(GAME.GAME_STATE == 4) {
+				GAME.CONTROL_HANDLER[0] = -1;
+			}
+		});
+		document.querySelector('.controls .movement .left').addEventListener('touchend',function(e){
+			if(GAME.GAME_STATE == 4) {
+				GAME.CONTROL_HANDLER[0] = 0;
+			}
+		})
+		
+		document.querySelector('.controls .movement .right').addEventListener('touchstart',function(e){
+			if(GAME.GAME_STATE == 4) {
+				GAME.CONTROL_HANDLER[0] = 1;
+			}
+		});
+		document.querySelector('.controls .movement .right').addEventListener('touchend',function(e){
+			if(GAME.GAME_STATE == 4) {
+				GAME.CONTROL_HANDLER[0] = 0;
+			}
+		});
+		
+		document.querySelector('.controls .fire .gun').addEventListener('touchstart',function(e){
+			switch(GAME.GAME_STATE) {
+				// start game on these states
+				case 0:
+				case 1:
+					GAME.start_game();
+					break;
+				// fire on these states
+				case 4:
+					GAME.CONTROL_HANDLER[2] = 1;
+					break;
+				// ignore on the rest
+				default:
+					break;
+			}
+		});
+		document.querySelector('.controls .fire .gun').addEventListener('touchend',function(e){
+			switch(GAME.GAME_STATE) {
+				// fire on these states
+				case 4:
+					GAME.CONTROL_HANDLER[2] = 0;
+					break;
+				// ignore on the rest
+				default:
+					break;
+			}
+		});
+		
+		document.querySelector('.controls .fire .bomb').addEventListener('touchstart',function(e){
+			if(GAME.GAME_STATE == 4) {
+				GAME.CONTROL_HANDLER[3] = 1;
+			}
+		});
+		document.querySelector('.controls .fire .bomb').addEventListener('touchend',function(e){
+			if(GAME.GAME_STATE == 4) {
+				GAME.CONTROL_HANDLER[3] = 0;
 			}
 		});
 	},

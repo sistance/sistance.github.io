@@ -1,13 +1,30 @@
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<style>
 			body {margin:0;padding:0;position:relative;width:100%;height:100%;}
 			canvas {margin: 0 auto;}
+			.controls {display:flex;flex-flow:row;position:absolute;left:0;top:480px;width:320px;height:160px;border:1px solid red;box-sizing:border-box;align-items:stretch;}
+			.controls .movement {width:60%;height:100%;display:flex;flex-flow:row;align-items:stretch;}
+			.controls .fire {width:40%;height:100%;display:flex;flex-flow:column;}
+			.controls .movement .left, .controls .movement .right {width:50%;height:100%;border:1px solid blue;box-sizing:border-box;}
+			.controls .fire .gun, .controls .fire .bomb {width:100%;height:50%;border:1px solid green;box-sizing:border-box;} 
 		</style>
 	</head>
 	
 	<body>
 		<canvas id="game_canvas"></canvas>
+		<div class="controls">
+			<div class="movement">
+				<div class="left"></div>
+				<div class="right"></div>
+			</div>
+			<div class="fire">
+				<div class="bomb"></div>
+				<div class="gun"></div>
+			</div>
+		</div>
+		
 		<script src="scripts/scripts.js"></script>
 	</body>
 </html>
